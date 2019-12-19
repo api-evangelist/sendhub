@@ -1,0 +1,65 @@
+{
+    "name": "SendHub",
+    "description": "<p>SendHub provides a simple, fast and reliable communications platform for businesses and organizations. Our BYOD business phone system is easy to use and manage with no contracts or no hardware to install. Business owners or IT admins can easily add, delete or reallocate phone lines, monitor usage, and download analytics with a single click. Call or text using any device, whether it is a PC, cellphone or tablet.&nbsp;<\/p>",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/1147_logo.png",
+    "tags": [
+        "have api",
+        "messages",
+        "target"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/sendhub\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "SendHub",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/1147_logo.png",
+            "humanURL": "https:\/\/www.sendhub.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/sendhub-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Base",
+            "url": "https:\/\/api.sendhub.com"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.sendhub.com"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/blog.sendhub.com\/rss"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "http:\/\/www.crunchbase.com\/company\/sendhub"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/www.sendhub.com\/developer\/"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/Sendhub"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/#!\/SendHub"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/www.sendhub.com"
+        }
+    ]
+}
