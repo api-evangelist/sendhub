@@ -1,0 +1,1071 @@
+openapi: 3.0.3
+info:
+  title: SendHub Authentication Thread API
+  version: v1
+  contact:
+    name: Contact SendHub
+    email: support@sendhub.com
+  termsOfService: https://www.sendhub.com/terms/
+  license:
+    url: https://www.sendhub.com/terms/#:~:text=Limited%20License
+    name: Limited
+  description: 'SendHub''s REST-like API allows you to control & interact with your SendHub account programmatically.
+
+
+    Note: this documentation is in Beta and may be updated periodically.'
+servers:
+- url: https://api.sendhub.com
+  description: SendHub's API
+security:
+- username: []
+  api_key: []
+- basic_auth: []
+tags:
+- name: Thread
+  x-displayName: Inbox & Threads
+  description: View and manage inbox threads.
+paths:
+  /v1/inbox:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Thread
+      summary: List Threads
+      description: 'Gets a list of inbox threads
+
+
+        **Note:** the URL **must** include the forward-slash after /v1/inbox
+
+
+        The `next` field in the `meta` object doesn''t include this forward-slash in the URI it provides
+
+
+        We suggest constructing your URIs via your code and using the `next` field to determine if there''s a next page (eg. if `next` is null)'
+      operationId: listThreads
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      responses:
+        '200':
+          $ref: '#/components/responses/listThreads200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/threads/{thread_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        thread_id: '{{thread_id}}'
+    parameters:
+    - $ref: '#/components/parameters/thread_id'
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Thread
+      summary: Get thread
+      description: Gets an individual thread by its id
+      operationId: getThread
+      responses:
+        '200':
+          $ref: '#/components/responses/getThread200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/thread404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Thread
+      summary: Delete thread
+      description: Deletes an individual thread by its id
+      operationId: deleteThread
+      responses:
+        '200':
+          $ref: '#/components/responses/deleteThread200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+components:
+  schemas:
+    errorObject:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: number
+    attachmentSize:
+      type: number
+      description: Size of attachment in bytes
+    textToSubscribe:
+      type: boolean
+      default: false
+      description: Whether to enable text-to-join functionality for this group
+    messageUnread:
+      type: boolean
+      nullable: true
+      description: 'Whether or not the message is marked as unread
+
+        Changing this will mark the corresponding thread as read or unread'
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    attachments:
+      type: array
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/inboundAttachment'
+        - $ref: '#/components/schemas/outboundAttachment'
+      description: List of attachments
+    attachmentFilename:
+      type: string
+    nullableString:
+      type: string
+      nullable: true
+    scheduledAtWithoutTimezone:
+      type: string
+      nullable: true
+      description: The date & time **in UTC** the message was scheduled to be sent at.
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+    next:
+      type: string
+      nullable: true
+    threadNestedGroup:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/groupId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        name:
+          $ref: '#/components/schemas/groupName'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        mediums:
+          $ref: '#/components/schemas/groupMediums'
+        check_all:
+          $ref: '#/components/schemas/groupCheckAll'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
+    threadUnread:
+      type: boolean
+      description: Whether or not the thread is marked as unread
+    messageText:
+      title: messageText
+      type: string
+      description: 'The text content of the message
+
+        **Note:** Be sure you understand SMS segmenting ((learn more here)[https://sendhub.force.com/support/s/article/how-am-i-billed-for-long-messages])'
+      minimum: 1
+      maximum: 1600
+    messageHash:
+      type: string
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    deleted:
+      type: boolean
+      readOnly: true
+    groupName:
+      type: string
+      description: The group's name
+      minLength: 1
+      maxLength: 128
+    ttjResponse:
+      type: string
+      maximum: 70
+      default: You are now subscribed.
+      description: A custom response sent when someone texts-to-join this group
+    idStr:
+      type: string
+      pattern: ^\d+$
+      description: Same as id but always a string
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+    attachmentType:
+      type: string
+      description: Mimetype of the attachment
+      example: video/mp4
+    inboxThread:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/threadNestedContact'
+        created_at:
+          $ref: '#/components/schemas/timestamp'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          type: string
+          enum:
+          - outbound-api
+          - incoming
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/threadNestedGroup'
+        id:
+          allOf:
+          - $ref: '#/components/schemas/id'
+          - description: Id of the last message in this thread
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+          - starred
+        last_read_at:
+          $ref: '#/components/schemas/nullableTimestamp'
+        modified_at:
+          $ref: '#/components/schemas/timestamp'
+        resource_uri:
+          type: string
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/timestamp'
+        text:
+          type: string
+        threadId:
+          $ref: '#/components/schemas/threadId'
+        type:
+          type: string
+          enum:
+          - voicecall-in
+          - voicecall-out
+          - voicecall-missed
+          - voicecall-voicemail
+          - message-out
+          - message-in
+          description: The message type of the last item in the thread
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    listOfGroupNames:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupName'
+      description: List of group names
+    id:
+      type: string
+      pattern: ^\d+$
+    groupMediums:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - deprecated: true
+        description: This is used internally and may be expanded upon or removed in the future
+    groupSlug:
+      type: string
+      description: 'The "keyword" used to text-to-join
+
+
+        Defaults to the group name lowercased, without any spaces and not duplicate by appending an incrementing number if needed'
+    limit:
+      type: integer
+    attachmentIsWriteable:
+      type: boolean
+    contactNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The contact's phone number
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    directionToFrom:
+      description: The direction of the message; `to` or `from` the contact
+      type: string
+      enum:
+      - to
+      - from
+    attachmentKey:
+      type: string
+    offset:
+      type: integer
+    inboundAttachment:
+      type: object
+      description: Inbound attachment
+      properties:
+        container:
+          $ref: '#/components/schemas/attachmentContainer'
+        filename:
+          $ref: '#/components/schemas/attachmentFilename'
+        id:
+          $ref: '#/components/schemas/id'
+        size:
+          $ref: '#/components/schemas/attachmentSize'
+        key:
+          $ref: '#/components/schemas/attachmentKey'
+        url:
+          $ref: '#/components/schemas/attachmentUrl'
+        type:
+          $ref: '#/components/schemas/attachmentType'
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    threadNestedContact:
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactIdInt'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        groups:
+          $ref: '#/components/schemas/listOfGroupNames'
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+      example:
+        blocked: false
+        deleted: false
+        groups:
+        - ACME Product Alerts
+        id: 116006957938017580
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        my-custom-field: My Custom Field Value
+        name: Bob Parker
+        number: '+12015716227'
+        screened: false
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    sent:
+      title: sent
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - type: string
+        nullable: true
+      description: The date & time **in UTC** the message was sent at.
+    previous:
+      type: string
+      nullable: true
+    thread:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/threadMeta'
+        objects:
+          type: array
+          items:
+            type: object
+            properties:
+              attachments:
+                $ref: '#/components/schemas/attachments'
+              contacts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/threadNestedContact'
+              deleted:
+                $ref: '#/components/schemas/deleted'
+              direction:
+                $ref: '#/components/schemas/directionToFrom'
+              groups:
+                type: array
+                items:
+                  $ref: '#/components/schemas/threadNestedGroup'
+              hash:
+                $ref: '#/components/schemas/messageHash'
+              id:
+                $ref: '#/components/schemas/id'
+              modified_at:
+                $ref: '#/components/schemas/timestamp'
+              resource_uri:
+                $ref: '#/components/schemas/messageResourceUri'
+              scheduled_at:
+                $ref: '#/components/schemas/scheduledAtWithoutTimezone'
+              sent:
+                $ref: '#/components/schemas/sent'
+              shortlink:
+                $ref: '#/components/schemas/shortlink'
+              text:
+                $ref: '#/components/schemas/messageText'
+              type:
+                $ref: '#/components/schemas/messageType'
+              unread:
+                $ref: '#/components/schemas/threadUnread'
+    threadMeta:
+      allOf:
+      - $ref: '#/components/schemas/meta'
+      - type: object
+        properties:
+          hasUnread:
+            type: boolean
+            description: Whether this thread has messages marked as unread or not
+          labels:
+            type: array
+            items:
+              type: string
+            example:
+            - starred
+    contactIdInt:
+      type: integer
+      format: int64
+      description: The contact ID
+    groupCheckAll:
+      type: boolean
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    meta:
+      type: object
+      properties:
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    attachmentUrl:
+      type: string
+    shortlink:
+      type: string
+      description: A short link generated by SendHub when you send a message with an attachment or with `force_shortlink_creation` set to `true`
+      pattern: ^$|^https?://sh.gl/[a-zA-Z0-9]+$
+    scheduledAt:
+      title: scheduledAt
+      type: string
+      nullable: true
+      description: 'The date & time **in UTC** to schedule the message to be sent at.
+
+
+        **Note:** it **must** be exactly 24-characters long and in this format: `2022-04-13T15:29:40+0000`'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{4}$
+    threadId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The thread ID
+    attachmentContainer:
+      type: string
+      enum:
+      - sendhub-attachments
+    customField:
+      type: string
+      nullable: true
+      description: 'Custom field(s)
+
+
+        There''s no limit to the number or size of custom fields (this may be subject to change in the future) except for a total limit of 65,535 bytes for the string of the json object that they''re stored in
+
+
+        **Note:** Custom fields may add *very* slight load time per contact. This is typically only noticable when listing many contacts that have a large amount of custom fields
+
+        Note: Setting the value to `null` removes the custom field'
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    listThreads200Response:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/inboxThread'
+    messageType:
+      type: string
+      enum:
+      - voicecall-in
+      - voicecall-out
+      - voicecall-missed
+      - voicecall-voicemail
+      - message-out
+      - message-in
+      description: The type of the message (if on the thread object, then the type of the last message in the thread)
+    outboundAttachment:
+      type: object
+      description: Outbound attachment
+      properties:
+        container:
+          $ref: '#/components/schemas/attachmentContainer'
+        filename:
+          $ref: '#/components/schemas/attachmentFilename'
+        id:
+          $ref: '#/components/schemas/id'
+        isWriteable:
+          $ref: '#/components/schemas/attachmentIsWriteable'
+        key:
+          $ref: '#/components/schemas/attachmentKey'
+        mimetype:
+          $ref: '#/components/schemas/attachmentMimetype'
+        size:
+          $ref: '#/components/schemas/attachmentSize'
+        url:
+          $ref: '#/components/schemas/attachmentUrl'
+    attachmentMimetype:
+      type: string
+      description: Mimetype of the attachment
+      example: video/mp4
+    nullableTimestamp:
+      anyOf:
+      - $ref: '#/components/schemas/timestamp'
+      - type: string
+        nullable: true
+    messageResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/messages\/\d+$
+      description: Resource URI for this message
+      example: /v1/messages/123
+  responses:
+    getThread200:
+      description: Found thread
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/thread'
+          examples:
+            A group thread:
+              $ref: '#/components/examples/getThread200Response1'
+            A thread with different message types:
+              $ref: '#/components/examples/getThread200Response2'
+    listThreads200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listThreads200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listThreads200Response-2'
+    deleteThread200:
+      description: Deleted thread
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          examples:
+            Thread successfully deleted:
+              $ref: '#/components/examples/deleteThread200Response'
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    thread404:
+      description: Thread not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Thread not found:
+              summary: Thread not found
+              value:
+                error: Requested thread not found
+                status: 404
+    contact404:
+      description: Contact not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Contact not found:
+              summary: Contact not found
+              value:
+                error: Requested contact not found
+                status: 404
+    '401':
+      description: The credentials you supplied are invalid
+  examples:
+    deleteThread200Response:
+      summary: Deleted thread successfully
+      value:
+        message: Thread successfully deleted
+    getThread200Response1:
+      summary: A group thread
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+          hasUnread: false
+          labels:
+          - starred
+        objects:
+        - attachments:
+          - filename: SendHub_Logo.png
+            id: '336909160859829608'
+            isWriteable: true
+            mimetype: image/png
+            size: 18884
+            url: https://app.sendhub.com/v1/attachments/336909160859829608
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818976'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818976
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: http://sh.gl/IuvJma
+          text: 'Short Link?
+
+            File: http://sh.gl/IuvJma'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818148'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818148
+          scheduled_at: '2021-08-24T19:44:31'
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is a scheduled alert.'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818517'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818517
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is our second product alert.'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870812489'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812489
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is our first product alert.'
+          type: message-out
+          unread: false
+    getThread200Response2:
+      summary: Different message types
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+          hasUnread: false
+          labels:
+          - starred
+        objects:
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870814050'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870814050
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Received call at 2021-08-24 19:44:31 UTC, 4 seconds
+          type: voicecall-in
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: to
+          groups: []
+          hash: ''
+          id: '115995236870814041'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870814041
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Placed call at 2021-08-24 19:44:31 UTC, 9 seconds
+          type: voicecall-out
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870813983'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870813983
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Voicemail message at 2021-08-24 19:44:31 UTC: https://sendhub-prod-user-files.s3.amazonaws.com/voicemail/2/283014186889381821-28301418688938182152f236ba4a4a8d9fca1200dcd28f7ebe.mp3
+
+            Voicemail transcription result transcribed:Hey I had a question about your products could you give me a call? Thanks.'
+          type: voicecall-voicemail
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870813982'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870813982
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Missed call at 2021-08-24 19:44:31 UTC
+          type: voicecall-missed
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: to
+          groups: []
+          hash: ''
+          id: '115995236870812424'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812424
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hi Bob,
+
+
+            You can subscribe to our product alerts by texting "alerts" (without the quotes).'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870812408'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812408
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Hi, I'd like to receive product alerts.
+          type: message-in
+          unread: false
+    listThreads200Response-2:
+      summary: Success
+      value:
+        meta:
+          limit: 1
+          next: /v1/inbox?limit=1&offset=1
+          offset: 0
+          previous: null
+          unread: 9
+        objects:
+        - contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: johnsmithy
+            name: John Smithy
+            number: '+12015716227'
+            screened: false
+          created_at: '2020-03-27T22:50:35.283171'
+          deleted: false
+          direction: incoming
+          groups: []
+          id: '115995236880212923'
+          labels:
+          - starred
+          last_read_at: '2022-03-08T20:38:03.476505'
+          modified_at: '2022-03-09T23:21:46.661440'
+          resource_uri: /v1/threads/115988808193508637
+          scheduled_at: null
+          sent: '2022-03-09T23:21:46.135757'
+          text: 'Hey got ''em
+
+            File: http://sh.gl/CNpLW5'
+          threadId: '115988808193508637'
+          type: message-in
+          unread: true
+  parameters:
+    thread_id:
+      in: path
+      required: true
+      name: thread_id
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      description: The thread ID
+    PageOffset:
+      name: offset
+      in: query
+      description: (Pagination) How many records to skip
+      schema:
+        type: integer
+        default: 0
+    PageLimit:
+      name: limit
+      in: query
+      description: (Pagination) How many records to return
+      schema:
+        type: integer
+        maximum: 1000
+        minimum: 1
+        default: 20
+  securitySchemes:
+    username:
+      name: username
+      type: apiKey
+      in: query
+      description: Your SendHub line's username (can be found in your My Settings page)
+    api_key:
+      name: api_key
+      type: apiKey
+      in: query
+      description: Your SendHub line's API key (can be found in your My Settings page)
+    basic_auth:
+      type: http
+      scheme: basic
+      description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication (Your username and API key can be found in your My Settings page)
+x-logo:
+  url: https://www.sendhub.com/wp-content/uploads/2018/01/SendHubHorizontalGreen-e1532630318570.png

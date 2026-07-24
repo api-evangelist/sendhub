@@ -1,0 +1,1160 @@
+openapi: 3.0.3
+info:
+  title: SendHub Authentication Message API
+  version: v1
+  contact:
+    name: Contact SendHub
+    email: support@sendhub.com
+  termsOfService: https://www.sendhub.com/terms/
+  license:
+    url: https://www.sendhub.com/terms/#:~:text=Limited%20License
+    name: Limited
+  description: 'SendHub''s REST-like API allows you to control & interact with your SendHub account programmatically.
+
+
+    Note: this documentation is in Beta and may be updated periodically.'
+servers:
+- url: https://api.sendhub.com
+  description: SendHub's API
+security:
+- username: []
+  api_key: []
+- basic_auth: []
+tags:
+- name: Message
+  x-displayName: Messages
+  description: Send and manage messages.
+paths:
+  /v1/messages:
+    x-testConfig:
+      enabled: true
+    post:
+      x-testConfig:
+        body:
+          contacts:
+          - '+12015716227'
+          text: Hey got 'em
+          mms:
+            filename: funny_video.mp4
+            url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+      summary: Send an SMS or MMS message
+      description: Sends an SMS (or MMS based on your plan) to a list of contacts, phone numbers or groups.
+      operationId: sendMessage
+      tags:
+      - Message
+      responses:
+        '201':
+          $ref: '#/components/responses/sendMessage201'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/sendMessage'
+  /v1/messages/{message_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        message_id: '{{message_id}}'
+    parameters:
+    - in: path
+      required: true
+      name: message_id
+      schema:
+        type: string
+      description: The message ID
+    get:
+      tags:
+      - Message
+      summary: Get Message
+      description: Retrieves an existing message by its Id
+      operationId: getMessage
+      responses:
+        '200':
+          $ref: '#/components/responses/getMessage200'
+          x-$ref: '#/components/responses/getMessage200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Message not found
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          contacts:
+          - '+18884445555'
+          text: Hey got 'em
+          mms:
+            filename: funny_video.mp4
+            url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+      tags:
+      - Message
+      summary: Update Message
+      description: Updates a scheduled message
+      operationId: updateMessage
+      requestBody:
+        $ref: '#/components/requestBodies/sendMessage'
+      responses:
+        '201':
+          $ref: '#/components/responses/updateMessage201'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/deleteMessage404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Message
+      summary: Delete Message
+      description: Deletes an individual message by its id
+      operationId: deleteMessage
+      responses:
+        '200':
+          $ref: '#/components/responses/deleteMessage200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/deleteMessage404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/messages/scheduled:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      summary: List scheduled messages
+      description: Lists scheduled messages
+      operationId: listScheduledMessages
+      tags:
+      - Message
+      responses:
+        '200':
+          $ref: '#/components/responses/listScheduledMessages200'
+        '400':
+          $ref: '#/components/responses/listScheduledMessages400'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+components:
+  requestBodies:
+    sendMessage:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - x-$ref: '#/components/schemas/sendMessageRequest'
+            - $ref: '#/components/schemas/sendMessageRequest'
+          examples:
+            Send SMS to a phone number:
+              summary: Send SMS to a phone number
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hello there
+            Schedule a message to be sent in the future:
+              summary: Schedule a message to be sent in the future
+              value:
+                contacts:
+                - '116006957938017590'
+                - '+18884445555'
+                groups:
+                - '115999753870991330'
+                text: Hello from the past!
+                scheduled_at: 2069-04-20T04:20:59+0000
+            Send an image (via URL):
+              summary: Send an image (via URL)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hello there
+                mms:
+                  filename: Obiwan.png
+                  url: https://pics.me.me/hello-there-general-kenobi-39974644.png
+            Send a video (via URL):
+              summary: Send a video (via URL)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hey got 'em
+                mms:
+                  filename: funny_video.mp4
+                  url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+            Send an image (via base64-encoded data):
+              summary: Send an image (via base64-encoded data)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hey! Check out SendHub :)
+                mms:
+                  filename: SendHub.png
+                  data: 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
+  schemas:
+    modifiedTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
+    mmsOnlyFilename:
+      type: object
+      oneOf:
+      - properties:
+          filename:
+            type: string
+          url:
+            type: string
+            format: uri
+            description: Publicly-accessible URL
+        required:
+        - filename
+        - url
+      - properties:
+          filename:
+            type: string
+          data:
+            type: string
+            format: byte
+            description: Base64-encoded file
+        required:
+        - filename
+        - data
+    deleted:
+      type: boolean
+      readOnly: true
+    sendMessageResponse:
+      type: object
+      description: Successfully queued or scheduled the message for sending
+      properties:
+        acknowledgment:
+          $ref: '#/components/schemas/acknowledgment'
+        contacts:
+          type: array
+          uniqueItems: true
+          items:
+            required:
+            - blocked
+            - date_created
+            - date_modified
+            - deleted
+            - extra_info
+            - id
+            - id_str
+            - is_owned
+            - keyword
+            - name
+            - number
+            - screened
+            - smsGateway
+            - user_id
+            properties:
+              blocked:
+                type: boolean
+              date_created:
+                type: string
+                minLength: 1
+              date_modified:
+                type: string
+                minLength: 1
+              deleted:
+                type: boolean
+              extra_info:
+                type: string
+                minLength: 1
+              id:
+                type: string
+                minLength: 1
+              id_str:
+                type: string
+                minLength: 1
+              is_owned:
+                type: boolean
+              keyword:
+                type: string
+                minLength: 1
+              name:
+                type: string
+                minLength: 1
+              number:
+                type: string
+                minLength: 1
+              screened:
+                type: boolean
+              smsGateway:
+                type: string
+                minLength: 1
+              user_id:
+                type: string
+                minLength: 1
+        created_at:
+          $ref: '#/components/schemas/messageCreatedAt'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          $ref: '#/components/schemas/directionToFrom'
+        force_shortlink_creation:
+          $ref: '#/components/schemas/forceShortlinkCreation'
+        groups:
+          type: array
+          uniqueItems: true
+          items:
+            required:
+            - check_all
+            - date_created
+            - date_modified
+            - deleted
+            - id
+            - id_str
+            - is_shared
+            - mediums
+            - name
+            - permissions
+            - slug
+            - text_to_subscribe
+            - ttjResponse
+            - user_id
+            properties:
+              check_all:
+                type: boolean
+              date_created:
+                type: string
+                minLength: 1
+              date_modified:
+                type: string
+                minLength: 1
+              deleted:
+                type: boolean
+              id:
+                type: string
+                minLength: 1
+              id_str:
+                type: string
+                minLength: 1
+              is_shared:
+                type: boolean
+              mediums:
+                type: string
+                minLength: 1
+              name:
+                type: string
+                minLength: 1
+              permissions:
+                type: string
+                minLength: 1
+              slug:
+                type: string
+                minLength: 1
+              text_to_subscribe:
+                type: boolean
+              ttjResponse:
+                type: string
+                minLength: 1
+              user_id:
+                type: string
+                minLength: 1
+        id:
+          type: string
+          minLength: 1
+        id_is_thread_id:
+          type: boolean
+        message_id:
+          type: string
+          minLength: 1
+        mms:
+          type: object
+          properties:
+            filename:
+              type: string
+              minLength: 1
+          required:
+          - filename
+        modified_at:
+          type: string
+          minLength: 1
+        resource_uri:
+          type: string
+          minLength: 1
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/sent'
+        shortlink:
+          type: string
+          minLength: 1
+        text:
+          type: string
+          minLength: 1
+        thread_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+        via_shortcode:
+          type: boolean
+      required:
+      - acknowledgment
+      - contacts
+      - created_at
+      - deleted
+      - direction
+      - force_shortlink_creation
+      - groups
+      - id
+      - id_is_thread_id
+      - message_id
+      - mms
+      - modified_at
+      - resource_uri
+      - scheduled_at
+      - shortlink
+      - text
+      - thread_id
+      - type
+      - via_shortcode
+    message:
+      type: object
+      properties:
+        acknowledgment:
+          $ref: '#/components/schemas/acknowledgment'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedContact'
+            x-$ref: '#/components/schemas/messageNestedContact'
+        created_at:
+          $ref: '#/components/schemas/createdTs'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          $ref: '#/components/schemas/direction'
+        force_shortlink_creation:
+          $ref: '#/components/schemas/forceShortlinkCreation'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedGroup'
+        id:
+          $ref: '#/components/schemas/dynamicThreadId'
+        id_is_thread_id:
+          $ref: '#/components/schemas/idIsThreadId'
+        message_id:
+          $ref: '#/components/schemas/messageId'
+        modified_at:
+          $ref: '#/components/schemas/modifiedTs'
+        resource_uri:
+          $ref: '#/components/schemas/messageResourceUri'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/sent'
+        shortlink:
+          $ref: '#/components/schemas/shortlink'
+        text:
+          $ref: '#/components/schemas/messageText'
+        thread_id:
+          $ref: '#/components/schemas/threadId'
+        type:
+          $ref: '#/components/schemas/messageType'
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+        via_shortcode:
+          $ref: '#/components/schemas/messageViaShortcode'
+        mms:
+          $ref: '#/components/schemas/mmsOnlyFilename'
+      required:
+      - acknowledgment
+      - contacts
+      - created_at
+      - deleted
+      - direction
+      - force_shortlink_creation
+      - groups
+      - id
+      - id_is_thread_id
+      - message_id
+      - modified_at
+      - resource_uri
+      - scheduled_at
+      - sent
+      - shortlink
+      - text
+      - thread_id
+      - type
+      - unread
+      - via_shortcode
+    updateMessageResponse:
+      allOf:
+      - x-$ref: '#/components/schemas/sendMessageRequest'
+      - $ref: '#/components/schemas/sendMessageRequest'
+    groupMediums:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - deprecated: true
+        description: This is used internally and may be expanded upon or removed in the future
+    contactIdBoth:
+      type: string
+      anyOf:
+      - $ref: '#/components/schemas/contactId'
+      - $ref: '#/components/schemas/contactIdInt'
+    sendMessageRequestAtLeastContacts:
+      type: object
+      title: sendMessageRequestAtLeastContacts
+      required:
+      - text
+      - contacts
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+        contacts:
+          allOf:
+          - $ref: '#/components/schemas/messageContactIdsOrNumbers'
+          - minItems: 1
+    messageViaShortcode:
+      type: boolean
+      description: Send the message via your account's Short Code number (requires a plan with Short Code access (learn more here)[https://sendhub.force.com/support/s/article/shortcode])
+    messageNestedGroup:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/threadNestedGroup'
+      - properties:
+          date_created:
+            $ref: '#/components/schemas/timestampWithoutDecimal'
+          date_modified:
+            $ref: '#/components/schemas/timestampWithoutDecimal'
+          is_shared:
+            $ref: '#/components/schemas/isShared'
+          permissions:
+            $ref: '#/components/schemas/groupPermissions'
+          user_id:
+            $ref: '#/components/schemas/userId'
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    sent:
+      title: sent
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - type: string
+        nullable: true
+      description: The date & time **in UTC** the message was sent at.
+    groupCheckAll:
+      type: boolean
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    smsGateway:
+      type: string
+      example: sendhub
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    threadId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The thread ID
+    mms:
+      title: mms
+      type: object
+      oneOf:
+      - title: Attachment via URL
+        type: object
+        properties:
+          filename:
+            type: string
+          url:
+            type: string
+            format: uri
+            description: Publicly-accessible URL
+        required:
+        - filename
+        - url
+      - title: Attachment via Base64-encoded file
+        type: object
+        properties:
+          filename:
+            type: string
+          data:
+            type: string
+            format: byte
+            description: Base64-encoded file
+        required:
+        - filename
+        - data
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+    errorObject:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: number
+    messageCreatedAt:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      description: UTC timestamp of when the message was created
+    messageUnread:
+      type: boolean
+      nullable: true
+      description: 'Whether or not the message is marked as unread
+
+        Changing this will mark the corresponding thread as read or unread'
+    messageContactIdsOrNumbers:
+      title: messageContactIdsOrNumbers
+      type: array
+      maxItems: 25
+      items:
+        type: string
+        oneOf:
+        - $ref: '#/components/schemas/contactIdBoth'
+        - type: string
+          pattern: ^\+1\d{10}$
+          description: 'Phone number
+
+
+            **Note:** the phone number _**must**_ be in the E.164 format (eg. `+18004445555`)'
+    nullableString:
+      type: string
+      nullable: true
+    messageText:
+      title: messageText
+      type: string
+      description: 'The text content of the message
+
+        **Note:** Be sure you understand SMS segmenting ((learn more here)[https://sendhub.force.com/support/s/article/how-am-i-billed-for-long-messages])'
+      minimum: 1
+      maximum: 1600
+    idStr:
+      type: string
+      pattern: ^\d+$
+      description: Same as id but always a string
+    id:
+      type: string
+      pattern: ^\d+$
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    sendMessageRequest:
+      type: object
+      title: sendMessageRequest
+      oneOf:
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestAtLeastContacts'
+        - $ref: '#/components/schemas/sendMessageRequestAtLeastContacts'
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestAtLeastGroups'
+        - $ref: '#/components/schemas/sendMessageRequestAtLeastGroups'
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestBoth'
+        - $ref: '#/components/schemas/sendMessageRequestBoth'
+    sendMessageRequestBoth:
+      type: object
+      title: sendMessageRequestBoth
+      allOf:
+      - $ref: '#/components/schemas/baseSendMessageRequest'
+      - type: object
+        required:
+        - groups
+        - contacts
+        properties:
+          groups:
+            allOf:
+            - $ref: '#/components/schemas/messageGroupIds'
+            - minItems: 1
+          contacts:
+            allOf:
+            - $ref: '#/components/schemas/messageContactIdsOrNumbers'
+            - minItems: 1
+    userId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The ID of a SendHub user (an individual line)
+    groupPermissions:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - default: write
+        enum:
+        - write
+    baseSendMessageRequest:
+      type: object
+      title: baseSendMessageRequest
+      additionalProperties: false
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+      required:
+      - text
+    timestampWithoutDecimal:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:34` equals August 1st, 2021 at 3:48 and 34 seconds AM (UTC)'
+      example: '2021-08-01T03:48:34'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+    messageResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/messages\/\d+$
+      description: Resource URI for this message
+      example: /v1/messages/123
+    isShared:
+      type: boolean
+      description: Whether the group is shared between the lines
+      deprecated: true
+    threadNestedGroup:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/groupId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        name:
+          $ref: '#/components/schemas/groupName'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        mediums:
+          $ref: '#/components/schemas/groupMediums'
+        check_all:
+          $ref: '#/components/schemas/groupCheckAll'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+    scheduledAt:
+      title: scheduledAt
+      type: string
+      nullable: true
+      description: 'The date & time **in UTC** to schedule the message to be sent at.
+
+
+        **Note:** it **must** be exactly 24-characters long and in this format: `2022-04-13T15:29:40+0000`'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{4}$
+    ttjResponse:
+      type: string
+      maximum: 70
+      default: You are now subscribed.
+      description: A custom response sent when someone texts-to-join this group
+    groupName:
+      type: string
+      description: The group's name
+      minLength: 1
+      maxLength: 128
+    createdTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
+    messageId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The message ID
+    groupSlug:
+      type: string
+      description: 'The "keyword" used to text-to-join
+
+
+        Defaults to the group name lowercased, without any spaces and not duplicate by appending an incrementing number if needed'
+    extraInfo:
+      type: string
+      description: JSON-escaped object containing this contact's custom field(s)
+      maxLength: 65535
+      readOnly: true
+    direction:
+      description: The direction of the message; `outbound-api` or `incoming`
+      type: string
+      enum:
+      - outbound-api
+      - incoming
+    textToSubscribe:
+      type: boolean
+      default: false
+      description: Whether to enable text-to-join functionality for this group
+    groupIdInt:
+      type: integer
+      format: int64
+      description: The group ID
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    messageGroupIds:
+      type: array
+      description: Group ids
+      items:
+        type: string
+        oneOf:
+        - $ref: '#/components/schemas/groupId'
+        - $ref: '#/components/schemas/groupIdInt'
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    contactNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The contact's phone number
+    directionToFrom:
+      description: The direction of the message; `to` or `from` the contact
+      type: string
+      enum:
+      - to
+      - from
+    idIsThreadId:
+      type: boolean
+      description: Determines whether `id` is the thread ID or the message ID
+    contactIdInt:
+      type: integer
+      format: int64
+      description: The contact ID
+    contactId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The contact ID
+    forceShortlinkCreation:
+      type: boolean
+      description: If `true`, creates a shortlink for this message regardless if there's an attachment.
+    dynamicThreadId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: If `id_is_thread_id` is true, this is the `thread_id`, otherwise it's the `message_id`
+    shortlink:
+      type: string
+      description: A short link generated by SendHub when you send a message with an attachment or with `force_shortlink_creation` set to `true`
+      pattern: ^$|^https?://sh.gl/[a-zA-Z0-9]+$
+    listScheduledMessagesResponse:
+      type: object
+      description: ''
+      properties:
+        objects:
+          items:
+            type: object
+    sendMessageRequestAtLeastGroups:
+      type: object
+      title: sendMessageRequestAtLeastGroups
+      additionalProperties: false
+      required:
+      - text
+      - groups
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+        groups:
+          allOf:
+          - $ref: '#/components/schemas/messageGroupIds'
+          - minItems: 1
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    messageType:
+      type: string
+      enum:
+      - voicecall-in
+      - voicecall-out
+      - voicecall-missed
+      - voicecall-voicemail
+      - message-out
+      - message-in
+      description: The type of the message (if on the thread object, then the type of the last message in the thread)
+    messageNestedContact:
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        date_created:
+          $ref: '#/components/schemas/timestampWithoutDecimal'
+        date_modified:
+          $ref: '#/components/schemas/timestampWithoutDecimal'
+        extra_info:
+          $ref: '#/components/schemas/extraInfo'
+        smsGateway:
+          $ref: '#/components/schemas/smsGateway'
+    acknowledgment:
+      type: string
+      minLength: 1
+      nullable: true
+      example: Message queued for sending.
+  responses:
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    sendMessage201:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/sendMessageResponse'
+          examples:
+            Sent message with attachment (from URL):
+              value:
+                acknowledgment: Message queued for sending.
+                contacts:
+                - blocked: false
+                  date_created: '2020-04-08T17:57:38'
+                  date_modified: '2021-08-25T06:41:06'
+                  deleted: false
+                  extra_info: '{}'
+                  id: '116006957938283973'
+                  id_str: '116006957938283973'
+                  is_owned: true
+                  keyword: deleted116006957938283973
+                  name: John Smith
+                  number: '+19198915828'
+                  screened: false
+                  smsGateway: sendhub
+                  user_id: '283014186889381821'
+                created_at: '2021-09-07T19:28:39.099805'
+                deleted: false
+                direction: to
+                force_shortlink_creation: false
+                groups:
+                - check_all: false
+                  date_created: '2021-08-10T18:33:57'
+                  date_modified: '2021-08-30T18:23:00'
+                  deleted: false
+                  id: '115999753870991332'
+                  id_str: '115999753870991332'
+                  is_shared: false
+                  mediums: '["sms"]'
+                  name: ACME Alerts
+                  permissions: write
+                  slug: alerts
+                  text_to_subscribe: true
+                  ttjResponse: 'Thanks for opting in!
+
+                    Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+                  user_id: '283014186889381821'
+                id: '115988808197247577'
+                id_is_thread_id: true
+                message_id: '115995236872293501'
+                mms:
+                  filename: funny_video.mp4
+                modified_at: '2021-09-07T19:28:39.123132'
+                resource_uri: /v1/threads/115988808197247577
+                scheduled_at: null
+                sent: '2021-09-07T19:28:39.099805'
+                shortlink: http://sh.gl/5vUtCa
+                text: 'Hey got ''em''
+
+                  File: http://sh.gl/5vUtCa'
+                thread_id: '115988808197247577'
+                type: message-out
+                unread: null
+                via_shortcode: false
+    updateMessage201:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateMessageResponse'
+    listScheduledMessages400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - type: object
+              properties:
+                message:
+                  type: string
+                code:
+                  type: string
+                  enum:
+                  - '400'
+                error:
+                  type: string
+                moreInfo:
+                  type: string
+            - type: object
+              properties:
+                message:
+                  type: string
+          examples:
+            '`text` field missing or invalid':
+              $ref: '#/components/examples/sendMessage400Response1'
+            Trying to send to 0 contacts and 0 groups:
+              $ref: '#/components/examples/sendMessage400Response2'
+            '`text` field exceeded the 1,600 character limit':
+              $ref: '#/components/examples/sendMessage400Response3'
+    '401':
+      description: The credentials you supplied are invalid
+    deleteMessage200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Success message
+          examples:
+            Record successfully deleted:
+              value:
+                message: Record successfully deleted
+    listScheduledMessages200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listScheduledMessagesResponse'
+    deleteMessage404:
+      description: Message not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Message not found:
+              summary: Message not found
+              value:
+                error: Requested message not found
+                status: 404
+    getMessage200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/message'
+            x-$ref: '#/components/schemas/message'
+  examples:
+    sendMessage400Response1:
+      summary: '`text` field missing or invalid'
+      value:
+        message: sms message does not exist or is empty
+        code: '400'
+        error: text message invalid
+        moreInfo: ''
+    sendMessage400Response2:
+      summary: Trying to send to 0 contacts and 0 groups
+      value:
+        message: The list of contacts was empty, which is not allowed (or the list of contacts contained one or more invalid contact ids which were filtered out, and then the resulting list was empty)
+    sendMessage400Response3:
+      summary: '`text` field exceeded the 1,600 character limit'
+      value:
+        message: The message length exceeded the maximum allowed number of characters (max allowed is 1600)
+  securitySchemes:
+    username:
+      name: username
+      type: apiKey
+      in: query
+      description: Your SendHub line's username (can be found in your My Settings page)
+    api_key:
+      name: api_key
+      type: apiKey
+      in: query
+      description: Your SendHub line's API key (can be found in your My Settings page)
+    basic_auth:
+      type: http
+      scheme: basic
+      description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication (Your username and API key can be found in your My Settings page)
+x-logo:
+  url: https://www.sendhub.com/wp-content/uploads/2018/01/SendHubHorizontalGreen-e1532630318570.png

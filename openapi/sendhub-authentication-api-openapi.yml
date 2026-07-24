@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: SendHub Authentication API
+  version: v1
+  contact:
+    name: Contact SendHub
+    email: support@sendhub.com
+  termsOfService: https://www.sendhub.com/terms/
+  license:
+    url: https://www.sendhub.com/terms/#:~:text=Limited%20License
+    name: Limited
+  description: 'SendHub''s REST-like API allows you to control & interact with your SendHub account programmatically.
+
+
+    Note: this documentation is in Beta and may be updated periodically.'
+servers:
+- url: https://api.sendhub.com
+  description: SendHub's API
+security:
+- username: []
+  api_key: []
+- basic_auth: []
+tags:
+- name: Authentication
+  x-internal: 'true'
+  x-displayName: Authentication
+  description: Log in via Username & Password and "Sign In As User"
+paths:
+  /v1/auth:
+    x-testConfig:
+      enabled: true
+    post:
+      x-testConfig:
+        body:
+          authenticationType: sendhub
+          sessionId: ''
+          username: '{{username}}'
+          password: '{{password}}'
+      tags:
+      - Authentication
+      summary: Username & password login
+      description: Log in via username & password
+      operationId: login
+      responses:
+        '200':
+          $ref: '#/components/responses/login200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+components:
+  requestBodies:
+    login:
+      x-internal: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/loginRequest'
+  schemas:
+    sendhubNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: This line's SendHub number (E.164 format)
+    settingsJson:
+      type: string
+      minLength: 1
+    login200Response:
+      x-internal: 'true'
+      type: object
+      properties:
+        authToken:
+          type: string
+        authenticationType:
+          $ref: '#/components/schemas/authenticationType'
+        csrf_token:
+          type: string
+        emailAddress:
+          type: string
+        kazooApiPassword:
+          type: string
+          nullable: true
+        password:
+          type: string
+          description: Always giong to return '******'
+        resource_uri:
+          type: string
+          enum:
+          - /api/v1/auth
+        sendhub_number:
+          $ref: '#/components/schemas/sendhubNumber'
+        settings:
+          type: object
+          properties:
+            automated_sms_response:
+              $ref: '#/components/schemas/nullableString'
+            customer_id:
+              $ref: '#/components/schemas/nullableString'
+            deleted:
+              $ref: '#/components/schemas/deletedNullable'
+            disable_incoming_sms:
+              $ref: '#/components/schemas/disableIncomingSms'
+            enterprise:
+              $ref: '#/components/schemas/enterpriseSize'
+            entitlement:
+              $ref: '#/components/schemas/nullableString'
+            id:
+              $ref: '#/components/schemas/idBoth'
+            is_verified_email:
+              $ref: '#/components/schemas/isVerifiedEmail'
+            mixpanelid:
+              $ref: '#/components/schemas/nullableString'
+            onboarding_mobile_finished:
+              $ref: '#/components/schemas/onboardingMobileFinished'
+            onboarding_web_finished:
+              $ref: '#/components/schemas/onboardingWebFinished'
+            payment_schedule:
+              $ref: '#/components/schemas/paymentScheduleIdInt'
+            pending_email:
+              $ref: '#/components/schemas/nullableStringRO'
+            pending_phone_number:
+              $ref: '#/components/schemas/nullableString'
+            phone_number:
+              $ref: '#/components/schemas/personalCell'
+            registration_status:
+              $ref: '#/components/schemas/registrationStatus'
+            settings_json:
+              $ref: '#/components/schemas/settingsJson'
+            siftScienceLabel:
+              $ref: '#/components/schemas/nullableString'
+            signature:
+              $ref: '#/components/schemas/signature'
+            smsForwardingNumber:
+              $ref: '#/components/schemas/nullableInteger'
+            twilio_phone_number:
+              $ref: '#/components/schemas/twilioPhoneNumberId'
+            user:
+              $ref: '#/components/schemas/idInt'
+            _payment_plan:
+              $ref: '#/components/schemas/nullableString'
+        sipDeviceId:
+          $ref: '#/components/schemas/nullableString'
+        sipPassword:
+          $ref: '#/components/schemas/nullableString'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        username:
+          $ref: '#/components/schemas/username'
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    registrationStatus:
+      type: string
+      minLength: 1
+      enum:
+      - created
+      - email_verified
+      - payment_method_absent
+      - completed
+      readOnly: true
+    nullableInteger:
+      type: integer
+      nullable: true
+    disableIncomingSms:
+      type: boolean
+    nullableString:
+      type: string
+      nullable: true
+    authenticationType:
+      x-internal: 'true'
+      type: string
+      enum:
+      - sendhub
+      - manager
+    id:
+      type: string
+      pattern: ^\d+$
+    isVerifiedEmail:
+      type: boolean
+      description: Whether this user's email has been verified
+      readOnly: true
+    idInt:
+      type: integer
+      format: int64
+    onboardingWebFinished:
+      $ref: '#/components/schemas/onboardingMobileFinished'
+    username:
+      type: string
+      description: User's (SendHub line's) username
+      minLength: 1
+      maxLength: 254
+    twilioPhoneNumberId:
+      allOf:
+      - $ref: '#/components/schemas/idBoth'
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    personalCell:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
+    signature:
+      type: string
+      description: 'Signature that the SendHub apps append to new messages
+
+        **Note:** SendHub does not use this field when sending via the API'
+    paymentScheduleIdInt:
+      type: integer
+      minimum: 1
+      maximum: 3
+      description: 'Your plan''s payment schedule type:
+
+        1. Monthly 2. Yearly 3. Consumable (eg. free trial)'
+    idBoth:
+      anyOf:
+      - $ref: '#/components/schemas/id'
+      - $ref: '#/components/schemas/idInt'
+    nullableStringRO:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - readOnly: true
+    deletedNullable:
+      type: boolean
+      readOnly: true
+      nullable: true
+    userId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The ID of a SendHub user (an individual line)
+    loginRequest:
+      x-internal: 'true'
+      type: object
+      properties:
+        authenticationType:
+          allOf:
+          - $ref: '#/components/schemas/authenticationType'
+          - x-$ref: '#/components/schemas/authenticationType'
+        sessionId:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    enterpriseSize:
+      type: integer
+      description: How manu Users (lines) your account has
+      readOnly: true
+    onboardingMobileFinished:
+      type: boolean
+      readOnly: true
+      description: This is used internally and may be expanded upon or removed in the future
+      deprecated: true
+  responses:
+    login200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login200Response'
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    '401':
+      description: The credentials you supplied are invalid
+  securitySchemes:
+    username:
+      name: username
+      type: apiKey
+      in: query
+      description: Your SendHub line's username (can be found in your My Settings page)
+    api_key:
+      name: api_key
+      type: apiKey
+      in: query
+      description: Your SendHub line's API key (can be found in your My Settings page)
+    basic_auth:
+      type: http
+      scheme: basic
+      description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication (Your username and API key can be found in your My Settings page)
+x-logo:
+  url: https://www.sendhub.com/wp-content/uploads/2018/01/SendHubHorizontalGreen-e1532630318570.png

@@ -1,0 +1,1030 @@
+openapi: 3.0.3
+info:
+  title: SendHub Authentication Contact API
+  version: v1
+  contact:
+    name: Contact SendHub
+    email: support@sendhub.com
+  termsOfService: https://www.sendhub.com/terms/
+  license:
+    url: https://www.sendhub.com/terms/#:~:text=Limited%20License
+    name: Limited
+  description: 'SendHub''s REST-like API allows you to control & interact with your SendHub account programmatically.
+
+
+    Note: this documentation is in Beta and may be updated periodically.'
+servers:
+- url: https://api.sendhub.com
+  description: SendHub's API
+security:
+- username: []
+  api_key: []
+- basic_auth: []
+tags:
+- name: Contact
+  x-displayName: Contacts
+  description: Create and manage contacts.
+paths:
+  /v1/contacts:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Contact
+      summary: List Contacts
+      operationId: listContacts
+      description: 'Gets a list of contacts
+
+
+        See also: [List Group Contacts](#listGroupContacts)'
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      - $ref: '#/components/parameters/ContactsListFilterByNumber'
+      - $ref: '#/components/parameters/ContactsListFilterByName'
+      - $ref: '#/components/parameters/ContactsListFilterByScreened'
+      - $ref: '#/components/parameters/ContactsListFilterByBlocked'
+      - $ref: '#/components/parameters/ContactsListOrdering'
+      security:
+      - username: []
+        api_key: []
+      - basic_auth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/listContacts200'
+          x-$ref: '#/components/responses/listContacts200'
+        '400':
+          $ref: '#/components/responses/list400BadFiltering'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/listContacts403'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    post:
+      tags:
+      - Contact
+      summary: Create/Update Contact
+      description: 'Creates or updates a contact
+
+
+        You can add arbitrary custom fields to a contact (see [Custom Fields](#todo: add link here))
+
+
+        **Note:** the contact''s `id` is required in the request payload if the supplied `number` already exists in your contacts
+
+
+        This operation _doesn''t_ remove properties that aren''t specified when updating an existing contact
+
+
+        [Use PUT to remove custom fields or groups](#operation/upsertContact)'
+      operationId: upsertContact
+      responses:
+        '201':
+          $ref: '#/components/responses/upsertContact201'
+        '400':
+          $ref: '#/components/responses/upsertContact400'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/upsertContact'
+        x-$ref: '#/components/requestBodies/upsertContact'
+      x-testConfig:
+        body:
+          id: '116006957938017590'
+          name: Bob Parker
+          number: '+12015716227'
+    patch:
+      tags:
+      - Contact
+      summary: Creates, updates, or deletes multiple contacts in one request
+      description: Creates, updates, or deletes multiple contacts in one request
+      operationId: bulkUpsertContacts
+      responses:
+        '202':
+          $ref: '#/components/responses/bulkUpsertContacts202'
+      requestBody:
+        $ref: '#/components/requestBodies/bulkUpsertContact'
+        x-$ref: '#/components/requestBodies/bulkUpsertContact'
+      x-testConfig:
+        enabled: false
+  /v1/contacts/{contact_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        contact_id: '{{contact_id}}'
+    parameters:
+    - $ref: '#/components/parameters/contact_id'
+    get:
+      tags:
+      - Contact
+      summary: Get Contact
+      description: Retrieves a contact by its id
+      operationId: getContact
+      responses:
+        '200':
+          $ref: '#/components/responses/getContact200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          id: '116006957938017590'
+          name: John Smithy
+          number: '+12015716227'
+          landline: false
+      tags:
+      - Contact
+      summary: Update Contact
+      description: 'Updates an individual contact referenced by its id
+
+
+        You can add arbitrary custom fields to a contact (see [Custom Fields](#todo: ))
+
+
+        **Note:** this is a _replace_ operation; any properties the contact already has that you don''t specify in your request will be removed
+
+
+        [Use POST for _upsert_ functionality](#operation/upsertContact)'
+      operationId: updateContact
+      responses:
+        '200':
+          $ref: '#/components/responses/updateContact200'
+        '400':
+          $ref: '#/components/responses/updateContact400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/updateContact'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Contact
+      summary: Delete Contact
+      description: Deletes a contact
+      operationId: deleteContact
+      responses:
+        '204':
+          description: Deleted contact
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/groups/{group_id}/contacts:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        group_id: '{{group_id}}'
+    parameters:
+    - in: path
+      name: group_id
+      required: true
+      schema:
+        type: string
+      description: The group ID
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Contact
+      summary: List Group's Contacts
+      description: Lists contacts in a specified group
+      operationId: listGroupContacts
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      - $ref: '#/components/parameters/ContactsListFilterByNumber'
+      - $ref: '#/components/parameters/ContactsListFilterByName'
+      - $ref: '#/components/parameters/ContactsListFilterByScreened'
+      - $ref: '#/components/parameters/ContactsListFilterByBlocked'
+      - $ref: '#/components/parameters/ContactsListOrdering'
+      responses:
+        '200':
+          $ref: '#/components/responses/listGroupContacts200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+components:
+  schemas:
+    bulkUpsertContactRequest:
+      type: object
+      properties:
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/upsertContactRequest'
+    contactWithContactId:
+      allOf:
+      - $ref: '#/components/schemas/contact'
+      - properties:
+          contact_id:
+            $ref: '#/components/schemas/contactIdBoth'
+    next:
+      type: string
+      nullable: true
+    deleted:
+      type: boolean
+      readOnly: true
+    localGateway:
+      type: boolean
+      description: True if the contact is a SendHub line
+      readOnly: true
+    contactIdBoth:
+      type: string
+      anyOf:
+      - $ref: '#/components/schemas/contactId'
+      - $ref: '#/components/schemas/contactIdInt'
+    offset:
+      type: integer
+    nameErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    upsertContactRequestWithId:
+      allOf:
+      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
+      - type: object
+        title: upsertContactRequestWithId
+        required:
+        - id
+    listOfGroupResourceUris:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    listContacts200Response:
+      title: listContacts200Response
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+          x-$ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+    customField:
+      type: string
+      nullable: true
+      description: 'Custom field(s)
+
+
+        There''s no limit to the number or size of custom fields (this may be subject to change in the future) except for a total limit of 65,535 bytes for the string of the json object that they''re stored in
+
+
+        **Note:** Custom fields may add *very* slight load time per contact. This is typically only noticable when listing many contacts that have a large amount of custom fields
+
+        Note: Setting the value to `null` removes the custom field'
+    landlineOverride:
+      type: boolean
+      description: 'TODO: '
+    upsertContactRequestWithoutId:
+      title: upsertContactRequestWithoutId
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+        x-$ref: '#/components/schemas/customField'
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+          x-$ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+          x-$ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactIdBoth'
+          x-$ref: '#/components/schemas/contactIdBoth'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+          x-$ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+          x-$ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+          x-$ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+          x-$ref: '#/components/schemas/screened'
+        groups:
+          $ref: '#/components/schemas/listOfGroupIds'
+          x-$ref: '#/components/schemas/listOfGroupIds'
+      required:
+      - name
+      - number
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+    errorObject:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: number
+    updateContactRequest:
+      $ref: '#/components/schemas/upsertContactRequestWithId'
+      x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    groupResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
+      description: Resource URI for this group
+      example: /v1/groups/115999753870991332
+    landline:
+      type: boolean
+      description: Whether SendHub has determined the contact's number is a landline number
+    idStr:
+      type: string
+      pattern: ^\d+$
+      description: Same as id but always a string
+    id:
+      type: string
+      pattern: ^\d+$
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    updateContactResponse:
+      $ref: '#/components/schemas/contactWithContactId'
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    previous:
+      type: string
+      nullable: true
+    contactResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
+      description: Resource URI for this contact
+      example: /v1/contacts/116006957938017590
+    limit:
+      type: integer
+    listOfGroupIds:
+      type: array
+      items:
+        anyOf:
+        - allOf:
+          - $ref: '#/components/schemas/groupId'
+          - writeOnly: true
+        - $ref: '#/components/schemas/groupIdInt'
+        - $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs and/or IDs
+    groupIdInt:
+      type: integer
+      format: int64
+      description: The group ID
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    contactNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The contact's phone number
+    contact:
+      title: Contact
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        id:
+          $ref: '#/components/schemas/contactId'
+        date_created:
+          $ref: '#/components/schemas/timestamp'
+        date_modified:
+          $ref: '#/components/schemas/timestamp'
+        local_gateway:
+          $ref: '#/components/schemas/localGateway'
+        resource_uri:
+          $ref: '#/components/schemas/contactResourceUri'
+        groups:
+          $ref: '#/components/schemas/listOfGroupResourceUris'
+        landline:
+          $ref: '#/components/schemas/landline'
+        landline_override:
+          $ref: '#/components/schemas/landlineOverride'
+      required:
+      - name
+      - number
+    numberErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    contactIdInt:
+      type: integer
+      format: int64
+      description: The contact ID
+    contactId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The contact ID
+    meta:
+      type: object
+      properties:
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    upsertContactResponse:
+      anyOf:
+      - $ref: '#/components/schemas/contact'
+      - $ref: '#/components/schemas/contactWithContactId'
+    upsertContactRequest:
+      anyOf:
+      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithoutId'
+      - $ref: '#/components/schemas/upsertContactRequestWithId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    nameOrNumberError:
+      anyOf:
+      - $ref: '#/components/schemas/nameErrorObject'
+      - $ref: '#/components/schemas/numberErrorObject'
+  responses:
+    upsertContact201:
+      description: Created or updated contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upsertContactResponse'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/johnWithContactId'
+            Example contact 2:
+              $ref: '#/components/examples/bobWithContactId'
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    list400BadFiltering:
+      description: Bad Request
+      content:
+        text/html; charset=utf-8:
+          schema:
+            type: string
+          examples:
+            Invalid filter parameter:
+              summary: Invalid filter parameter
+              value: The 'resource_uri' field does not allow filtering.
+    bulkUpsertContacts202:
+      description: Created or updated contacts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/upsertContactResponse'
+    upsertContact400:
+      $ref: '#/components/responses/updateContact400'
+    getContact200:
+      description: Found contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/john'
+            Example contact 2:
+              $ref: '#/components/examples/bob'
+    contact404:
+      description: Contact not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Contact not found:
+              summary: Contact not found
+              value:
+                error: Requested contact not found
+                status: 404
+    listGroupContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listGroupContacts200Response'
+    listContacts403:
+      description: Forbidden
+    updateContact400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/nameOrNumberError'
+          examples:
+            Missing name and number fields:
+              summary: Missing name and number fields
+              value:
+                name:
+                - This field is required.
+                number:
+                - This field is required.
+            Missing id field or incorrect id provided:
+              summary: Missing id field or incorrect id provided
+              value:
+                number:
+                - That number is already in your contacts.
+    listContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+            x-$ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listContacts200Response-2'
+    updateContact200:
+      description: Updated contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateContactResponse'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/johnWithContactId'
+            Example contact 2:
+              $ref: '#/components/examples/bobWithContactId'
+    '401':
+      description: The credentials you supplied are invalid
+  examples:
+    bobWithContactId:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+        contact_id: '116006957938017590'
+    Updating_a_contacts_custom_fields:
+      summary: Updating a contact's custom field(s)
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field: My custom value
+    listGroupContacts200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938017590'
+          id_str: '116006957938017590'
+          is_owned: true
+          keyword: bob
+          local_gateway: false
+          name: Bob Parker
+          number: '+12015716227'
+          resource_uri: /v1/contacts/116006957938017590
+          screened: false
+          landline: false
+          landline_override: false
+    Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in:
+      summary: Updating a contact's custom field(s) without removing them from any groups they're in
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field: My custom value
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    Create_non-existing_contact:
+      summary: Create a non-existing contact
+      value:
+        name: Bob Parker
+        number: '+12015716227'
+    johnWithContactId:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938283973'
+        id_str: '116006957938283973'
+        is_owned: true
+        keyword: john
+        local_gateway: false
+        name: John Smith
+        number: '+19198915828'
+        resource_uri: /v1/contacts/116006957938283973
+        screened: false
+        landline: false
+        landline_override: false
+        contact_id: '116006957938283973'
+    Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+      summary: Update my-custom-field-2 without modifying or removing my-custom-field
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field-2: My custom value 2
+    Updating_a_contacts_name:
+      summary: Updating a contact's name
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+    Updating_a_contacts_groups:
+      summary: Updating a contact's groups
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    listContacts200Response-2:
+      summary: Success
+      value:
+        meta:
+          limit: 1
+          next: /v1/contacts?limit=1&offset=1
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2022-03-03T14:30:43.434051'
+          date_modified: '2022-03-09T17:00:32.795897'
+          deleted: false
+          groups: []
+          id: '116006957944371848'
+          id_str: '116006957944371848'
+          is_owned: true
+          keyword: acme
+          landline: false
+          local_gateway: false
+          my-custom-field-2: my-custom-field-2
+          name: ACME Alerts
+          number: '+18002222228'
+          resource_uri: /v1/contacts/116006957944371848
+          screened: false
+    bob:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+    john:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938283973'
+        id_str: '116006957938283973'
+        is_owned: true
+        keyword: john
+        local_gateway: false
+        name: John Smith
+        number: '+19198915828'
+        resource_uri: /v1/contacts/116006957938283973
+        screened: false
+        landline: false
+        landline_override: false
+  requestBodies:
+    upsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upsertContactRequest'
+            x-$ref: '#/components/schemas/upsertContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Create_non-existing_contact:
+              $ref: '#/components/examples/Create_non-existing_contact'
+            Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+              $ref: '#/components/examples/Update_my-custom-field-2_without_modifying_or_removing_my-custom-field'
+    bulkUpsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/bulkUpsertContactRequest'
+            x-$ref: '#/components/schemas/bulkUpsertContactRequest'
+    updateContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateContactRequest'
+            x-$ref: '#/components/schemas/updateContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Updating_a_contact's_custom_field(s)_without_removing_them_from_any_groups_they're_in:
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in'
+  parameters:
+    ContactsListOrdering:
+      name: ordering
+      in: query
+      description: 'Sort contacts by a specified field (prepend a hyphen to reverse order)
+
+
+        **Must** be a built-in contact field, not a custom field'
+      schema:
+        type: string
+        enum:
+        - name
+        - -name
+        - date_created
+        - -date_created
+        - date_modified
+        - -date_modified
+        - id
+        - -id
+        - blocked
+        - -blocked
+        - screened
+        - -screened
+        - is_owned
+        - -is_owned
+        - keyword
+        - -keyword
+        - number
+        - -number
+      examples:
+        Sort contacts by date_created last-to-first:
+          summary: Sort contacts by date_created last-to-first
+          value: -date_created
+        Sort contacts by date_created first-to-last:
+          summary: Sort contacts by date_created first-to-last
+          value: date_created
+        Sort contacts by date_modified last-to-first:
+          summary: Sort contacts by date_modified last-to-first
+          value: -date_modified
+        Sort contacts by date_modified first-to-last:
+          summary: Sort contacts by date_modified first-to-last
+          value: date_modified
+        Sort contacts by their name Z-to-A:
+          summary: Sort contacts by their name Z-to-A
+          value: -name
+        Sort contacts by their name A-to-Z:
+          summary: Sort contacts by their name A-to-Z
+          value: name
+    ContactsListFilterByBlocked:
+      name: blocked
+      in: query
+      description: Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+      schema:
+        type: boolean
+      examples:
+        Only show contacts that have opted-out:
+          summary: Only show contacts that have opted-out
+          value: true
+        Only show contacts that haven't opted-out:
+          summary: Only show contacts that haven't opted-out
+          value: false
+    contact_id:
+      name: contact_id
+      in: path
+      required: true
+      schema:
+        anyOf:
+        - type: integer
+          format: int64
+          minimum: 1
+        - type: string
+          pattern: ^\d+$
+          minLength: 1
+      description: The contact ID
+    PageLimit:
+      name: limit
+      in: query
+      description: (Pagination) How many records to return
+      schema:
+        type: integer
+        maximum: 1000
+        minimum: 1
+        default: 20
+    ContactsListFilterByName:
+      name: name
+      in: query
+      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
+      schema:
+        type: string
+      examples:
+        John Smith:
+          value: John Smith
+        Bob Parker:
+          value: Bob Parker
+    ContactsListFilterByNumber:
+      name: number
+      in: query
+      description: "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+      schema:
+        type: string
+      examples:
+        Only show contacts with a `number` matching +18004445555:
+          summary: Only show contacts with a `number` matching +18004445555
+          value: '%2B18004445555'
+        Only show contacts with a `number` matching +12015716227:
+          summary: Only show contacts with a `number` matching +12015716227
+          value: '%2B12015716227'
+    ContactsListFilterByScreened:
+      name: screened
+      in: query
+      description: Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)
+      schema:
+        type: boolean
+      examples:
+        Only show contacts that you have blocked:
+          summary: Only show contacts that you have blocked
+          value: true
+        Only show contacts that you haven't blocked:
+          summary: Only show contacts that you haven't blocked
+          value: false
+    PageOffset:
+      name: offset
+      in: query
+      description: (Pagination) How many records to skip
+      schema:
+        type: integer
+        default: 0
+  securitySchemes:
+    username:
+      name: username
+      type: apiKey
+      in: query
+      description: Your SendHub line's username (can be found in your My Settings page)
+    api_key:
+      name: api_key
+      type: apiKey
+      in: query
+      description: Your SendHub line's API key (can be found in your My Settings page)
+    basic_auth:
+      type: http
+      scheme: basic
+      description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication (Your username and API key can be found in your My Settings page)
+x-logo:
+  url: https://www.sendhub.com/wp-content/uploads/2018/01/SendHubHorizontalGreen-e1532630318570.png
