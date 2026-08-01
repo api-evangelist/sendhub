@@ -1,0 +1,21 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for SendHub
+  version: 1.0.0
+extends: openapi/sendhub-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-artifacts:
+    - authentication
+    - conventions
+    - errors
+    - data-model
+    - lifecycle
+    - mcp
+    - skills
+    - webhooks
+- target: $.info
+  update:
+    x-api-auth-note: apiKey username+api_key in query, or HTTP Basic; API access on custom plans only.

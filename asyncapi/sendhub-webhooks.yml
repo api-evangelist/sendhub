@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: searched
+source:
+- https://sendhub.com/developer/
+- openapi/sendhub-openapi-original.yml
+spec_type: Webhooks
+note: 'SendHub supports inbound-SMS webhooks: configure an SMS webhook URL and SendHub HTTP POSTs incoming
+  messages to it. No AsyncAPI/event-catalog document is published; payload schema is not formally documented.'
+configuration:
+  field: sms_webhook_url
+  via: GET/PUT /v1/settings (settings.settingsJson) and account settings UI
+events:
+- name: inbound_sms
+  trigger: A message is received on a SendHub line
+  delivery: HTTP POST to the configured sms_webhook_url
+  payload_ref: openapi/sendhub-openapi-original.yml#/components/schemas/message

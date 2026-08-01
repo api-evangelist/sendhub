@@ -1,0 +1,94 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/sendhub-openapi-original.yml
+status: candidate
+server:
+  name: sendhub
+  transport: http
+note: Candidate tool list derived one-per-operation from the SendHub v1 OpenAPI. No official hosted MCP
+  server was found.
+tools:
+- name: listContacts
+  description: List Contacts
+  source_operation: openapi/sendhub-openapi-original.yml#listContacts
+- name: upsertContact
+  description: Create/Update Contact
+  source_operation: openapi/sendhub-openapi-original.yml#upsertContact
+- name: bulkUpsertContacts
+  description: Creates, updates, or deletes multiple contacts in one request
+  source_operation: openapi/sendhub-openapi-original.yml#bulkUpsertContacts
+- name: getContact
+  description: Get Contact
+  source_operation: openapi/sendhub-openapi-original.yml#getContact
+- name: updateContact
+  description: Update Contact
+  source_operation: openapi/sendhub-openapi-original.yml#updateContact
+- name: deleteContact
+  description: Delete Contact
+  source_operation: openapi/sendhub-openapi-original.yml#deleteContact
+- name: listGroups
+  description: List Groups
+  source_operation: openapi/sendhub-openapi-original.yml#listGroups
+- name: createGroup
+  description: Create Group
+  source_operation: openapi/sendhub-openapi-original.yml#createGroup
+- name: getGroup
+  description: Get Group
+  source_operation: openapi/sendhub-openapi-original.yml#getGroup
+- name: updateGroup
+  description: Update Group
+  source_operation: openapi/sendhub-openapi-original.yml#updateGroup
+- name: deleteGroup
+  description: Delete Group
+  source_operation: openapi/sendhub-openapi-original.yml#deleteGroup
+- name: listGroupContacts
+  description: List Group's Contacts
+  source_operation: openapi/sendhub-openapi-original.yml#listGroupContacts
+- name: addRemoveGroupContacts
+  description: Add/Remove Group's Contacts
+  source_operation: openapi/sendhub-openapi-original.yml#addRemoveGroupContacts
+- name: listThreads
+  description: List Threads
+  source_operation: openapi/sendhub-openapi-original.yml#listThreads
+- name: getThread
+  description: Get thread
+  source_operation: openapi/sendhub-openapi-original.yml#getThread
+- name: deleteThread
+  description: Delete thread
+  source_operation: openapi/sendhub-openapi-original.yml#deleteThread
+- name: sendMessage
+  description: Send an SMS or MMS message
+  source_operation: openapi/sendhub-openapi-original.yml#sendMessage
+- name: getMessage
+  description: Get Message
+  source_operation: openapi/sendhub-openapi-original.yml#getMessage
+- name: updateMessage
+  description: Update Message
+  source_operation: openapi/sendhub-openapi-original.yml#updateMessage
+- name: deleteMessage
+  description: Delete Message
+  source_operation: openapi/sendhub-openapi-original.yml#deleteMessage
+- name: listScheduledMessages
+  description: List scheduled messages
+  source_operation: openapi/sendhub-openapi-original.yml#listScheduledMessages
+- name: getSettings
+  description: Get Settings
+  source_operation: openapi/sendhub-openapi-original.yml#getSettings
+- name: updateSettings
+  description: Update Settings
+  source_operation: openapi/sendhub-openapi-original.yml#updateSettings
+- name: getProfile
+  description: Get Profile
+  source_operation: openapi/sendhub-openapi-original.yml#getProfile
+- name: getEnterprise
+  description: Get Enterprise (Account)
+  source_operation: openapi/sendhub-openapi-original.yml#getEnterprise
+- name: listUsers
+  description: List Users
+  source_operation: openapi/sendhub-openapi-original.yml#listUsers
+- name: getUser
+  description: Get User
+  source_operation: openapi/sendhub-openapi-original.yml#getUser
+- name: login
+  description: Username & password login
+  source_operation: openapi/sendhub-openapi-original.yml#login

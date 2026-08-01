@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: derived
+source:
+- openapi/sendhub-openapi-original.yml
+- https://sendhub.com/developer/
+authentication:
+  styles:
+  - apiKey (username + api_key as query params)
+  - HTTP Basic (username + password/api_key)
+  ref: authentication/sendhub-authentication.yml
+idempotency:
+  supported: false
+  note: No idempotency-key header/param documented. upsertContact (POST) and bulkUpsertContacts (PATCH)
+    provide upsert-by-number semantics but are not request-idempotency keys.
+pagination:
+  style: offset
+  params:
+  - limit
+  - offset
+  response_fields:
+  - meta.offset
+  - meta.limit
+  - meta.previous
+  - meta.next
+  note: List endpoints return a meta object with offset/limit and previous/next links.
+versioning:
+  scheme: uri-path
+  current: v1
+  note: All endpoints under /v1/. Docs marked Beta.
+error_envelope:
+  ref: errors/sendhub-error-codes.yml
+  fields:
+  - message
+  - code
+  - error
+  - devMessage
+  - moreInfo
+rate_limiting:
+  signals:
+  - HTTP 429 (too many requests, includes timeLeft)
+  - HTTP 420 (plan API limit reached / no API access on plan)
+  note: API access is available on custom plans only.
+resource_uris:
+  note: Objects carry resource_uri fields (e.g. /v1/contacts/{id}) for hypermedia-style linking.

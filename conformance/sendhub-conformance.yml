@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/sendhub-openapi-original.yml
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; auth is apiKey (query) + HTTP Basic.
+- id: openid-connect
+  conforms: false
+- id: http-basic-auth
+  conforms: true
+  evidence: components.securitySchemes.basic_auth type http scheme basic
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors return application/json custom envelope, not application/problem+json.
+- id: rest
+  conforms: true
+  evidence: Resource-oriented /v1 endpoints with standard HTTP verbs (self-described REST-like).
+- id: offset-pagination
+  conforms: true
+  evidence: meta.offset/limit/previous/next on list endpoints
+- id: json
+  conforms: true
+  evidence: application/json request/response bodies

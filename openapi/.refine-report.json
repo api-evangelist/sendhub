@@ -1,0 +1,24 @@
+{
+  "provider": "sendhub",
+  "sources": [
+    "sendhub-authentication-api-openapi.yml",
+    "sendhub-contact-api-openapi.yml",
+    "sendhub-group-api-openapi.yml",
+    "sendhub-message-api-openapi.yml",
+    "sendhub-profile-api-openapi.yml",
+    "sendhub-thread-api-openapi.yml"
+  ],
+  "outputs": [
+    "sendhub-authentication-api-openapi.yml",
+    "sendhub-contact-api-openapi.yml",
+    "sendhub-group-api-openapi.yml",
+    "sendhub-message-api-openapi.yml",
+    "sendhub-profile-api-openapi.yml",
+    "sendhub-thread-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

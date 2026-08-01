@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/sendhub-openapi-original.yml
+entities:
+- name: Contact
+  id_field: id
+  collection: /v1/contacts
+  belongs_to: []
+- name: Group
+  id_field: id
+  collection: /v1/groups
+- name: Thread
+  id_field: id
+  collection: /v1/inbox
+- name: Message
+  id_field: id
+  collection: /v1/messages
+- name: User
+  id_field: id
+  collection: /v1/enterprises/{enterprise_id}/users
+- name: Enterprise
+  id_field: id
+  collection: /v1/enterprises
+- name: Settings
+  collection: /v1/settings
+- name: Profile
+  collection: /v1/profile
+relationships:
+- from: Group
+  type: has_many
+  to: Contact
+  via: /v1/groups/{group_id}/contacts
+- from: Contact
+  type: has_many
+  to: Group
+  via: groups
+- from: Message
+  type: references
+  to: Contact
+  via: contacts
+- from: Message
+  type: references
+  to: Group
+  via: groups
+- from: Thread
+  type: has_one
+  to: Contact
+  via: contact
+- from: Thread
+  type: has_many
+  to: Message
+  via: messages
+- from: Enterprise
+  type: has_many
+  to: User
+  via: /v1/enterprises/{enterprise_id}/users

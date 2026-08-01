@@ -1,0 +1,5346 @@
+openapi: 3.0.3
+info:
+  title: SendHub
+  version: v1
+  contact:
+    name: Contact SendHub
+    email: support@sendhub.com
+  termsOfService: https://www.sendhub.com/terms/
+  license:
+    url: https://www.sendhub.com/terms/#:~:text=Limited%20License
+    name: Limited
+  description: 'SendHub''s REST-like API allows you to control & interact with your SendHub account programmatically.
+
+
+    Note: this documentation is in Beta and may be updated periodically.'
+servers:
+- url: https://api.sendhub.com
+  description: SendHub's API
+security:
+- username: []
+  api_key: []
+- basic_auth: []
+x-logo:
+  url: https://www.sendhub.com/wp-content/uploads/2018/01/SendHubHorizontalGreen-e1532630318570.png
+tags:
+- name: Contact
+  x-displayName: Contacts
+  description: Create and manage contacts.
+- name: Group
+  x-displayName: Groups
+  description: Create and manage groups.
+- name: Thread
+  x-displayName: Inbox & Threads
+  description: View and manage inbox threads.
+- name: Message
+  x-displayName: Messages
+  description: Send and manage messages.
+- name: Profile
+  x-displayName: Profile
+  description: View and manage your account and lines
+- name: Authentication
+  x-internal: 'true'
+  x-displayName: Authentication
+  description: Log in via Username & Password and "Sign In As User"
+paths:
+  /v1/contacts:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Contact
+      summary: List Contacts
+      operationId: listContacts
+      description: 'Gets a list of contacts
+
+
+        See also: [List Group Contacts](#listGroupContacts)'
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      - $ref: '#/components/parameters/ContactsListFilterByNumber'
+      - $ref: '#/components/parameters/ContactsListFilterByName'
+      - $ref: '#/components/parameters/ContactsListFilterByScreened'
+      - $ref: '#/components/parameters/ContactsListFilterByBlocked'
+      - $ref: '#/components/parameters/ContactsListOrdering'
+      security:
+      - username: []
+        api_key: []
+      - basic_auth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/listContacts200'
+          x-$ref: '#/components/responses/listContacts200'
+        '400':
+          $ref: '#/components/responses/list400BadFiltering'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/listContacts403'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    post:
+      tags:
+      - Contact
+      summary: Create/Update Contact
+      description: 'Creates or updates a contact
+
+
+        You can add arbitrary custom fields to a contact (see [Custom Fields](#todo: add link here))
+
+
+        **Note:** the contact''s `id` is required in the request payload if the supplied `number` already exists in your contacts
+
+
+        This operation _doesn''t_ remove properties that aren''t specified when updating an existing contact
+
+
+        [Use PUT to remove custom fields or groups](#operation/upsertContact)'
+      operationId: upsertContact
+      responses:
+        '201':
+          $ref: '#/components/responses/upsertContact201'
+        '400':
+          $ref: '#/components/responses/upsertContact400'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/upsertContact'
+        x-$ref: '#/components/requestBodies/upsertContact'
+      x-testConfig:
+        body:
+          id: '116006957938017590'
+          name: Bob Parker
+          number: '+12015716227'
+    patch:
+      tags:
+      - Contact
+      summary: Creates, updates, or deletes multiple contacts in one request
+      description: Creates, updates, or deletes multiple contacts in one request
+      operationId: bulkUpsertContacts
+      responses:
+        '202':
+          $ref: '#/components/responses/bulkUpsertContacts202'
+      requestBody:
+        $ref: '#/components/requestBodies/bulkUpsertContact'
+        x-$ref: '#/components/requestBodies/bulkUpsertContact'
+      x-testConfig:
+        enabled: false
+  /v1/contacts/{contact_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        contact_id: '{{contact_id}}'
+    parameters:
+    - $ref: '#/components/parameters/contact_id'
+    get:
+      tags:
+      - Contact
+      summary: Get Contact
+      description: Retrieves a contact by its id
+      operationId: getContact
+      responses:
+        '200':
+          $ref: '#/components/responses/getContact200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          id: '116006957938017590'
+          name: John Smithy
+          number: '+12015716227'
+          landline: false
+      tags:
+      - Contact
+      summary: Update Contact
+      description: 'Updates an individual contact referenced by its id
+
+
+        You can add arbitrary custom fields to a contact (see [Custom Fields](#todo: ))
+
+
+        **Note:** this is a _replace_ operation; any properties the contact already has that you don''t specify in your request
+        will be removed
+
+
+        [Use POST for _upsert_ functionality](#operation/upsertContact)'
+      operationId: updateContact
+      responses:
+        '200':
+          $ref: '#/components/responses/updateContact200'
+        '400':
+          $ref: '#/components/responses/updateContact400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/updateContact'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Contact
+      summary: Delete Contact
+      description: Deletes a contact
+      operationId: deleteContact
+      responses:
+        '204':
+          description: Deleted contact
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/groups:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Group
+      summary: List Groups
+      description: Gets a list of groups
+      operationId: listGroups
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      responses:
+        '200':
+          $ref: '#/components/responses/listGroups200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    post:
+      x-testConfig:
+        body:
+          name: jest test {{now()}}{{random()}}
+      tags:
+      - Group
+      summary: Create Group
+      description: Creates a group
+      operationId: createGroup
+      responses:
+        '201':
+          $ref: '#/components/responses/createGroup201'
+        '400':
+          $ref: '#/components/responses/updateGroup400'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/createGroup'
+  /v1/groups/{group_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        group_id: '{{group_id}}'
+    parameters:
+    - in: path
+      name: group_id
+      required: true
+      schema:
+        type: string
+      description: The group ID
+    get:
+      tags:
+      - Group
+      summary: Get Group
+      description: Gets an individual group by its id
+      operationId: getGroup
+      responses:
+        '200':
+          $ref: '#/components/responses/getGroup200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/group404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          id: '{{group_id}}'
+          name: ACME Alerts
+          slug: alerts
+          text_to_subscribe: true
+          ttjResponse: Thanks for opting in!\nOpt-out anytime by replying UNSUBSCRIBE ALERTS
+      tags:
+      - Group
+      summary: Update Group
+      description: 'Updates an individual group referenced by its id
+
+
+        **Note:** this is a _replace_ operation; any properties the group already has that you don''t specify in your request
+        will be set to their defaults'
+      operationId: updateGroup
+      responses:
+        '200':
+          $ref: '#/components/responses/updateGroup200'
+        '400':
+          $ref: '#/components/responses/updateGroup400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/group404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/updateGroup'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Group
+      summary: Delete Group
+      description: Deletes a group
+      operationId: deleteGroup
+      responses:
+        '204':
+          description: Deleted group
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Group not found
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/groups/{group_id}/contacts:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        group_id: '{{group_id}}'
+    parameters:
+    - in: path
+      name: group_id
+      required: true
+      schema:
+        type: string
+      description: The group ID
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Group
+      - Contact
+      summary: List Group's Contacts
+      description: Lists contacts in a specified group
+      operationId: listGroupContacts
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      - $ref: '#/components/parameters/ContactsListFilterByNumber'
+      - $ref: '#/components/parameters/ContactsListFilterByName'
+      - $ref: '#/components/parameters/ContactsListFilterByScreened'
+      - $ref: '#/components/parameters/ContactsListFilterByBlocked'
+      - $ref: '#/components/parameters/ContactsListOrdering'
+      responses:
+        '200':
+          $ref: '#/components/responses/listGroupContacts200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    post:
+      x-testConfig:
+        body:
+          add:
+          - '116006957938017590'
+      tags:
+      - Group
+      summary: Add/Remove Group's Contacts
+      description: Add and/or remove contacts from a group
+      operationId: addRemoveGroupContacts
+      responses:
+        '202':
+          $ref: '#/components/responses/addRemoveGroupContacts202'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/addRemoveGroupContacts'
+  /v1/inbox:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Thread
+      summary: List Threads
+      description: 'Gets a list of inbox threads
+
+
+        **Note:** the URL **must** include the forward-slash after /v1/inbox
+
+
+        The `next` field in the `meta` object doesn''t include this forward-slash in the URI it provides
+
+
+        We suggest constructing your URIs via your code and using the `next` field to determine if there''s a next page (eg.
+        if `next` is null)'
+      operationId: listThreads
+      parameters:
+      - $ref: '#/components/parameters/PageLimit'
+      - $ref: '#/components/parameters/PageOffset'
+      responses:
+        '200':
+          $ref: '#/components/responses/listThreads200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/threads/{thread_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        thread_id: '{{thread_id}}'
+    parameters:
+    - $ref: '#/components/parameters/thread_id'
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      tags:
+      - Thread
+      summary: Get thread
+      description: Gets an individual thread by its id
+      operationId: getThread
+      responses:
+        '200':
+          $ref: '#/components/responses/getThread200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/thread404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Thread
+      summary: Delete thread
+      description: Deletes an individual thread by its id
+      operationId: deleteThread
+      responses:
+        '200':
+          $ref: '#/components/responses/deleteThread200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/contact404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/messages:
+    x-testConfig:
+      enabled: true
+    post:
+      x-testConfig:
+        body:
+          contacts:
+          - '+12015716227'
+          text: Hey got 'em
+          mms:
+            filename: funny_video.mp4
+            url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+      summary: Send an SMS or MMS message
+      description: Sends an SMS (or MMS based on your plan) to a list of contacts, phone numbers or groups.
+      operationId: sendMessage
+      tags:
+      - Message
+      responses:
+        '201':
+          $ref: '#/components/responses/sendMessage201'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/sendMessage'
+  /v1/messages/{message_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        message_id: '{{message_id}}'
+    parameters:
+    - in: path
+      required: true
+      name: message_id
+      schema:
+        type: string
+      description: The message ID
+    get:
+      tags:
+      - Message
+      summary: Get Message
+      description: Retrieves an existing message by its Id
+      operationId: getMessage
+      responses:
+        '200':
+          $ref: '#/components/responses/getMessage200'
+          x-$ref: '#/components/responses/getMessage200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          description: Message not found
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          contacts:
+          - '+18884445555'
+          text: Hey got 'em
+          mms:
+            filename: funny_video.mp4
+            url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+      tags:
+      - Message
+      summary: Update Message
+      description: Updates a scheduled message
+      operationId: updateMessage
+      requestBody:
+        $ref: '#/components/requestBodies/sendMessage'
+      responses:
+        '201':
+          $ref: '#/components/responses/updateMessage201'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/deleteMessage404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    delete:
+      x-testConfig:
+        enabled: false
+      tags:
+      - Message
+      summary: Delete Message
+      description: Deletes an individual message by its id
+      operationId: deleteMessage
+      responses:
+        '200':
+          $ref: '#/components/responses/deleteMessage200'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/deleteMessage404'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/messages/scheduled:
+    x-testConfig:
+      enabled: true
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      summary: List scheduled messages
+      description: Lists scheduled messages
+      operationId: listScheduledMessages
+      tags:
+      - Message
+      responses:
+        '200':
+          $ref: '#/components/responses/listScheduledMessages200'
+        '400':
+          $ref: '#/components/responses/listScheduledMessages400'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/settings:
+    x-testConfig:
+      enabled: true
+    get:
+      summary: Get Settings
+      operationId: getSettings
+      description: Gets your line's Settings
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/getSettings200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+    put:
+      x-testConfig:
+        body:
+          api_key: '{{api_key}}'
+          auto_attendant_greeting_url: null
+          auto_upgrade_plan: false
+          automated_sms_response: null
+          conference_lines_enabled: true
+          createdTs: '2019-12-19T21:09:21.293391'
+          customer_id: null
+          deleted: null
+          desktop_notifications: true
+          disable_incoming_sms: false
+          email_calling_notifications: true
+          ent_toll_free_enabled: false
+          enterprise_id: '232267963371095740'
+          firstPaymentTs: null
+          hide_link_in_bulk_messages: true
+          id: '115999530581874548'
+          image: https://sendhub-prod-user-files.s3.amazonaws.com/media/files/avatars/283014186889381821-favicon1.ico
+          is_verified_email: true
+          mfa_enabled: false
+          mfa_enforced: false
+          mixpanelid: null
+          modifiedTs: '2022-03-02T20:35:57.702404'
+          month_start: '2022-02-26'
+          name: Product Alerts
+          onboarding_mobile_finished: false
+          onboarding_web_finished: false
+          payment_period_end: '2020-01-19'
+          payment_period_start: '2019-12-19'
+          pending_email: null
+          pending_phone_number: ''
+          phone_number: '+19109165709'
+          plan_usage:
+            api_requests: '113'
+            current_plan:
+              api_requests: 10000000
+              groups: -1
+              max_sms_recipients: 200
+              maxpergroup: -1
+              messages: -1
+              plan_cost: 0
+              plan_id: 1268
+              plan_name: Cameo Account
+              voice_minutes: 0
+            groups: 15
+            maxpergroup: 4
+            messages: '17'
+            voice_mail_transcriptions: 0
+            voice_minutes: 0
+          pusher_key: 8715b5e19cc78d5e5941
+          registration_status: completed
+          resource_uri: /settings
+          send_only_via_short_code: false
+          send_only_via_toll_free: false
+          settings_json: '{"kazoo_callflow_id": "293c68bf4f3cf0193c7780eca364e5fd", "transcribe_voice_mails": true, "kazoo_temporal_rule_id":
+            "64c66c7303684375d511efd940788e7c", "kazoo_user_id": "59812382f01bdec57af0793301a50cb2", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/232267963371095740-115999530581874548-1159995305818745482b6048d2fdbae04609a75cc550688496.csv",
+            "toll_free_primary": false, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications":
+            true, "kazoo_device_ids": ["8a80e16b2e6e3cf197c33814a07cc65c"], "sms_fwd_help": true, "kazoo_account_id": "dcb1127dcf93a31217e74aa61ab33ded",
+            "email_calling_notifications": true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages":
+            true, "kazoo_voicemail_id": "5a82b5a3b1fb03ffe5286ad40411528e", "msg_send_rate_limit": 100, "kazoo_account_realm":
+            "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "1c46599372ee534c50170f45893b1940",
+            "kazoo_vm_media_id": "8543dacd57c53a3dd454c6776fbb641d", "sms_webhook_url": null, "mask_caller_id": true, "sms_config":
+            {"last_example_ts": "1645723877", "last_keyword_reminder_ts": "1646252812", "last_sms_contact_id": "116006957938017590"}}'
+          siftScienceLabel: null
+          signature: null
+          sms_forwarding: '115999691431257661'
+          sms_fwd_help: true
+          sms_webhook_url: null
+          sound_notifications: true
+          toll_free_number: null
+          toll_free_primary: false
+          transcribe_voice_mails: true
+          voicemail_greeting_url: null
+      summary: Update Settings
+      operationId: updateSettings
+      description: Updates your SendHub line's settings
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/updateSettings200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/updateSettings'
+  /v1/profile:
+    x-testConfig:
+      enabled: true
+    get:
+      summary: Get Profile
+      operationId: getProfile
+      description: Gets details about your SendHub line
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/getProfile200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/enterprises/{enterprise_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        enterprise_id: '{{enterprise_id}}'
+    parameters:
+    - $ref: '#/components/parameters/enterprise_id'
+    get:
+      summary: Get Enterprise (Account)
+      operationId: getEnterprise
+      description: Gets your enterprise account's details
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/getEnterprise200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/enterprises/{enterprise_id}/users:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        enterprise_id: '{{enterprise_id}}'
+    parameters:
+    - $ref: '#/components/parameters/enterprise_id'
+    get:
+      x-testConfig:
+        params:
+          limit: 1
+      summary: List Users
+      operationId: listUsers
+      description: Lists your enterprise account's users (lines)
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/listUsers200'
+          x-$ref: '#/components/responses/listUsers200'
+        '401':
+          $ref: '#/components/responses/401'
+          x-$ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+          x-$ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+          x-$ref: '#/components/responses/429RateLimiting'
+  /v1/enterprises/{enterprise_id}/users/{user_id}:
+    x-testConfig:
+      enabled: true
+      pathParameters:
+        enterprise_id: '{{enterprise_id}}'
+        user_id: '{{user_id}}'
+    parameters:
+    - $ref: '#/components/parameters/enterprise_id'
+    - $ref: '#/components/parameters/user_id'
+    get:
+      summary: Get User
+      operationId: getUser
+      description: Gets a user (line)
+      tags:
+      - Profile
+      responses:
+        '200':
+          $ref: '#/components/responses/getUser200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+  /v1/auth:
+    x-testConfig:
+      enabled: true
+    post:
+      x-testConfig:
+        body:
+          authenticationType: sendhub
+          sessionId: ''
+          username: '{{username}}'
+          password: '{{password}}'
+      tags:
+      - Authentication
+      summary: Username & password login
+      description: Log in via username & password
+      operationId: login
+      responses:
+        '200':
+          $ref: '#/components/responses/login200'
+        '401':
+          $ref: '#/components/responses/401'
+        '420':
+          $ref: '#/components/responses/420PlanLimit'
+        '429':
+          $ref: '#/components/responses/429RateLimiting'
+      requestBody:
+        $ref: '#/components/requestBodies/login'
+components:
+  x-constants:
+    deprecatedVerbiage: This is used internally and may be expanded upon or removed in the future
+    emailRegex: (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])
+  schemas:
+    brandId:
+      type: string
+      nullable: true
+      description: 10DLC Brand ID
+    authenticationType:
+      x-internal: 'true'
+      type: string
+      enum:
+      - sendhub
+      - manager
+    loginRequest:
+      x-internal: 'true'
+      type: object
+      properties:
+        authenticationType:
+          allOf:
+          - $ref: '#/components/schemas/authenticationType'
+          - x-$ref: '#/components/schemas/authenticationType'
+        sessionId:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+    login200Response:
+      x-internal: 'true'
+      type: object
+      properties:
+        authToken:
+          type: string
+        authenticationType:
+          $ref: '#/components/schemas/authenticationType'
+        csrf_token:
+          type: string
+        emailAddress:
+          type: string
+        kazooApiPassword:
+          type: string
+          nullable: true
+        password:
+          type: string
+          description: Always giong to return '******'
+        resource_uri:
+          type: string
+          enum:
+          - /api/v1/auth
+        sendhub_number:
+          $ref: '#/components/schemas/sendhubNumber'
+        settings:
+          type: object
+          properties:
+            automated_sms_response:
+              $ref: '#/components/schemas/nullableString'
+            customer_id:
+              $ref: '#/components/schemas/nullableString'
+            deleted:
+              $ref: '#/components/schemas/deletedNullable'
+            disable_incoming_sms:
+              $ref: '#/components/schemas/disableIncomingSms'
+            enterprise:
+              $ref: '#/components/schemas/enterpriseSize'
+            entitlement:
+              $ref: '#/components/schemas/nullableString'
+            id:
+              $ref: '#/components/schemas/idBoth'
+            is_verified_email:
+              $ref: '#/components/schemas/isVerifiedEmail'
+            mixpanelid:
+              $ref: '#/components/schemas/nullableString'
+            onboarding_mobile_finished:
+              $ref: '#/components/schemas/onboardingMobileFinished'
+            onboarding_web_finished:
+              $ref: '#/components/schemas/onboardingWebFinished'
+            payment_schedule:
+              $ref: '#/components/schemas/paymentScheduleIdInt'
+            pending_email:
+              $ref: '#/components/schemas/nullableStringRO'
+            pending_phone_number:
+              $ref: '#/components/schemas/nullableString'
+            phone_number:
+              $ref: '#/components/schemas/personalCell'
+            registration_status:
+              $ref: '#/components/schemas/registrationStatus'
+            settings_json:
+              $ref: '#/components/schemas/settingsJson'
+            siftScienceLabel:
+              $ref: '#/components/schemas/nullableString'
+            signature:
+              $ref: '#/components/schemas/signature'
+            smsForwardingNumber:
+              $ref: '#/components/schemas/nullableInteger'
+            twilio_phone_number:
+              $ref: '#/components/schemas/twilioPhoneNumberId'
+            user:
+              $ref: '#/components/schemas/idInt'
+            _payment_plan:
+              $ref: '#/components/schemas/nullableString'
+        sipDeviceId:
+          $ref: '#/components/schemas/nullableString'
+        sipPassword:
+          $ref: '#/components/schemas/nullableString'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        username:
+          $ref: '#/components/schemas/username'
+    offset:
+      type: integer
+    limit:
+      type: integer
+    previous:
+      type: string
+      nullable: true
+    next:
+      type: string
+      nullable: true
+    deleted:
+      type: boolean
+      readOnly: true
+    deletedNullable:
+      type: boolean
+      readOnly: true
+      nullable: true
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    nullableTimestamp:
+      anyOf:
+      - $ref: '#/components/schemas/timestamp'
+      - type: string
+        nullable: true
+    timestampWithoutDecimal:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:34` equals August 1st, 2021 at 3:48 and 34 seconds AM (UTC)'
+      example: '2021-08-01T03:48:34'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+    nullableString:
+      type: string
+      nullable: true
+    nullableStringRO:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - readOnly: true
+    nullableInteger:
+      type: integer
+      nullable: true
+    directionToFrom:
+      description: The direction of the message; `to` or `from` the contact
+      type: string
+      enum:
+      - to
+      - from
+    direction:
+      description: The direction of the message; `outbound-api` or `incoming`
+      type: string
+      enum:
+      - outbound-api
+      - incoming
+    createdTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
+    createdTsWithoutDecimal:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      - minLength: 1
+        readOnly: true
+    modifiedTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
+    modifiedTsWithoutDecimal:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      - minLength: 1
+        readOnly: true
+    date:
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    dateRO:
+      allOf:
+      - $ref: '#/components/schemas/date'
+      - readOnly: true
+    customerId:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - readOnly: true
+        example: cus_D0TMCytXFqWuNO
+    id:
+      type: string
+      pattern: ^\d+$
+    idInt:
+      type: integer
+      format: int64
+    idStr:
+      type: string
+      pattern: ^\d+$
+      description: Same as id but always a string
+    idBoth:
+      anyOf:
+      - $ref: '#/components/schemas/id'
+      - $ref: '#/components/schemas/idInt'
+    internalId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      - description: This is an internal ID and is not the same as a user ID (SendHub line)
+        readOnly: true
+    enterpriseId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The enterprise ID
+      readOnly: true
+    enterpriseIdInt:
+      type: integer
+      format: int64
+      description: The enterprise ID
+    enterpriseIdBoth:
+      oneOf:
+      - $ref: '#/components/schemas/enterpriseId'
+      - $ref: '#/components/schemas/enterpriseIdInt'
+    enterpriseIdStr:
+      allOf:
+      - $ref: '#/components/schemas/enterpriseId'
+      description: The enterprise ID
+    enterpriseResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/enterprises\/\d+$
+      description: Resource URI for this enterprise
+      example: /v1/enterprises/232267963371095740
+    profileResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/profile$
+      description: Resource URI for this User's profile
+      example: /v1/profile
+    enterpriseName:
+      type: string
+      description: Your company name
+      maxLength: 255
+      nullable: true
+    enterpriseJoinLink:
+      type: string
+      pattern: ^https?://sh\.gl/[a-zA-Z0-9]+$
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    enterpriseSize:
+      type: integer
+      description: How manu Users (lines) your account has
+      readOnly: true
+    mixpanelId:
+      type: string
+      format: int64
+      nullable: true
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    userId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The ID of a SendHub user (an individual line)
+    userIdInt:
+      type: integer
+      format: int64
+      description: The ID of a SendHub user (an individual line)
+    userIdBoth:
+      oneOf:
+      - $ref: '#/components/schemas/userId'
+      - $ref: '#/components/schemas/userIdInt'
+    username:
+      type: string
+      description: User's (SendHub line's) username
+      minLength: 1
+      maxLength: 254
+    userName:
+      type: string
+      description: User's (SendHub line's) name
+      minLength: 1
+      maxLength: 120
+    onboardingMobileFinished:
+      type: boolean
+      readOnly: true
+      description: This is used internally and may be expanded upon or removed in the future
+      deprecated: true
+    onboardingWebFinished:
+      $ref: '#/components/schemas/onboardingMobileFinished'
+    personalCell:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
+    personalCellNullable:
+      allOf:
+      - $ref: '#/components/schemas/personalCell'
+      - type: string
+        nullable: true
+        readOnly: true
+    pusherKey:
+      type: string
+      minLength: 1
+      readOnly: true
+    registrationStatus:
+      type: string
+      minLength: 1
+      enum:
+      - created
+      - email_verified
+      - payment_method_absent
+      - completed
+      readOnly: true
+    automatedSmsResponse:
+      type: string
+      description: 'SendHub will automatically respond to incoming messages with text saved in this field ((learn more here)[https://sendhub.force.com/support/s/article/how-can-i-add-an-auto-response-for-incoming-messages])
+
+        The last contact to recieve'
+    confirmationCode:
+      type: string
+      minLength: 1
+    userCreatedTs:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      - minLength: 1
+        readOnly: true
+    disableIncomingSms:
+      type: boolean
+    isVerifiedEmail:
+      type: boolean
+      description: Whether this user's email has been verified
+      readOnly: true
+    paymentPeriodEnd:
+      allOf:
+      - $ref: '#/components/schemas/date'
+      readOnly: true
+    paymentPeriodStart:
+      allOf:
+      - $ref: '#/components/schemas/date'
+      readOnly: true
+    paymentScheduleId:
+      type: string
+      minLength: 1
+      pattern: ^\d+$
+      description: 'Your plan''s payment schedule type:
+
+        1. Monthly 2. Yearly 3. Consumable (eg. free trial)'
+      enum:
+      - '1'
+      - '2'
+      - '3'
+    paymentScheduleIdInt:
+      type: integer
+      minimum: 1
+      maximum: 3
+      description: 'Your plan''s payment schedule type:
+
+        1. Monthly 2. Yearly 3. Consumable (eg. free trial)'
+    formattedSendhubNumber:
+      type: string
+      pattern: ^\(\d{3}\) \d{3}-\d{4}$
+      description: This line's SendHub number (formatted)
+    sendhubNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: This line's SendHub number (E.164 format)
+    settingsJson:
+      type: string
+      minLength: 1
+    signature:
+      type: string
+      description: 'Signature that the SendHub apps append to new messages
+
+        **Note:** SendHub does not use this field when sending via the API'
+    smsForwarding:
+      type: string
+      minLength: 1
+      pattern: ^\d+$
+      nullable: true
+      description: The ID of the forwarding number
+    twilioPhoneNumberId:
+      allOf:
+      - $ref: '#/components/schemas/idBoth'
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    twilioPhoneNumberIdStr:
+      $ref: '#/components/schemas/twilioPhoneNumberId'
+    image:
+      type: string
+      readOnly: true
+      description: The URL for this user's profile image
+    pendingPhoneNumber:
+      type: string
+      pattern: ^\+1\d{10}|$
+      description: Phone number waiting to be verified for the "Personal Cell" field
+    dateJoined:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      description: Timestamp that this SendHub User (line) was created
+    downvotes:
+      type: integer
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    email:
+      type: string
+      pattern: ^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])|$
+    profileUnread:
+      type: integer
+      readOnly: true
+      description: Shows how many unread threads this User (line) has
+    upvotes:
+      type: integer
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    threadId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The thread ID
+    threadIdInt:
+      type: integer
+      format: int64
+      description: The thread ID
+    threadIdBoth:
+      oneOf:
+      - $ref: '#/components/schemas/threadId'
+      - $ref: '#/components/schemas/threadIdInt'
+    threadResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/threads\/\d+$
+      description: Resource URI for this thread
+      example: /v1/threads/123
+    threadUnread:
+      type: boolean
+      description: Whether or not the thread is marked as unread
+    threadMeta:
+      allOf:
+      - $ref: '#/components/schemas/meta'
+      - type: object
+        properties:
+          hasUnread:
+            type: boolean
+            description: Whether this thread has messages marked as unread or not
+          labels:
+            type: array
+            items:
+              type: string
+            example:
+            - starred
+    contactId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The contact ID
+    contactIdInt:
+      type: integer
+      format: int64
+      description: The contact ID
+    contactIdBoth:
+      type: string
+      anyOf:
+      - $ref: '#/components/schemas/contactId'
+      - $ref: '#/components/schemas/contactIdInt'
+    contactResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
+      description: Resource URI for this contact
+      example: /v1/contacts/116006957938017590
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    landline:
+      type: boolean
+      description: Whether SendHub has determined the contact's number is a landline number
+    landlineOverride:
+      type: boolean
+      description: 'TODO: '
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    contactNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The contact's phone number
+    customField:
+      type: string
+      nullable: true
+      description: 'Custom field(s)
+
+
+        There''s no limit to the number or size of custom fields (this may be subject to change in the future) except for
+        a total limit of 65,535 bytes for the string of the json object that they''re stored in
+
+
+        **Note:** Custom fields may add *very* slight load time per contact. This is typically only noticable when listing
+        many contacts that have a large amount of custom fields
+
+        Note: Setting the value to `null` removes the custom field'
+    extraInfo:
+      type: string
+      description: JSON-escaped object containing this contact's custom field(s)
+      maxLength: 65535
+      readOnly: true
+    smsGateway:
+      type: string
+      example: sendhub
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    localGateway:
+      type: boolean
+      description: True if the contact is a SendHub line
+      readOnly: true
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
+    groupIdInt:
+      type: integer
+      format: int64
+      description: The group ID
+    groupIdBoth:
+      oneOf:
+      - $ref: '#/components/schemas/groupId'
+      - $ref: '#/components/schemas/groupIdInt'
+    groupResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
+      description: Resource URI for this group
+      example: /v1/groups/115999753870991332
+    groupName:
+      type: string
+      description: The group's name
+      minLength: 1
+      maxLength: 128
+    groupPermissions:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - default: write
+        enum:
+        - write
+    groupShareInviteCount:
+      allOf:
+      - $ref: '#/components/schemas/nullableInteger'
+      - deprecated: true
+        description: This is used internally and may be expanded upon or removed in the future
+    groupMediums:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - deprecated: true
+        description: This is used internally and may be expanded upon or removed in the future
+    listOfGroupNames:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupName'
+      description: List of group names
+    listOfGroupIds:
+      type: array
+      items:
+        anyOf:
+        - allOf:
+          - $ref: '#/components/schemas/groupId'
+          - writeOnly: true
+        - $ref: '#/components/schemas/groupIdInt'
+        - $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs and/or IDs
+    listOfGroupResourceUris:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs
+    isShared:
+      type: boolean
+      description: Whether the group is shared between the lines
+      deprecated: true
+    textToSubscribe:
+      type: boolean
+      default: false
+      description: Whether to enable text-to-join functionality for this group
+    groupSlug:
+      type: string
+      description: 'The "keyword" used to text-to-join
+
+
+        Defaults to the group name lowercased, without any spaces and not duplicate by appending an incrementing number if
+        needed'
+    groupSize:
+      type: integer
+      description: The number of contacts that are a memeber of this group
+      nullable: true
+    ttjResponse:
+      type: string
+      maximum: 70
+      default: You are now subscribed.
+      description: A custom response sent when someone texts-to-join this group
+    groupCheckAll:
+      type: boolean
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    messageId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The message ID
+    messageIdInt:
+      type: integer
+      format: int64
+      description: The message ID
+    messageIdBoth:
+      oneOf:
+      - $ref: '#/components/schemas/messageId'
+      - $ref: '#/components/schemas/messageIdInt'
+    messageResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/messages\/\d+$
+      description: Resource URI for this message
+      example: /v1/messages/123
+    messageType:
+      type: string
+      enum:
+      - voicecall-in
+      - voicecall-out
+      - voicecall-missed
+      - voicecall-voicemail
+      - message-out
+      - message-in
+      description: The type of the message (if on the thread object, then the type of the last message in the thread)
+    messageContactIdsOrNumbers:
+      title: messageContactIdsOrNumbers
+      type: array
+      maxItems: 25
+      items:
+        type: string
+        oneOf:
+        - $ref: '#/components/schemas/contactIdBoth'
+        - type: string
+          pattern: ^\+1\d{10}$
+          description: 'Phone number
+
+
+            **Note:** the phone number _**must**_ be in the E.164 format (eg. `+18004445555`)'
+    messageGroupIds:
+      type: array
+      description: Group ids
+      items:
+        type: string
+        oneOf:
+        - $ref: '#/components/schemas/groupId'
+        - $ref: '#/components/schemas/groupIdInt'
+    messageText:
+      title: messageText
+      type: string
+      description: 'The text content of the message
+
+        **Note:** Be sure you understand SMS segmenting ((learn more here)[https://sendhub.force.com/support/s/article/how-am-i-billed-for-long-messages])'
+      minimum: 1
+      maximum: 1600
+    scheduledAt:
+      title: scheduledAt
+      type: string
+      nullable: true
+      description: 'The date & time **in UTC** to schedule the message to be sent at.
+
+
+        **Note:** it **must** be exactly 24-characters long and in this format: `2022-04-13T15:29:40+0000`'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{4}$
+    sent:
+      title: sent
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - type: string
+        nullable: true
+      description: The date & time **in UTC** the message was sent at.
+    scheduledAtWithoutTimezone:
+      type: string
+      nullable: true
+      description: The date & time **in UTC** the message was scheduled to be sent at.
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+    mms:
+      title: mms
+      type: object
+      oneOf:
+      - title: Attachment via URL
+        type: object
+        properties:
+          filename:
+            type: string
+          url:
+            type: string
+            format: uri
+            description: Publicly-accessible URL
+        required:
+        - filename
+        - url
+      - title: Attachment via Base64-encoded file
+        type: object
+        properties:
+          filename:
+            type: string
+          data:
+            type: string
+            format: byte
+            description: Base64-encoded file
+        required:
+        - filename
+        - data
+    mmsOnlyFilename:
+      type: object
+      oneOf:
+      - properties:
+          filename:
+            type: string
+          url:
+            type: string
+            format: uri
+            description: Publicly-accessible URL
+        required:
+        - filename
+        - url
+      - properties:
+          filename:
+            type: string
+          data:
+            type: string
+            format: byte
+            description: Base64-encoded file
+        required:
+        - filename
+        - data
+    acknowledgment:
+      type: string
+      minLength: 1
+      nullable: true
+      example: Message queued for sending.
+    messageCreatedAt:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      description: UTC timestamp of when the message was created
+    messageModifiedAt:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      description: UTC timestamp of when the message was last modified
+    messageModifiedAtWithoutDecimal:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      description: UTC timestamp of when the message was last modified
+    messageCreatedAtWithoutDecimal:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      description: UTC timestamp of when the message was created
+    forceShortlinkCreation:
+      type: boolean
+      description: If `true`, creates a shortlink for this message regardless if there's an attachment.
+    messageHash:
+      type: string
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    messageLink:
+      type: string
+      description: This is used internally and may be expanded upon or removed in the future
+      deprecated: true
+    shortlinkId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: 'The shortlink ID
+
+        Note: This field won''t show up if the message doesn''t have a shortlink'
+    shortlink:
+      type: string
+      description: A short link generated by SendHub when you send a message with an attachment or with `force_shortlink_creation`
+        set to `true`
+      pattern: ^$|^https?://sh.gl/[a-zA-Z0-9]+$
+    dynamicThreadId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: If `id_is_thread_id` is true, this is the `thread_id`, otherwise it's the `message_id`
+    idIsThreadId:
+      type: boolean
+      description: Determines whether `id` is the thread ID or the message ID
+    messageUnread:
+      type: boolean
+      nullable: true
+      description: 'Whether or not the message is marked as unread
+
+        Changing this will mark the corresponding thread as read or unread'
+    messageViaShortcode:
+      type: boolean
+      description: Send the message via your account's Short Code number (requires a plan with Short Code access (learn more
+        here)[https://sendhub.force.com/support/s/article/shortcode])
+    attachmentContainer:
+      type: string
+      enum:
+      - sendhub-attachments
+    attachmentFilename:
+      type: string
+    attachmentId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The attachment ID
+    attachmentSize:
+      type: number
+      description: Size of attachment in bytes
+    attachmentKey:
+      type: string
+    attachmentUrl:
+      type: string
+    attachmentType:
+      type: string
+      description: Mimetype of the attachment
+      example: video/mp4
+    attachmentMimetype:
+      type: string
+      description: Mimetype of the attachment
+      example: video/mp4
+    attachmentIsWriteable:
+      type: boolean
+    inboundAttachment:
+      type: object
+      description: Inbound attachment
+      properties:
+        container:
+          $ref: '#/components/schemas/attachmentContainer'
+        filename:
+          $ref: '#/components/schemas/attachmentFilename'
+        id:
+          $ref: '#/components/schemas/id'
+        size:
+          $ref: '#/components/schemas/attachmentSize'
+        key:
+          $ref: '#/components/schemas/attachmentKey'
+        url:
+          $ref: '#/components/schemas/attachmentUrl'
+        type:
+          $ref: '#/components/schemas/attachmentType'
+    outboundAttachment:
+      type: object
+      description: Outbound attachment
+      properties:
+        container:
+          $ref: '#/components/schemas/attachmentContainer'
+        filename:
+          $ref: '#/components/schemas/attachmentFilename'
+        id:
+          $ref: '#/components/schemas/id'
+        isWriteable:
+          $ref: '#/components/schemas/attachmentIsWriteable'
+        key:
+          $ref: '#/components/schemas/attachmentKey'
+        mimetype:
+          $ref: '#/components/schemas/attachmentMimetype'
+        size:
+          $ref: '#/components/schemas/attachmentSize'
+        url:
+          $ref: '#/components/schemas/attachmentUrl'
+    attachments:
+      type: array
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/inboundAttachment'
+        - $ref: '#/components/schemas/outboundAttachment'
+      description: List of attachments
+    planId:
+      allOf:
+      - $ref: '#/components/schemas/idInt'
+      description: The plan ID
+    meta:
+      type: object
+      properties:
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    errorObject:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: number
+    nameErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    numberErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    nameOrNumberError:
+      anyOf:
+      - $ref: '#/components/schemas/nameErrorObject'
+      - $ref: '#/components/schemas/numberErrorObject'
+    group:
+      type: object
+      properties:
+        date_created:
+          $ref: '#/components/schemas/timestamp'
+        date_modified:
+          $ref: '#/components/schemas/timestamp'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/groupId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_shared:
+          $ref: '#/components/schemas/isShared'
+        name:
+          $ref: '#/components/schemas/groupName'
+        parent_id:
+          $ref: '#/components/schemas/nullableString'
+        parent_user_id:
+          $ref: '#/components/schemas/nullableString'
+        permissions:
+          $ref: '#/components/schemas/groupPermissions'
+        resource_uri:
+          $ref: '#/components/schemas/groupResourceUri'
+        share_invite_count:
+          $ref: '#/components/schemas/nullableInteger'
+        size:
+          $ref: '#/components/schemas/groupSize'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+    groupWithMediums:
+      allOf:
+      - $ref: '#/components/schemas/group'
+      - properties:
+          mediums:
+            $ref: '#/components/schemas/groupMediums'
+    threadNestedGroup:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/groupId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        name:
+          $ref: '#/components/schemas/groupName'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        mediums:
+          $ref: '#/components/schemas/groupMediums'
+        check_all:
+          $ref: '#/components/schemas/groupCheckAll'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+    messageNestedGroup:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/threadNestedGroup'
+      - properties:
+          date_created:
+            $ref: '#/components/schemas/timestampWithoutDecimal'
+          date_modified:
+            $ref: '#/components/schemas/timestampWithoutDecimal'
+          is_shared:
+            $ref: '#/components/schemas/isShared'
+          permissions:
+            $ref: '#/components/schemas/groupPermissions'
+          user_id:
+            $ref: '#/components/schemas/userId'
+    createGroupRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/groupName'
+        is_shared:
+          $ref: '#/components/schemas/isShared'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        mediums:
+          $ref: '#/components/schemas/groupMediums'
+        permissions:
+          $ref: '#/components/schemas/groupPermissions'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+      required:
+      - name
+    updateGroupRequest:
+      allOf:
+      - $ref: '#/components/schemas/createGroupRequest'
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/contactId'
+      required:
+      - id
+      - name
+    addRemoveGroupContactsRequestBoth:
+      title: addRemoveGroupContactsRequestBoth
+      type: object
+      required:
+      - add
+      - remove
+      properties:
+        add:
+          $ref: '#/components/schemas/addRemoveGroupContactsRequestAdd/properties/add'
+        remove:
+          $ref: '#/components/schemas/addRemoveGroupContactsRequestRemove/properties/remove'
+    addRemoveGroupContactsRequestAdd:
+      title: addRemoveGroupContactsRequestAdd
+      type: object
+      required:
+      - add
+      additionalProperties: false
+      properties:
+        add:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids that you want to add to this group
+    addRemoveGroupContactsRequestRemove:
+      title: addRemoveGroupContactsRequestRemove
+      type: object
+      required:
+      - remove
+      additionalProperties: false
+      properties:
+        remove:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids that you want to remove from this group
+    addRemoveGroupContactsRequest:
+      title: addRemoveGroupContactsRequest
+      type: object
+      oneOf:
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
+    addRemoveGroupContacts202ResponseAdd:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+          description: Contact ids that failed to be added to this group
+    addRemoveGroupContacts202ResponseRemove:
+      type: object
+      properties:
+        remove:
+          type: array
+          items:
+            type: string
+          description: Contact ids that failed to be removed from this group
+    addRemoveGroupContacts202Response:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids successfully added to this group
+        errors:
+          anyOf:
+          - $ref: '#/components/schemas/addRemoveGroupContacts202ResponseAdd'
+          - $ref: '#/components/schemas/addRemoveGroupContacts202ResponseRemove'
+          - allOf:
+            - $ref: '#/components/schemas/addRemoveGroupContacts202ResponseAdd'
+            - $ref: '#/components/schemas/addRemoveGroupContacts202ResponseRemove'
+        remove:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids successfully removed from this group
+    listGroups200Response:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/group'
+    threadNestedContact:
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactIdInt'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        groups:
+          $ref: '#/components/schemas/listOfGroupNames'
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+      example:
+        blocked: false
+        deleted: false
+        groups:
+        - ACME Product Alerts
+        id: 116006957938017580
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        my-custom-field: My Custom Field Value
+        name: Bob Parker
+        number: '+12015716227'
+        screened: false
+    messageNestedContact:
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        date_created:
+          $ref: '#/components/schemas/timestampWithoutDecimal'
+        date_modified:
+          $ref: '#/components/schemas/timestampWithoutDecimal'
+        extra_info:
+          $ref: '#/components/schemas/extraInfo'
+        smsGateway:
+          $ref: '#/components/schemas/smsGateway'
+    contact:
+      title: Contact
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_owned:
+          $ref: '#/components/schemas/isOwned'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+        id:
+          $ref: '#/components/schemas/contactId'
+        date_created:
+          $ref: '#/components/schemas/timestamp'
+        date_modified:
+          $ref: '#/components/schemas/timestamp'
+        local_gateway:
+          $ref: '#/components/schemas/localGateway'
+        resource_uri:
+          $ref: '#/components/schemas/contactResourceUri'
+        groups:
+          $ref: '#/components/schemas/listOfGroupResourceUris'
+        landline:
+          $ref: '#/components/schemas/landline'
+        landline_override:
+          $ref: '#/components/schemas/landlineOverride'
+      required:
+      - name
+      - number
+    contactWithContactId:
+      allOf:
+      - $ref: '#/components/schemas/contact'
+      - properties:
+          contact_id:
+            $ref: '#/components/schemas/contactIdBoth'
+    updateContactRequest:
+      $ref: '#/components/schemas/upsertContactRequestWithId'
+      x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    updateContactResponse:
+      $ref: '#/components/schemas/contactWithContactId'
+    upsertContactRequestWithoutId:
+      title: upsertContactRequestWithoutId
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+        x-$ref: '#/components/schemas/customField'
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+          x-$ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+          x-$ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactIdBoth'
+          x-$ref: '#/components/schemas/contactIdBoth'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+          x-$ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+          x-$ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+          x-$ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+          x-$ref: '#/components/schemas/screened'
+        groups:
+          $ref: '#/components/schemas/listOfGroupIds'
+          x-$ref: '#/components/schemas/listOfGroupIds'
+      required:
+      - name
+      - number
+    upsertContactRequestWithId:
+      allOf:
+      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
+      - type: object
+        title: upsertContactRequestWithId
+        required:
+        - id
+    bulkUpsertContactRequest:
+      type: object
+      properties:
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/upsertContactRequest'
+    upsertContactRequest:
+      anyOf:
+      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithoutId'
+      - $ref: '#/components/schemas/upsertContactRequestWithId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    upsertContactResponse:
+      anyOf:
+      - $ref: '#/components/schemas/contact'
+      - $ref: '#/components/schemas/contactWithContactId'
+    listContacts200Response:
+      title: listContacts200Response
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+          x-$ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+    scheduledNestedMessage:
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedContact'
+        created_at:
+          $ref: '#/components/schemas/messageCreatedAt'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          $ref: '#/components/schemas/direction'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedGroup'
+        hash:
+          $ref: '#/components/schemas/messageHash'
+        id:
+          $ref: '#/components/schemas/messageId'
+        link:
+          $ref: '#/components/schemas/messageLink'
+        message_id:
+          $ref: '#/components/schemas/messageId'
+        modified_at:
+          $ref: '#/components/schemas/messageModifiedAtWithoutDecimal'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAtWithoutTimezone'
+        shortlink_id:
+          $ref: '#/components/schemas/shortlinkId'
+        text:
+          $ref: '#/components/schemas/messageText'
+        thread_id:
+          $ref: '#/components/schemas/threadId'
+        user_id:
+          $ref: '#/components/schemas/userId'
+      required:
+      - contacts
+      - created_at
+      - deleted
+      - direction
+      - groups
+      - hash
+      - id
+      - link
+      - message_id
+      - modified_at
+      - scheduled_at
+      - text
+      - thread_id
+      - user_id
+    message:
+      type: object
+      properties:
+        acknowledgment:
+          $ref: '#/components/schemas/acknowledgment'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedContact'
+            x-$ref: '#/components/schemas/messageNestedContact'
+        created_at:
+          $ref: '#/components/schemas/createdTs'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          $ref: '#/components/schemas/direction'
+        force_shortlink_creation:
+          $ref: '#/components/schemas/forceShortlinkCreation'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/messageNestedGroup'
+        id:
+          $ref: '#/components/schemas/dynamicThreadId'
+        id_is_thread_id:
+          $ref: '#/components/schemas/idIsThreadId'
+        message_id:
+          $ref: '#/components/schemas/messageId'
+        modified_at:
+          $ref: '#/components/schemas/modifiedTs'
+        resource_uri:
+          $ref: '#/components/schemas/messageResourceUri'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/sent'
+        shortlink:
+          $ref: '#/components/schemas/shortlink'
+        text:
+          $ref: '#/components/schemas/messageText'
+        thread_id:
+          $ref: '#/components/schemas/threadId'
+        type:
+          $ref: '#/components/schemas/messageType'
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+        via_shortcode:
+          $ref: '#/components/schemas/messageViaShortcode'
+        mms:
+          $ref: '#/components/schemas/mmsOnlyFilename'
+      required:
+      - acknowledgment
+      - contacts
+      - created_at
+      - deleted
+      - direction
+      - force_shortlink_creation
+      - groups
+      - id
+      - id_is_thread_id
+      - message_id
+      - modified_at
+      - resource_uri
+      - scheduled_at
+      - sent
+      - shortlink
+      - text
+      - thread_id
+      - type
+      - unread
+      - via_shortcode
+    updateMessageResponse:
+      allOf:
+      - x-$ref: '#/components/schemas/sendMessageRequest'
+      - $ref: '#/components/schemas/sendMessageRequest'
+    sendMessageRequestAtLeastContacts:
+      type: object
+      title: sendMessageRequestAtLeastContacts
+      required:
+      - text
+      - contacts
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+        contacts:
+          allOf:
+          - $ref: '#/components/schemas/messageContactIdsOrNumbers'
+          - minItems: 1
+    sendMessageRequestAtLeastGroups:
+      type: object
+      title: sendMessageRequestAtLeastGroups
+      additionalProperties: false
+      required:
+      - text
+      - groups
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+        groups:
+          allOf:
+          - $ref: '#/components/schemas/messageGroupIds'
+          - minItems: 1
+    sendMessageRequestBoth:
+      type: object
+      title: sendMessageRequestBoth
+      allOf:
+      - $ref: '#/components/schemas/baseSendMessageRequest'
+      - type: object
+        required:
+        - groups
+        - contacts
+        properties:
+          groups:
+            allOf:
+            - $ref: '#/components/schemas/messageGroupIds'
+            - minItems: 1
+          contacts:
+            allOf:
+            - $ref: '#/components/schemas/messageContactIdsOrNumbers'
+            - minItems: 1
+    sendMessageRequest:
+      type: object
+      title: sendMessageRequest
+      oneOf:
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestAtLeastContacts'
+        - $ref: '#/components/schemas/sendMessageRequestAtLeastContacts'
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestAtLeastGroups'
+        - $ref: '#/components/schemas/sendMessageRequestAtLeastGroups'
+      - allOf:
+        - x-$ref: '#/components/schemas/sendMessageRequestBoth'
+        - $ref: '#/components/schemas/sendMessageRequestBoth'
+    baseSendMessageRequest:
+      type: object
+      title: baseSendMessageRequest
+      additionalProperties: false
+      properties:
+        text:
+          $ref: '#/components/schemas/messageText'
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        mms:
+          $ref: '#/components/schemas/mms'
+      required:
+      - text
+    sendMessageResponse:
+      type: object
+      description: Successfully queued or scheduled the message for sending
+      properties:
+        acknowledgment:
+          $ref: '#/components/schemas/acknowledgment'
+        contacts:
+          type: array
+          uniqueItems: true
+          items:
+            required:
+            - blocked
+            - date_created
+            - date_modified
+            - deleted
+            - extra_info
+            - id
+            - id_str
+            - is_owned
+            - keyword
+            - name
+            - number
+            - screened
+            - smsGateway
+            - user_id
+            properties:
+              blocked:
+                type: boolean
+              date_created:
+                type: string
+                minLength: 1
+              date_modified:
+                type: string
+                minLength: 1
+              deleted:
+                type: boolean
+              extra_info:
+                type: string
+                minLength: 1
+              id:
+                type: string
+                minLength: 1
+              id_str:
+                type: string
+                minLength: 1
+              is_owned:
+                type: boolean
+              keyword:
+                type: string
+                minLength: 1
+              name:
+                type: string
+                minLength: 1
+              number:
+                type: string
+                minLength: 1
+              screened:
+                type: boolean
+              smsGateway:
+                type: string
+                minLength: 1
+              user_id:
+                type: string
+                minLength: 1
+        created_at:
+          $ref: '#/components/schemas/messageCreatedAt'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          $ref: '#/components/schemas/directionToFrom'
+        force_shortlink_creation:
+          $ref: '#/components/schemas/forceShortlinkCreation'
+        groups:
+          type: array
+          uniqueItems: true
+          items:
+            required:
+            - check_all
+            - date_created
+            - date_modified
+            - deleted
+            - id
+            - id_str
+            - is_shared
+            - mediums
+            - name
+            - permissions
+            - slug
+            - text_to_subscribe
+            - ttjResponse
+            - user_id
+            properties:
+              check_all:
+                type: boolean
+              date_created:
+                type: string
+                minLength: 1
+              date_modified:
+                type: string
+                minLength: 1
+              deleted:
+                type: boolean
+              id:
+                type: string
+                minLength: 1
+              id_str:
+                type: string
+                minLength: 1
+              is_shared:
+                type: boolean
+              mediums:
+                type: string
+                minLength: 1
+              name:
+                type: string
+                minLength: 1
+              permissions:
+                type: string
+                minLength: 1
+              slug:
+                type: string
+                minLength: 1
+              text_to_subscribe:
+                type: boolean
+              ttjResponse:
+                type: string
+                minLength: 1
+              user_id:
+                type: string
+                minLength: 1
+        id:
+          type: string
+          minLength: 1
+        id_is_thread_id:
+          type: boolean
+        message_id:
+          type: string
+          minLength: 1
+        mms:
+          type: object
+          properties:
+            filename:
+              type: string
+              minLength: 1
+          required:
+          - filename
+        modified_at:
+          type: string
+          minLength: 1
+        resource_uri:
+          type: string
+          minLength: 1
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/sent'
+        shortlink:
+          type: string
+          minLength: 1
+        text:
+          type: string
+          minLength: 1
+        thread_id:
+          type: string
+          minLength: 1
+        type:
+          type: string
+          minLength: 1
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+        via_shortcode:
+          type: boolean
+      required:
+      - acknowledgment
+      - contacts
+      - created_at
+      - deleted
+      - direction
+      - force_shortlink_creation
+      - groups
+      - id
+      - id_is_thread_id
+      - message_id
+      - mms
+      - modified_at
+      - resource_uri
+      - scheduled_at
+      - shortlink
+      - text
+      - thread_id
+      - type
+      - via_shortcode
+    listScheduledMessagesResponse:
+      type: object
+      description: ''
+      properties:
+        objects:
+          items:
+            type: object
+    thread:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/threadMeta'
+        objects:
+          type: array
+          items:
+            type: object
+            properties:
+              attachments:
+                $ref: '#/components/schemas/attachments'
+              contacts:
+                type: array
+                items:
+                  $ref: '#/components/schemas/threadNestedContact'
+              deleted:
+                $ref: '#/components/schemas/deleted'
+              direction:
+                $ref: '#/components/schemas/directionToFrom'
+              groups:
+                type: array
+                items:
+                  $ref: '#/components/schemas/threadNestedGroup'
+              hash:
+                $ref: '#/components/schemas/messageHash'
+              id:
+                $ref: '#/components/schemas/id'
+              modified_at:
+                $ref: '#/components/schemas/timestamp'
+              resource_uri:
+                $ref: '#/components/schemas/messageResourceUri'
+              scheduled_at:
+                $ref: '#/components/schemas/scheduledAtWithoutTimezone'
+              sent:
+                $ref: '#/components/schemas/sent'
+              shortlink:
+                $ref: '#/components/schemas/shortlink'
+              text:
+                $ref: '#/components/schemas/messageText'
+              type:
+                $ref: '#/components/schemas/messageType'
+              unread:
+                $ref: '#/components/schemas/threadUnread'
+    listThreads200Response:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/inboxThread'
+    inboxThread:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/threadNestedContact'
+        created_at:
+          $ref: '#/components/schemas/timestamp'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        direction:
+          type: string
+          enum:
+          - outbound-api
+          - incoming
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/threadNestedGroup'
+        id:
+          allOf:
+          - $ref: '#/components/schemas/id'
+          - description: Id of the last message in this thread
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+          - starred
+        last_read_at:
+          $ref: '#/components/schemas/nullableTimestamp'
+        modified_at:
+          $ref: '#/components/schemas/timestamp'
+        resource_uri:
+          type: string
+        scheduled_at:
+          $ref: '#/components/schemas/scheduledAt'
+        sent:
+          $ref: '#/components/schemas/timestamp'
+        text:
+          type: string
+        threadId:
+          $ref: '#/components/schemas/threadId'
+        type:
+          type: string
+          enum:
+          - voicecall-in
+          - voicecall-out
+          - voicecall-missed
+          - voicecall-voicemail
+          - message-out
+          - message-in
+          description: The message type of the last item in the thread
+        unread:
+          $ref: '#/components/schemas/messageUnread'
+    settings:
+      title: UserSettings
+      type: object
+      description: Settings for an individual user (SendHub line)
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          readOnly: true
+        auto_attendant_greeting_url:
+          type: string
+          nullable: true
+          readOnly: true
+        auto_upgrade_plan:
+          type: boolean
+          readOnly: true
+        automated_sms_response:
+          type: string
+          nullable: true
+          maximum: 160
+        conference_lines_enabled:
+          type: boolean
+          readOnly: true
+        createdTs:
+          $ref: '#/components/schemas/createdTs'
+        customer_id:
+          $ref: '#/components/schemas/customerId'
+        deleted:
+          $ref: '#/components/schemas/deletedNullable'
+        desktop_notifications:
+          type: boolean
+        disable_incoming_sms:
+          type: boolean
+        email_calling_notifications:
+          type: boolean
+        ent_toll_free_enabled:
+          type: boolean
+          nullable: true
+          readOnly: true
+        enterprise_id:
+          $ref: '#/components/schemas/enterpriseId'
+        firstPaymentTs:
+          $ref: '#/components/schemas/nullableStringRO'
+        hide_link_in_bulk_messages:
+          type: boolean
+        id:
+          $ref: '#/components/schemas/internalId'
+        image:
+          $ref: '#/components/schemas/nullableStringRO'
+        is_verified_email:
+          type: boolean
+          readOnly: true
+        mfa_enabled:
+          type: boolean
+          readOnly: true
+          nullable: true
+        mfa_enforced:
+          type: boolean
+          readOnly: true
+        mixpanelid:
+          type: string
+          nullable: true
+          readOnly: true
+          description: This is used internally and may be expanded upon or removed in the future
+          deprecated: true
+        modifiedTs:
+          $ref: '#/components/schemas/modifiedTs'
+        month_start:
+          $ref: '#/components/schemas/dateRO'
+        name:
+          $ref: '#/components/schemas/userName'
+        onboarding_mobile_finished:
+          $ref: '#/components/schemas/onboardingMobileFinished'
+        onboarding_web_finished:
+          $ref: '#/components/schemas/onboardingWebFinished'
+        payment_period_end:
+          $ref: '#/components/schemas/dateRO'
+        payment_period_start:
+          $ref: '#/components/schemas/dateRO'
+        pending_email:
+          $ref: '#/components/schemas/nullableStringRO'
+        pending_phone_number:
+          $ref: '#/components/schemas/nullableStringRO'
+        phone_number:
+          $ref: '#/components/schemas/personalCell'
+        plan_usage:
+          type: object
+          additionalProperties: false
+          properties:
+            api_requests:
+              type: string
+              minLength: 1
+              readOnly: true
+            current_plan:
+              type: object
+              additionalProperties: false
+              properties:
+                api_requests:
+                  type: integer
+                  readOnly: true
+                groups:
+                  type: integer
+                  readOnly: true
+                max_sms_recipients:
+                  type: integer
+                  readOnly: true
+                maxpergroup:
+                  type: integer
+                  readOnly: true
+                messages:
+                  type: integer
+                  readOnly: true
+                plan_cost:
+                  type: integer
+                  readOnly: true
+                plan_id:
+                  type: integer
+                  readOnly: true
+                plan_name:
+                  type: string
+                  minLength: 1
+                  readOnly: true
+                voice_minutes:
+                  type: integer
+                  readOnly: true
+              readOnly: true
+            groups:
+              type: integer
+              readOnly: true
+            maxpergroup:
+              type: integer
+              readOnly: true
+            messages:
+              type: string
+              minLength: 1
+              readOnly: true
+            voice_mail_transcriptions:
+              type: integer
+              readOnly: true
+            voice_minutes:
+              oneOf:
+              - type: string
+                pattern: ^-?\d+$
+                readOnly: true
+              - type: integer
+                readOnly: true
+          readOnly: true
+        pusher_key:
+          $ref: '#/components/schemas/pusherKey'
+        registration_status:
+          $ref: '#/components/schemas/registrationStatus'
+        resource_uri:
+          type: string
+          enum:
+          - /settings
+          example: /settings
+          readOnly: true
+        send_only_via_short_code:
+          type: boolean
+        send_only_via_toll_free:
+          type: boolean
+        settings_json:
+          type: string
+          minLength: 1
+          readOnly: true
+        siftScienceLabel:
+          type: string
+          nullable: true
+          readOnly: true
+        signature:
+          type: string
+          minLength: 1
+          nullable: true
+        sms_forwarding:
+          type: string
+          minLength: 1
+          nullable: true
+        sms_fwd_help:
+          type: boolean
+        sms_webhook_url:
+          type: string
+          nullable: true
+        sound_notifications:
+          type: boolean
+        toll_free_number:
+          type: string
+          nullable: true
+          readOnly: true
+        toll_free_primary:
+          type: boolean
+        transcribe_voice_mails:
+          type: boolean
+        voicemail_greeting_url:
+          type: string
+          nullable: true
+          readOnly: true
+    updateSettings:
+      allOf:
+      - $ref: '#/components/schemas/settings'
+      - type: object
+        properties:
+          mask_caller_id:
+            type: boolean
+    listNestedUser:
+      type: object
+      title: listNestedUser
+      properties:
+        createdTs:
+          $ref: '#/components/schemas/createdTsWithoutDecimal'
+        disable_incoming_sms:
+          $ref: '#/components/schemas/disableIncomingSms'
+        enterprise_id:
+          $ref: '#/components/schemas/enterpriseId'
+        enterprise_id_str:
+          $ref: '#/components/schemas/enterpriseIdStr'
+        id:
+          $ref: '#/components/schemas/id'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        image:
+          $ref: '#/components/schemas/image'
+        is_verified_email:
+          $ref: '#/components/schemas/isVerifiedEmail'
+        modifiedTs:
+          $ref: '#/components/schemas/modifiedTsWithoutDecimal'
+        name:
+          $ref: '#/components/schemas/userName'
+        onboarding_mobile_finished:
+          $ref: '#/components/schemas/onboardingMobileFinished'
+        onboarding_web_finished:
+          $ref: '#/components/schemas/onboardingWebFinished'
+        payment_period_end:
+          $ref: '#/components/schemas/paymentPeriodEnd'
+        payment_period_start:
+          $ref: '#/components/schemas/paymentPeriodStart'
+        payment_schedule_id:
+          $ref: '#/components/schemas/paymentScheduleId'
+        pending_phone_number:
+          $ref: '#/components/schemas/pendingPhoneNumber'
+        phone_number:
+          $ref: '#/components/schemas/personalCell'
+        registration_status:
+          $ref: '#/components/schemas/registrationStatus'
+        sendhub_number:
+          $ref: '#/components/schemas/sendhubNumber'
+        settings_json:
+          $ref: '#/components/schemas/settingsJson'
+        signature:
+          $ref: '#/components/schemas/signature'
+        twilio_phone_number_id:
+          $ref: '#/components/schemas/twilioPhoneNumberId'
+        twilio_phone_number_id_str:
+          $ref: '#/components/schemas/twilioPhoneNumberIdStr'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        user_id_str:
+          $ref: '#/components/schemas/userId'
+      required:
+      - createdTs
+      - disable_incoming_sms
+      - enterprise_id
+      - enterprise_id_str
+      - id
+      - id_str
+      - image
+      - is_verified_email
+      - modifiedTs
+      - name
+      - onboarding_mobile_finished
+      - onboarding_web_finished
+      - payment_period_end
+      - payment_period_start
+      - payment_schedule_id
+      - registration_status
+      - sendhub_number
+      - settings_json
+      - signature
+      - twilio_phone_number_id
+      - twilio_phone_number_id_str
+      - user_id
+      - user_id_str
+    authGroup:
+      anyOf:
+      - properties:
+          id:
+            type: number
+            example: 7
+            enum:
+            - 7
+          name:
+            type: string
+            minLength: 1
+            enum:
+            - Account Administrators
+        required:
+        - id
+        - name
+        type: object
+        title: Auth Group
+      - properties:
+          id:
+            type: number
+            example: 5
+            enum:
+            - 5
+          name:
+            type: string
+            minLength: 1
+            enum:
+            - Restricted Users
+        required:
+        - id
+        - name
+        type: object
+        title: Auth Group
+      - properties:
+          id:
+            type: number
+            example: 9
+            enum:
+            - 9
+          name:
+            type: string
+            minLength: 1
+            enum:
+            - Billing Administrators
+        required:
+        - id
+        - name
+        type: object
+        title: Auth Group
+      - properties:
+          id:
+            type: number
+            example: 6
+            enum:
+            - 6
+          name:
+            type: string
+            minLength: 1
+            enum:
+            - Account Users
+        required:
+        - id
+        - name
+        type: object
+        title: Auth Group
+      title: Auth Group
+    authGroups:
+      type: array
+      uniqueItems: true
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/authGroup'
+    user:
+      type: object
+      title: User
+      x-examples:
+        Product Alerts Line:
+          value:
+            id: '115999530581874548'
+            user_id: '283014186889381821'
+            enterprise_id: '232267963371095740'
+            phone_number: '+18888888888'
+            twilio_phone_number_id: '115999766167712690'
+            registration_status: completed
+            image: ''
+            signature: 'Best Regards,
+
+              ACME Inc.'
+            disable_incoming_sms: false
+            automated_sms_response: ''
+            payment_schedule_id: '1'
+            payment_period_start: '2019-12-19'
+            payment_period_end: '2020-01-19'
+            onboarding_web_finished: false
+            onboarding_mobile_finished: false
+            settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX",
+              "kazoo_user_id": "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv",
+              "toll_free_primary": false, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications":
+              true, "kazoo_device_ids": ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications":
+              true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true,
+              "kazoo_voicemail_id": "XXX", "msg_send_rate_limit": null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com",
+              "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url":
+              null, "mask_caller_id": false, "sms_config": {"last_example_ts": "1629209040", "last_keyword_reminder_ts": "1629873648",
+              "last_sms_contact_id": "116006957938283973"}}'
+            is_verified_email: true
+            createdTs: '2019-12-19T21:09:21'
+            modifiedTs: '2021-08-25T06:47:16'
+            auth_groups:
+            - id: 7
+              name: Account Administrators
+            - id: 5
+              name: Restricted Users
+            - id: 9
+              name: Billing Administrators
+            username: alerts@acme.com
+            id_str: '115999530581874548'
+            user_id_str: '283014186889381821'
+            enterprise_id_str: '232267963371095740'
+            twilio_phone_number_id_str: '115999766167712690'
+            name: Product Alerts
+            sendhub_number: '+12015716227'
+            sms_forwarding: '115999691431257661'
+      description: Individual SendHub user (line)
+      allOf:
+      - $ref: '#/components/schemas/listNestedUser'
+      - properties:
+          auth_groups:
+            $ref: '#/components/schemas/authGroups'
+          username:
+            $ref: '#/components/schemas/username'
+        required:
+        - auth_groups
+        - username
+    userProfile:
+      type: object
+      title: User Profile
+      description: ''
+      properties:
+        auth_groups:
+          $ref: '#/components/schemas/authGroups'
+        date_joined:
+          $ref: '#/components/schemas/dateJoined'
+        downvotes:
+          $ref: '#/components/schemas/downvotes'
+        email:
+          $ref: '#/components/schemas/email'
+        enterprise:
+          $ref: '#/components/schemas/enterpriseName'
+        enterprise_id:
+          $ref: '#/components/schemas/enterpriseId'
+        enterpriseJoinLink:
+          $ref: '#/components/schemas/enterpriseJoinLink'
+        enterpriseSize:
+          $ref: '#/components/schemas/enterpriseSize'
+        mixpanel_id:
+          $ref: '#/components/schemas/mixpanelId'
+        name:
+          $ref: '#/components/schemas/enterpriseName'
+        onboarding_mobile_finished:
+          $ref: '#/components/schemas/onboardingMobileFinished'
+        onboarding_web_finished:
+          $ref: '#/components/schemas/onboardingWebFinished'
+        payment_plan_id:
+          $ref: '#/components/schemas/planId'
+        resource_uri:
+          $ref: '#/components/schemas/profileResourceUri'
+        sendhub_number:
+          $ref: '#/components/schemas/formattedSendhubNumber'
+        unread:
+          $ref: '#/components/schemas/profileUnread'
+        upvotes:
+          $ref: '#/components/schemas/upvotes'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        username:
+          $ref: '#/components/schemas/username'
+      required:
+      - auth_groups
+      - date_joined
+      - downvotes
+      - email
+      - enterprise
+      - enterprise_id
+      - enterpriseJoinLink
+      - enterpriseSize
+      - mixpanel_id
+      - name
+      - onboarding_mobile_finished
+      - onboarding_web_finished
+      - payment_plan_id
+      - resource_uri
+      - sendhub_number
+      - unread
+      - upvotes
+      - user_id
+      - username
+    listUsersResponse:
+      type: object
+      title: listUsersResponse
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/listNestedUser'
+            x-$ref: '#/components/schemas/listNestedUser'
+    enterprise:
+      type: object
+      title: Enterprise (Account)
+      description: ''
+      properties:
+        brand_id:
+          $ref: '#/components/schemas/brandId'
+        createdTs:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        hasAccessToChatSupport:
+          type: boolean
+          deprecated: true
+        hash:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          minLength: 1
+        joinUrl:
+          type: string
+          minLength: 1
+          deprecated: true
+        modifiedTs:
+          type: string
+          minLength: 1
+        month_start:
+          type: string
+          minLength: 1
+        name:
+          $ref: '#/components/schemas/enterpriseName'
+        payment_plan_id:
+          type: integer
+        resource_uri:
+          type: string
+          minLength: 1
+        settingsJson:
+          type: string
+          minLength: 1
+        shortcode_allowed:
+          type: boolean
+      required:
+      - createdTs
+      - customerId
+      - hasAccessToChatSupport
+      - hash
+      - id
+      - joinUrl
+      - modifiedTs
+      - month_start
+      - name
+      - payment_plan_id
+      - resource_uri
+      - settingsJson
+      - shortcode_allowed
+    updateEnterpriseRequest:
+      description: ''
+      type: object
+      properties:
+        brand_id:
+          $ref: '#/components/schemas/brandId'
+        createdTs:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        hash:
+          type: string
+          minLength: 1
+        joinUrl:
+          type: string
+          minLength: 1
+        month_start:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        payment_plan_id:
+          type: number
+        settingsJson:
+          type: string
+          minLength: 1
+          readOnly: true
+        shortcode_allowed:
+          type: boolean
+      required:
+      - createdTs
+      - customerId
+      - hash
+      - joinUrl
+      - month_start
+      - name
+      - payment_plan_id
+      - settingsJson
+      - shortcode_allowed
+  securitySchemes:
+    username:
+      name: username
+      type: apiKey
+      in: query
+      description: Your SendHub line's username (can be found in your My Settings page)
+    api_key:
+      name: api_key
+      type: apiKey
+      in: query
+      description: Your SendHub line's API key (can be found in your My Settings page)
+    basic_auth:
+      type: http
+      scheme: basic
+      description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication (Your username
+        and API key can be found in your My Settings page)
+  requestBodies:
+    login:
+      x-internal: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/loginRequest'
+    updateSettings:
+      x-internal: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateSettings'
+            x-$ref: '#/components/schemas/updateSettings'
+    sendMessage:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - x-$ref: '#/components/schemas/sendMessageRequest'
+            - $ref: '#/components/schemas/sendMessageRequest'
+          examples:
+            Send SMS to a phone number:
+              summary: Send SMS to a phone number
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hello there
+            Schedule a message to be sent in the future:
+              summary: Schedule a message to be sent in the future
+              value:
+                contacts:
+                - '116006957938017590'
+                - '+18884445555'
+                groups:
+                - '115999753870991330'
+                text: Hello from the past!
+                scheduled_at: 2069-04-20T04:20:59+0000
+            Send an image (via URL):
+              summary: Send an image (via URL)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hello there
+                mms:
+                  filename: Obiwan.png
+                  url: https://pics.me.me/hello-there-general-kenobi-39974644.png
+            Send a video (via URL):
+              summary: Send a video (via URL)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hey got 'em
+                mms:
+                  filename: funny_video.mp4
+                  url: https://drive.google.com/uc?export=download&id=1-0NB0DJJKrh1u9uvsfKWDYS5DwaRHevN
+            Send an image (via base64-encoded data):
+              summary: Send an image (via base64-encoded data)
+              value:
+                contacts:
+                - '+18884445555'
+                text: Hey! Check out SendHub :)
+                mms:
+                  filename: SendHub.png
+                  data: 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
+    updateEnterprise:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateEnterpriseRequest'
+    updateContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateContactRequest'
+            x-$ref: '#/components/schemas/updateContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Updating_a_contact's_custom_field(s)_without_removing_them_from_any_groups_they're_in:
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in'
+    bulkUpsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/bulkUpsertContactRequest'
+            x-$ref: '#/components/schemas/bulkUpsertContactRequest'
+    upsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upsertContactRequest'
+            x-$ref: '#/components/schemas/upsertContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Create_non-existing_contact:
+              $ref: '#/components/examples/Create_non-existing_contact'
+            Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+              $ref: '#/components/examples/Update_my-custom-field-2_without_modifying_or_removing_my-custom-field'
+    createGroup:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createGroupRequest'
+          examples:
+            Creating_a_group:
+              $ref: '#/components/examples/Creating_a_group'
+            Creating_a_group_with_more_options:
+              $ref: '#/components/examples/Creating_a_group_with_more_options'
+    updateGroup:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateGroupRequest'
+          examples:
+            Updating_a_group:
+              $ref: '#/components/examples/Updating_a_group'
+            Updating_a_group_with_more_options:
+              $ref: '#/components/examples/Updating_a_group_with_more_options'
+    addRemoveGroupContacts:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - x-$ref: '#/components/schemas/addRemoveGroupContactsRequest'
+            - $ref: '#/components/schemas/addRemoveGroupContactsRequest'
+          examples:
+            Adding 3 contacts to a group:
+              summary: Adding 3 contacts to a group
+              value:
+                add:
+                - '116006957942993390'
+                - '116006957943010580'
+                - '116006957938017580'
+            Adding and removing contacts from a group:
+              summary: Adding and removing contacts from a group
+              value:
+                add:
+                - '116006957942993390'
+                - '116006957943010580'
+                remove:
+                - '116006957938017580'
+  x-commonExamples:
+    timestamp: '2021-08-24T19:44:31.266590'
+    timestampWithoutDecimal: '2021-08-24T19:44:31'
+    bob:
+      id: '116006957938017590'
+      idInt: 116006957938017580
+      number: '+12015716227'
+      name: Bob Parker
+      keyword: bob
+      resourceUri: /v1/contacts/116006957938017590
+    john:
+      id: '116006957938283973'
+      idInt: 116006957938283970
+      number: '+19198915828'
+      name: John Smith
+      keyword: john
+      resourceUri: /v1/contacts/116006957938283973
+    meta:
+      limit: 20
+      next: null
+      offset: 0
+      previous: null
+    threadMeta:
+      limit: 20
+      next: null
+      offset: 0
+      previous: null
+      hasUnread: false
+      labels:
+      - starred
+    group1:
+      id: '115999753870990933'
+      idInt: 115999753870990930
+      name: ACME Product Alerts
+      resourceUri: /v1/groups/115999753870990933
+      slug: alerts
+      ttjResponse: 'Thanks for opting in!
+
+        Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    group2:
+      id: '115999753870990932'
+      idInt: 115999753870990930
+      name: New Leads
+      resourceUri: /v1/groups/115999753870990932
+      slug: leads
+      ttjResponse: You are now subscribed.
+  examples:
+    errorResponseMissingNameField:
+      summary: Missing name field
+      value:
+        name:
+        - This field is required.
+    john:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938283973'
+        id_str: '116006957938283973'
+        is_owned: true
+        keyword: john
+        local_gateway: false
+        name: John Smith
+        number: '+19198915828'
+        resource_uri: /v1/contacts/116006957938283973
+        screened: false
+        landline: false
+        landline_override: false
+    derp:
+      value: asdf
+    bob:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+    johnWithContactId:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938283973'
+        id_str: '116006957938283973'
+        is_owned: true
+        keyword: john
+        local_gateway: false
+        name: John Smith
+        number: '+19198915828'
+        resource_uri: /v1/contacts/116006957938283973
+        screened: false
+        landline: false
+        landline_override: false
+        contact_id: '116006957938283973'
+    bobWithContactId:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+        contact_id: '116006957938017590'
+    threadNestedJohn:
+      value:
+        blocked: false
+        deleted: false
+        groups:
+        - ACME Product Alerts
+        id: 116006957938283970
+        id_str: '116006957938283973'
+        is_owned: true
+        keyword: john
+        name: John Smith
+        number: '+19198915828'
+        screened: false
+    threadNestedBob:
+      value:
+        blocked: false
+        deleted: false
+        groups:
+        - ACME Product Alerts
+        id: 116006957938017580
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        my-custom-field: My Custom Field Value
+        name: Bob Parker
+        number: '+12015716227'
+        screened: false
+    listContacts200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938283973'
+          id_str: '116006957938283973'
+          is_owned: true
+          keyword: john
+          local_gateway: false
+          name: John Smith
+          number: '+19198915828'
+          resource_uri: /v1/contacts/116006957938283973
+          screened: false
+          landline: false
+          landline_override: false
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938017590'
+          id_str: '116006957938017590'
+          is_owned: true
+          keyword: bob
+          local_gateway: false
+          name: Bob Parker
+          number: '+12015716227'
+          resource_uri: /v1/contacts/116006957938017590
+          screened: false
+          landline: false
+          landline_override: false
+    listGroupContacts200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938017590'
+          id_str: '116006957938017590'
+          is_owned: true
+          keyword: bob
+          local_gateway: false
+          name: Bob Parker
+          number: '+12015716227'
+          resource_uri: /v1/contacts/116006957938017590
+          screened: false
+          landline: false
+          landline_override: false
+    getContact200Response:
+      $ref: '#/components/examples/bob'
+    Updating_a_contacts_name:
+      summary: Updating a contact's name
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+    Updating_a_contacts_groups:
+      summary: Updating a contact's groups
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    Updating_a_contacts_custom_fields:
+      summary: Updating a contact's custom field(s)
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field: My custom value
+    Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in:
+      summary: Updating a contact's custom field(s) without removing them from any groups they're in
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field: My custom value
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    Create_non-existing_contact:
+      summary: Create a non-existing contact
+      value:
+        name: Bob Parker
+        number: '+12015716227'
+    Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+      summary: Update my-custom-field-2 without modifying or removing my-custom-field
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field-2: My custom value 2
+    errorResponseTtjTooLong:
+      summary: Text-to-join message is too long
+      value:
+        error: Join message can not be longer than 70 characters.
+        status: 400
+    group1:
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: 0
+        size: 1
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    group2:
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: 0
+        size: 1
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+    threadNestedGroup1:
+      value:
+        check_all: false
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        mediums: '["sms"]'
+        name: ACME Product Alerts
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    threadNestedGroup2:
+      value:
+        check_all: false
+        deleted: false
+        id: 115999753870990930
+        id_str: '115999753870990932'
+        mediums: '["sms"]'
+        name: New Leads
+        slug: leads
+        text_to_subscribe: true
+        ttjResponse: You are now subscribed.
+    updateGroup1:
+      summary: Example group 1
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: 0
+        size: 1
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+        mediums: null
+    updateGroup2:
+      summary: Example group 2
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: 0
+        size: 1
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+        mediums: null
+    createGroupResponse1:
+      summary: Example group 1
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: null
+        size: null
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+        mediums: null
+    createGroupResponse2:
+      summary: Example group 2
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: null
+        size: null
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+        mediums: null
+    listGroups200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          id: '115999753870990933'
+          id_str: '115999753870990933'
+          is_shared: false
+          name: ACME Product Alerts
+          parent_id: null
+          parent_user_id: null
+          permissions: write
+          resource_uri: /v1/groups/115999753870990933
+          share_invite_count: 0
+          size: 1
+          slug: alerts
+          text_to_subscribe: true
+          ttjResponse: 'Thanks for opting in!
+
+            Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+        - date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          id: '115999753870990932'
+          id_str: '115999753870990932'
+          is_shared: false
+          name: New Leads
+          parent_id: null
+          parent_user_id: null
+          permissions: write
+          resource_uri: /v1/groups/115999753870990932
+          share_invite_count: 0
+          size: 1
+          slug: leads
+          text_to_subscribe: false
+          ttjResponse: You are now subscribed.
+    getGroup200Response1:
+      summary: Example group 1
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: 0
+        size: 1
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    getGroup200Response2:
+      summary: Example group 2
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: 0
+        size: 1
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+    Creating_a_group:
+      summary: Creating a group
+      value:
+        name: ACME Product Alerts
+    Creating_a_group_with_more_options:
+      summary: Creating a group with more options
+      value:
+        name: ACME Product Alerts
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    Updating_a_group:
+      summary: Updating a group
+      value:
+        id: '115999753870990933'
+        name: ACME Product Alerts
+    Updating_a_group_with_more_options:
+      summary: Updating a group with more options
+      value:
+        id: '115999753870990933'
+        name: ACME Product Alerts
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    listThreads200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - contacts: []
+          created_at: '2021-08-24T19:44:31.266590'
+          deleted: false
+          direction: outbound-api
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          id: '115995236870812489'
+          labels: []
+          last_read_at: '2021-08-24T19:44:31.266590'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/threads/115988808197057314
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          text: 'Hello,
+
+
+            This is our first product alert.'
+          threadId: '115988808197057314'
+          type: message-out
+          unread: false
+        - contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          created_at: '2021-08-24T19:44:31.266590'
+          deleted: false
+          direction: outbound-api
+          groups: []
+          id: '115995236870812424'
+          labels:
+          - starred
+          last_read_at: '2021-08-24T19:44:31.266590'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/threads/115988808193508637
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          text: 'Hi Bob,
+
+
+            You can subscribe to our product alerts by texting "alerts" (without the quotes).'
+          threadId: '115988808193508637'
+          type: message-out
+          unread: false
+    getThread200Response1:
+      summary: A group thread
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+          hasUnread: false
+          labels:
+          - starred
+        objects:
+        - attachments:
+          - filename: SendHub_Logo.png
+            id: '336909160859829608'
+            isWriteable: true
+            mimetype: image/png
+            size: 18884
+            url: https://app.sendhub.com/v1/attachments/336909160859829608
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818976'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818976
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: http://sh.gl/IuvJma
+          text: 'Short Link?
+
+            File: http://sh.gl/IuvJma'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818148'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818148
+          scheduled_at: '2021-08-24T19:44:31'
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is a scheduled alert.'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870818517'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870818517
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is our second product alert.'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts: []
+          deleted: false
+          direction: to
+          groups:
+          - check_all: false
+            deleted: false
+            id: '115999753870990933'
+            id_str: '115999753870990933'
+            mediums: '["sms"]'
+            name: ACME Product Alerts
+            slug: alerts
+            text_to_subscribe: true
+            ttjResponse: 'Thanks for opting in!
+
+              Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+          hash: ''
+          id: '115995236870812489'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812489
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hello,
+
+
+            This is our first product alert.'
+          type: message-out
+          unread: false
+    getThread200Response2:
+      summary: Different message types
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+          hasUnread: false
+          labels:
+          - starred
+        objects:
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870814050'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870814050
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Received call at 2021-08-24 19:44:31 UTC, 4 seconds
+          type: voicecall-in
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: to
+          groups: []
+          hash: ''
+          id: '115995236870814041'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870814041
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Placed call at 2021-08-24 19:44:31 UTC, 9 seconds
+          type: voicecall-out
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870813983'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870813983
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Voicemail message at 2021-08-24 19:44:31 UTC: https://sendhub-prod-user-files.s3.amazonaws.com/voicemail/2/283014186889381821-28301418688938182152f236ba4a4a8d9fca1200dcd28f7ebe.mp3
+
+            Voicemail transcription result transcribed:Hey I had a question about your products could you give me a call?
+            Thanks.'
+          type: voicecall-voicemail
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870813982'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870813982
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Missed call at 2021-08-24 19:44:31 UTC
+          type: voicecall-missed
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: to
+          groups: []
+          hash: ''
+          id: '115995236870812424'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812424
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: 'Hi Bob,
+
+
+            You can subscribe to our product alerts by texting "alerts" (without the quotes).'
+          type: message-out
+          unread: false
+        - attachments: []
+          contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Product Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: bob
+            my-custom-field: My Custom Field Value
+            name: Bob Parker
+            number: '+12015716227'
+            screened: false
+          deleted: false
+          direction: from
+          groups: []
+          hash: ''
+          id: '115995236870812408'
+          modified_at: '2021-08-24T19:44:31.266590'
+          resource_uri: /v1/messages/115995236870812408
+          scheduled_at: null
+          sent: '2021-08-24T19:44:31.266590'
+          shortlink: ''
+          text: Hi, I'd like to receive product alerts.
+          type: message-in
+          unread: false
+    deleteThread200Response:
+      summary: Deleted thread successfully
+      value:
+        message: Thread successfully deleted
+    sendMessage400Response1:
+      summary: '`text` field missing or invalid'
+      value:
+        message: sms message does not exist or is empty
+        code: '400'
+        error: text message invalid
+        moreInfo: ''
+    sendMessage400Response2:
+      summary: Trying to send to 0 contacts and 0 groups
+      value:
+        message: The list of contacts was empty, which is not allowed (or the list of contacts contained one or more invalid
+          contact ids which were filtered out, and then the resulting list was empty)
+    sendMessage400Response3:
+      summary: '`text` field exceeded the 1,600 character limit'
+      value:
+        message: The message length exceeded the maximum allowed number of characters (max allowed is 1600)
+    settings:
+      value:
+        api_key: 12a26b3bc48d52e69f70a82a94a13a29a3fa41a5
+        auto_attendant_greeting_url: null
+        auto_upgrade_plan: false
+        automated_sms_response: 'Thank you for reaching out!
+
+          We''ll respond shortlyWe''ll respond shortlyWe''ll respond shortlyWe''ll respond shortly'
+        conference_lines_enabled: true
+        createdTs: '2019-12-19T21:09:21.293391'
+        customer_id: null
+        deleted: null
+        desktop_notifications: true
+        disable_incoming_sms: true
+        email_calling_notifications: true
+        ent_toll_free_enabled: false
+        enterprise_id: '232267963371095740'
+        firstPaymentTs: null
+        hide_link_in_bulk_messages: true
+        id: '115999530581874548'
+        image: null
+        is_verified_email: true
+        mfa_enabled: false
+        mfa_enforced: false
+        mixpanelid: null
+        modifiedTs: '2021-08-25T12:06:22.025499'
+        month_start: '2021-04-20'
+        name: Product Alerts
+        onboarding_mobile_finished: false
+        onboarding_web_finished: false
+        payment_period_end: '2020-01-19'
+        payment_period_start: '2019-12-19'
+        pending_email: null
+        pending_phone_number: null
+        phone_number: '+18888888888'
+        plan_usage:
+          api_requests: '5208'
+          current_plan:
+            api_requests: 40000
+            groups: -1
+            max_sms_recipients: 150
+            maxpergroup: -1
+            messages: 24000
+            plan_cost: 100000
+            plan_id: 1943
+            plan_name: Basic 2021 - 4000 SMS 250 Min - Annual
+            voice_minutes: -1
+          groups: 1
+          maxpergroup: 1
+          messages: '77'
+          voice_mail_transcriptions: 0
+          voice_minutes: '1'
+        pusher_key: 1234567890abcdef1234
+        registration_status: completed
+        resource_uri: /settings
+        send_only_via_short_code: false
+        send_only_via_toll_free: false
+        settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id":
+          "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary":
+          true, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids":
+          ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code":
+          false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit":
+          null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id":
+          "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": true, "sms_config": {"last_example_ts":
+          "1629209040", "last_keyword_reminder_ts": "1629892091", "last_sms_contact_id": "116006957937271730"}}'
+        siftScienceLabel: null
+        signature: 'Best Regards,
+
+          SendHub Support'
+        sms_forwarding: '115999691431257661'
+        sms_fwd_help: true
+        sms_webhook_url: null
+        sound_notifications: true
+        toll_free_number: null
+        toll_free_primary: true
+        transcribe_voice_mails: true
+        voicemail_greeting_url: null
+    updateSettings:
+      value:
+        api_key: 12a26b3bc48d52e69f70a82a94a13a29a3fa41a5
+        auto_attendant_greeting_url: null
+        auto_upgrade_plan: false
+        automated_sms_response: 'Thank you for reaching out!
+
+          We''ll respond shortlyWe''ll respond shortlyWe''ll respond shortlyWe''ll respond shortly'
+        conference_lines_enabled: true
+        createdTs: '2019-12-19T21:09:21.293391'
+        customer_id: null
+        deleted: null
+        desktop_notifications: true
+        disable_incoming_sms: true
+        email_calling_notifications: true
+        ent_toll_free_enabled: false
+        enterprise_id: '232267963371095740'
+        firstPaymentTs: null
+        hide_link_in_bulk_messages: true
+        id: '115999530581874548'
+        image: null
+        is_verified_email: true
+        mfa_enabled: false
+        mfa_enforced: false
+        mixpanelid: null
+        modifiedTs: '2021-08-25T12:06:22.025499'
+        month_start: '2021-04-20'
+        name: Product Alerts
+        onboarding_mobile_finished: false
+        onboarding_web_finished: false
+        payment_period_end: '2020-01-19'
+        payment_period_start: '2019-12-19'
+        pending_email: null
+        pending_phone_number: null
+        phone_number: '+18888888888'
+        plan_usage:
+          api_requests: '5208'
+          current_plan:
+            api_requests: 40000
+            groups: -1
+            max_sms_recipients: 150
+            maxpergroup: -1
+            messages: 24000
+            plan_cost: 100000
+            plan_id: 1943
+            plan_name: Basic 2021 - 4000 SMS 250 Min - Annual
+            voice_minutes: -1
+          groups: 1
+          maxpergroup: 1
+          messages: '77'
+          voice_mail_transcriptions: 0
+          voice_minutes: '1'
+        pusher_key: 1234567890abcdef1234
+        registration_status: completed
+        resource_uri: /settings
+        send_only_via_short_code: false
+        send_only_via_toll_free: false
+        settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id":
+          "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary":
+          true, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids":
+          ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code":
+          false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit":
+          null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id":
+          "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": true, "sms_config": {"last_example_ts":
+          "1629209040", "last_keyword_reminder_ts": "1629892091", "last_sms_contact_id": "116006957937271730"}}'
+        siftScienceLabel: null
+        signature: 'Best Regards,
+
+          SendHub Support'
+        sms_forwarding: '115999691431257661'
+        sms_fwd_help: true
+        sms_webhook_url: null
+        sound_notifications: true
+        toll_free_number: null
+        toll_free_primary: true
+        transcribe_voice_mails: true
+        voicemail_greeting_url: null
+        mask_caller_id: true
+    userProfile:
+      value:
+        auth_groups:
+        - id: 7
+          name: Account Administrators
+        - id: 5
+          name: Restricted Users
+        - id: 9
+          name: Billing Administrators
+        date_joined: '2019-12-19T21:09:21.216167'
+        downvotes: 0
+        email: alerts@acme.com
+        enterprise: ACME Inc.
+        enterpriseJoinLink: http://sh.gl/HAmMgR
+        enterpriseSize: 6
+        enterprise_id: '232267963371095740'
+        mixpanel_id: null
+        name: Product Alerts
+        onboarding_mobile_finished: false
+        onboarding_web_finished: false
+        payment_plan_id: 1268
+        resource_uri: /v1/profile
+        sendhub_number: (201) 571-6227
+        unread: 0
+        upvotes: 0
+        user_id: '283014186889381821'
+        username: alerts@acme.com
+    user:
+      value:
+        id: '115999530581874548'
+        user_id: '283014186889381821'
+        enterprise_id: '232267963371095740'
+        phone_number: '+18888888888'
+        twilio_phone_number_id: '115999766167712690'
+        registration_status: completed
+        image: ''
+        signature: 'Best Regards,
+
+          ACME Inc.'
+        disable_incoming_sms: false
+        automated_sms_response: ''
+        payment_schedule_id: '1'
+        payment_period_start: '2019-12-19'
+        payment_period_end: '2020-01-19'
+        onboarding_web_finished: false
+        onboarding_mobile_finished: false
+        settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id":
+          "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary":
+          false, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids":
+          ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code":
+          false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit":
+          null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id":
+          "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": false, "sms_config": {"last_example_ts":
+          "1629209040", "last_keyword_reminder_ts": "1629873648", "last_sms_contact_id": "116006957938283973"}}'
+        is_verified_email: true
+        createdTs: '2019-12-19T21:09:21'
+        modifiedTs: '2021-08-25T06:47:16'
+        auth_groups:
+        - id: 7
+          name: Account Administrators
+        - id: 5
+          name: Restricted Users
+        - id: 9
+          name: Billing Administrators
+        username: alerts@acme.com
+        id_str: '115999530581874548'
+        user_id_str: '283014186889381821'
+        enterprise_id_str: '232267963371095740'
+        twilio_phone_number_id_str: '115999766167712690'
+        name: Product Alerts
+        sendhub_number: '+12015716227'
+        sms_forwarding: '115999691431257661'
+    enterprise:
+      value:
+        brand_id:
+          $ref: '#/components/schemas/brandId'
+        createdTs: '2018-06-07T17:59:51.186701'
+        customerId: cus_D0TMCytXFqWuNO
+        hasAccessToChatSupport: true
+        hash: XXX
+        id: '232267963371095740'
+        joinUrl: http://sh.gl/HAmMgR
+        modifiedTs: '2021-08-24T19:31:26.420082'
+        month_start: '2021-08-09'
+        name: ACME Inc.
+        payment_plan_id: 11
+        resource_uri: /v1/enterprises/232267963371095740
+        settingsJson: '{"mms_enabled": false, "integrationsAllowed": true,  "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv"}'
+        shortcode_allowed: false
+    listContacts200Response-2:
+      summary: Success
+      value:
+        meta:
+          limit: 1
+          next: /v1/contacts?limit=1&offset=1
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2022-03-03T14:30:43.434051'
+          date_modified: '2022-03-09T17:00:32.795897'
+          deleted: false
+          groups: []
+          id: '116006957944371848'
+          id_str: '116006957944371848'
+          is_owned: true
+          keyword: acme
+          landline: false
+          local_gateway: false
+          my-custom-field-2: my-custom-field-2
+          name: ACME Alerts
+          number: '+18002222228'
+          resource_uri: /v1/contacts/116006957944371848
+          screened: false
+    listThreads200Response-2:
+      summary: Success
+      value:
+        meta:
+          limit: 1
+          next: /v1/inbox?limit=1&offset=1
+          offset: 0
+          previous: null
+          unread: 9
+        objects:
+        - contacts:
+          - blocked: false
+            deleted: false
+            groups:
+            - ACME Alerts
+            id: 116006957938017580
+            id_str: '116006957938017590'
+            is_owned: true
+            keyword: johnsmithy
+            name: John Smithy
+            number: '+12015716227'
+            screened: false
+          created_at: '2020-03-27T22:50:35.283171'
+          deleted: false
+          direction: incoming
+          groups: []
+          id: '115995236880212923'
+          labels:
+          - starred
+          last_read_at: '2022-03-08T20:38:03.476505'
+          modified_at: '2022-03-09T23:21:46.661440'
+          resource_uri: /v1/threads/115988808193508637
+          scheduled_at: null
+          sent: '2022-03-09T23:21:46.135757'
+          text: 'Hey got ''em
+
+            File: http://sh.gl/CNpLW5'
+          threadId: '115988808193508637'
+          type: message-in
+          unread: true
+  responses:
+    '401':
+      description: The credentials you supplied are invalid
+    list400BadFiltering:
+      description: Bad Request
+      content:
+        text/html; charset=utf-8:
+          schema:
+            type: string
+          examples:
+            Invalid filter parameter:
+              summary: Invalid filter parameter
+              value: The 'resource_uri' field does not allow filtering.
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    contact404:
+      description: Contact not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Contact not found:
+              summary: Contact not found
+              value:
+                error: Requested contact not found
+                status: 404
+    group404:
+      description: Group not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Group not found:
+              summary: Group not found
+              value:
+                error: Requested group not found
+                status: 404
+    thread404:
+      description: Thread not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Thread not found:
+              summary: Thread not found
+              value:
+                error: Requested thread not found
+                status: 404
+    listContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+            x-$ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listContacts200Response-2'
+    listContacts403:
+      description: Forbidden
+    listGroupContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listGroupContacts200Response'
+    getContact200:
+      description: Found contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/john'
+            Example contact 2:
+              $ref: '#/components/examples/bob'
+    getContact404:
+      description: User not found
+    updateContact200:
+      description: Updated contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateContactResponse'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/johnWithContactId'
+            Example contact 2:
+              $ref: '#/components/examples/bobWithContactId'
+    updateContact400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/nameOrNumberError'
+          examples:
+            Missing name and number fields:
+              summary: Missing name and number fields
+              value:
+                name:
+                - This field is required.
+                number:
+                - This field is required.
+            Missing id field or incorrect id provided:
+              summary: Missing id field or incorrect id provided
+              value:
+                number:
+                - That number is already in your contacts.
+    upsertContact201:
+      description: Created or updated contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upsertContactResponse'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/johnWithContactId'
+            Example contact 2:
+              $ref: '#/components/examples/bobWithContactId'
+    upsertContact400:
+      $ref: '#/components/responses/updateContact400'
+    bulkUpsertContacts202:
+      description: Created or updated contacts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/upsertContactResponse'
+    listGroups200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listGroups200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listGroups200Response'
+    getGroup200:
+      description: Found group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/group'
+          examples:
+            Group 1:
+              $ref: '#/components/examples/getGroup200Response1'
+            Group 2:
+              $ref: '#/components/examples/getGroup200Response2'
+    createGroup201:
+      description: Created group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/groupWithMediums'
+          examples:
+            Example group 1:
+              $ref: '#/components/examples/createGroupResponse1'
+            Example group 2:
+              $ref: '#/components/examples/createGroupResponse2'
+    updateGroup200:
+      description: Updated group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/groupWithMediums'
+          examples:
+            Example group 1:
+              $ref: '#/components/examples/updateGroup1'
+            Example group 2:
+              $ref: '#/components/examples/updateGroup2'
+    updateGroup400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - $ref: '#/components/schemas/errorObject'
+            - $ref: '#/components/schemas/nameErrorObject'
+          examples:
+            Missing Name Field:
+              $ref: '#/components/examples/errorResponseMissingNameField'
+            Missing id field or incorrect id provided:
+              summary: Missing id field or incorrect id provided
+              value:
+                name:
+                - Duplicate group name.
+            Text-to-join message is too long:
+              $ref: '#/components/examples/errorResponseTtjTooLong'
+    updateGroup404:
+      $ref: '#/components/responses/group404'
+    addRemoveGroupContacts202:
+      description: Accepted
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/addRemoveGroupContacts202Response'
+          examples:
+            Successfully added 1 & removed 2 contacts:
+              summary: Successfully added 1 & removed 2 contacts
+              value:
+                add:
+                - '116006957938017580'
+                errors: {}
+                remove:
+                - '116006957942993390'
+                - '116006957943010580'
+            Successfully added 2, but the 3rd was already in the group:
+              summary: Successfully added 2, but the 3rd was already in the group
+              value:
+                add:
+                - '116006957942993390'
+                - '116006957943010580'
+                errors:
+                  add:
+                  - 116006957938017590 is the id of a contact who is already in this group
+                remove: []
+            Failed to added 2 & remove 1 contacts:
+              summary: Failed to added 2 & remove 1 contacts
+              value:
+                add: []
+                errors:
+                  add:
+                  - 116006957942993398 is the id of a contact who is already in this group
+                  - 116006957943010582 is the id of a contact who is already in this group
+                  remove:
+                  - 116006957938017590 is not an id of a contact in the group.
+                remove: []
+    listThreads200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listThreads200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listThreads200Response-2'
+    getThread200:
+      description: Found thread
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/thread'
+          examples:
+            A group thread:
+              $ref: '#/components/examples/getThread200Response1'
+            A thread with different message types:
+              $ref: '#/components/examples/getThread200Response2'
+    deleteThread200:
+      description: Deleted thread
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          examples:
+            Thread successfully deleted:
+              $ref: '#/components/examples/deleteThread200Response'
+    deleteThread404:
+      $ref: '#/components/responses/thread404'
+    getMessage200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/message'
+            x-$ref: '#/components/schemas/message'
+    sendMessage201:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/sendMessageResponse'
+          examples:
+            Sent message with attachment (from URL):
+              value:
+                acknowledgment: Message queued for sending.
+                contacts:
+                - blocked: false
+                  date_created: '2020-04-08T17:57:38'
+                  date_modified: '2021-08-25T06:41:06'
+                  deleted: false
+                  extra_info: '{}'
+                  id: '116006957938283973'
+                  id_str: '116006957938283973'
+                  is_owned: true
+                  keyword: deleted116006957938283973
+                  name: John Smith
+                  number: '+19198915828'
+                  screened: false
+                  smsGateway: sendhub
+                  user_id: '283014186889381821'
+                created_at: '2021-09-07T19:28:39.099805'
+                deleted: false
+                direction: to
+                force_shortlink_creation: false
+                groups:
+                - check_all: false
+                  date_created: '2021-08-10T18:33:57'
+                  date_modified: '2021-08-30T18:23:00'
+                  deleted: false
+                  id: '115999753870991332'
+                  id_str: '115999753870991332'
+                  is_shared: false
+                  mediums: '["sms"]'
+                  name: ACME Alerts
+                  permissions: write
+                  slug: alerts
+                  text_to_subscribe: true
+                  ttjResponse: 'Thanks for opting in!
+
+                    Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+                  user_id: '283014186889381821'
+                id: '115988808197247577'
+                id_is_thread_id: true
+                message_id: '115995236872293501'
+                mms:
+                  filename: funny_video.mp4
+                modified_at: '2021-09-07T19:28:39.123132'
+                resource_uri: /v1/threads/115988808197247577
+                scheduled_at: null
+                sent: '2021-09-07T19:28:39.099805'
+                shortlink: http://sh.gl/5vUtCa
+                text: 'Hey got ''em''
+
+                  File: http://sh.gl/5vUtCa'
+                thread_id: '115988808197247577'
+                type: message-out
+                unread: null
+                via_shortcode: false
+    updateMessage201:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateMessageResponse'
+    listScheduledMessages200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listScheduledMessagesResponse'
+    deleteMessage200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Success message
+          examples:
+            Record successfully deleted:
+              value:
+                message: Record successfully deleted
+    deleteMessage404:
+      description: Message not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Message not found:
+              summary: Message not found
+              value:
+                error: Requested message not found
+                status: 404
+    listScheduledMessages400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            anyOf:
+            - type: object
+              properties:
+                message:
+                  type: string
+                code:
+                  type: string
+                  enum:
+                  - '400'
+                error:
+                  type: string
+                moreInfo:
+                  type: string
+            - type: object
+              properties:
+                message:
+                  type: string
+          examples:
+            '`text` field missing or invalid':
+              $ref: '#/components/examples/sendMessage400Response1'
+            Trying to send to 0 contacts and 0 groups:
+              $ref: '#/components/examples/sendMessage400Response2'
+            '`text` field exceeded the 1,600 character limit':
+              $ref: '#/components/examples/sendMessage400Response3'
+    getSettings200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/settings'
+            x-$ref: '#/components/schemas/settings'
+          examples:
+            Get Product Alerts Line's Settings:
+              $ref: '#/components/examples/settings'
+    updateSettings200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateSettings'
+          examples:
+            Updated Product Alerts Line's Settings:
+              $ref: '#/components/examples/updateSettings'
+    getProfile200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userProfile'
+          examples:
+            Product Alerts Line Profile:
+              $ref: '#/components/examples/userProfile'
+    getUser200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
+            x-$ref: '#/components/schemas/user'
+          examples:
+            Product Alerts Line:
+              $ref: '#/components/examples/user'
+    listUsers200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listUsersResponse'
+            x-$ref: '#/components/schemas/listUsersResponse'
+    getEnterprise200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/enterprise'
+          examples:
+            ACME Inc.:
+              $ref: '#/components/examples/enterprise'
+    login200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/login200Response'
+  parameters:
+    PageLimit:
+      name: limit
+      in: query
+      description: (Pagination) How many records to return
+      schema:
+        type: integer
+        maximum: 1000
+        minimum: 1
+        default: 20
+    PageOffset:
+      name: offset
+      in: query
+      description: (Pagination) How many records to skip
+      schema:
+        type: integer
+        default: 0
+    ContactsListFilterByName:
+      name: name
+      in: query
+      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
+      schema:
+        type: string
+      examples:
+        John Smith:
+          value: John Smith
+        Bob Parker:
+          value: Bob Parker
+    ContactsListFilterByNumber:
+      name: number
+      in: query
+      description: "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded\
+        \ (eg. `+18004445555` would become `%2B18004445555`)"
+      schema:
+        type: string
+      examples:
+        Only show contacts with a `number` matching +18004445555:
+          summary: Only show contacts with a `number` matching +18004445555
+          value: '%2B18004445555'
+        Only show contacts with a `number` matching +12015716227:
+          summary: Only show contacts with a `number` matching +12015716227
+          value: '%2B12015716227'
+    ContactsListFilterByScreened:
+      name: screened
+      in: query
+      description: Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)
+      schema:
+        type: boolean
+      examples:
+        Only show contacts that you have blocked:
+          summary: Only show contacts that you have blocked
+          value: true
+        Only show contacts that you haven't blocked:
+          summary: Only show contacts that you haven't blocked
+          value: false
+    ContactsListFilterByBlocked:
+      name: blocked
+      in: query
+      description: Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` -
+        [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+      schema:
+        type: boolean
+      examples:
+        Only show contacts that have opted-out:
+          summary: Only show contacts that have opted-out
+          value: true
+        Only show contacts that haven't opted-out:
+          summary: Only show contacts that haven't opted-out
+          value: false
+    ContactsListOrdering:
+      name: ordering
+      in: query
+      description: 'Sort contacts by a specified field (prepend a hyphen to reverse order)
+
+
+        **Must** be a built-in contact field, not a custom field'
+      schema:
+        type: string
+        enum:
+        - name
+        - -name
+        - date_created
+        - -date_created
+        - date_modified
+        - -date_modified
+        - id
+        - -id
+        - blocked
+        - -blocked
+        - screened
+        - -screened
+        - is_owned
+        - -is_owned
+        - keyword
+        - -keyword
+        - number
+        - -number
+      examples:
+        Sort contacts by date_created last-to-first:
+          summary: Sort contacts by date_created last-to-first
+          value: -date_created
+        Sort contacts by date_created first-to-last:
+          summary: Sort contacts by date_created first-to-last
+          value: date_created
+        Sort contacts by date_modified last-to-first:
+          summary: Sort contacts by date_modified last-to-first
+          value: -date_modified
+        Sort contacts by date_modified first-to-last:
+          summary: Sort contacts by date_modified first-to-last
+          value: date_modified
+        Sort contacts by their name Z-to-A:
+          summary: Sort contacts by their name Z-to-A
+          value: -name
+        Sort contacts by their name A-to-Z:
+          summary: Sort contacts by their name A-to-Z
+          value: name
+    enterprise_id:
+      name: enterprise_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 'Your enterprise account''s ID
+
+
+        **Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints'
+    user_id:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      description: 'The SendHub user (line)''s ID
+
+
+        **Note:** You can find your `user_id` in the `/v1/profile` endpoint
+
+        You can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint'
+    group_id:
+      name: group_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      description: The group ID
+    contact_id:
+      name: contact_id
+      in: path
+      required: true
+      schema:
+        anyOf:
+        - type: integer
+          format: int64
+          minimum: 1
+        - type: string
+          pattern: ^\d+$
+          minLength: 1
+      description: The contact ID
+    thread_id:
+      in: path
+      required: true
+      name: thread_id
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      description: The thread ID

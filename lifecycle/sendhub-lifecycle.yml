@@ -1,0 +1,18 @@
+generated: '2026-07-21'
+method: searched
+source:
+- https://sendhub.com/developer/
+- openapi/sendhub-openapi-original.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
+  note: API documentation marked Beta; may be updated periodically.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation/sunset policy found.
+sla:
+  url: null
+status_page: null
+deprecated_operations: []

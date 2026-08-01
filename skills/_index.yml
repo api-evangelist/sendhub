@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/sendhub-openapi-original.yml
+skills:
+  - file: sendhub-send-message.md
+    name: Send an SMS to contacts or groups
+    api: openapi/sendhub-openapi-original.yml
+    operations: [listContacts, sendMessage, getMessage]
+  - file: sendhub-manage-contacts-groups.md
+    name: Manage contacts and groups
+    api: openapi/sendhub-openapi-original.yml
+    operations: [upsertContact, bulkUpsertContacts, createGroup, addRemoveGroupContacts, listGroupContacts]
+  - file: sendhub-read-inbox.md
+    name: Read the two-way texting inbox
+    api: openapi/sendhub-openapi-original.yml
+    operations: [listThreads, getThread, getSettings]

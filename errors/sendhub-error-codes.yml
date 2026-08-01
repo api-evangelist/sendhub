@@ -1,0 +1,45 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/sendhub-openapi-original.yml
+format: custom
+envelope:
+  content_type: application/json
+  fields:
+  - message
+  - code
+  - error
+  - devMessage
+  - moreInfo
+  note: Error responses return a JSON object; rate-limit responses (429) also include timeLeft. Not RFC
+    9457 problem+json.
+problems:
+- status: 200
+  title: Error
+  meaning: ''
+- status: 201
+  title: Error
+  meaning: ''
+- status: 202
+  title: Error
+  meaning: ''
+- status: 204
+  title: Error
+  meaning: ''
+- status: 400
+  title: Bad Request
+  meaning: Request was malformed or filter parameters were invalid
+- status: 401
+  title: Unauthorized
+  meaning: Supplied credentials (username + api_key, or basic auth password) are invalid
+- status: 403
+  title: Forbidden
+  meaning: Authenticated but not permitted to access this resource
+- status: 404
+  title: Not Found
+  meaning: The requested resource does not exist
+- status: 420
+  title: Plan API limit reached
+  meaning: Monthly plan API limit reached, or plan does not include API access
+- status: 429
+  title: Too Many Requests
+  meaning: Too many requests in a short window; client is rate-limited

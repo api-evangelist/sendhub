@@ -1,0 +1,31 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/sendhub-openapi-original.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - query
+schemes:
+- name: username
+  type: apiKey
+  in: query
+  parameter: username
+  description: Your SendHub line's username (can be found in your My Settings page)
+  sources:
+  - openapi/sendhub-openapi-original.yml
+- name: api_key
+  type: apiKey
+  in: query
+  parameter: api_key
+  description: Your SendHub line's API key (can be found in your My Settings page)
+  sources:
+  - openapi/sendhub-openapi-original.yml
+- name: basic_auth
+  type: http
+  scheme: basic
+  description: Use your SendHub line's password or API key as the password with HTTP Basic Authentication
+    (Your username and API key can be found in your My Settings page)
+  sources:
+  - openapi/sendhub-openapi-original.yml

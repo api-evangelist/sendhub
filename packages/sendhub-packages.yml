@@ -1,0 +1,17 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/sendhub/sendhub-python
+notes: >-
+  First-party Python client published in SendHub's official GitHub organization
+  (github.com/sendhub, Pleasanton CA). setup.py declares distribution name
+  "sendhub" but the package is not published to PyPI (pypi.org/pypi/sendhub/json
+  returns "Not Found"); install from source. Legacy v1-era client.
+packages:
+  - language: python
+    registry: github
+    name: sendhub
+    repository: https://github.com/sendhub/sendhub-python
+    install: pip install git+https://github.com/sendhub/sendhub-python.git
+    license: MIT
+    official: true
+    published_to_registry: false
