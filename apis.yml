@@ -6,8 +6,10 @@ description: >-
   calling, used by more than 10,000 businesses. It exposes a REST-like v1 API at
   api.sendhub.com for programmatically managing contacts, groups, messages, inbox threads,
   account settings, and enterprise users, authenticated with a line username and API key
-  (query params) or HTTP Basic. API access is available on custom plans, and SendHub also
-  supports 100+ integrations via direct connectors and Zapier plus inbound-SMS webhooks.
+  (query params) or HTTP Basic. Published plans run Lite $19/mo to Basic $100/mo plus a
+  quoted Custom tier, and every tier lists API access, though the developer page still says
+  API access is custom-plan only. SendHub also supports 100+ integrations via direct
+  connectors and Zapier plus inbound-SMS webhooks, and is a New Era Technology company.
   Surfaced as a 500 Global portfolio company and enriched by the API Evangelist pipeline.
 url: https://raw.githubusercontent.com/api-evangelist/sendhub/refs/heads/main/apis.yml
 accessModel:
@@ -31,11 +33,11 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-13'
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 16
+  artifacts_added: 2
   pass: local-v1
 tags:
 - Company
@@ -187,9 +189,13 @@ common:
   url: conformance/sendhub-conformance.yml
 - type: Overlay
   url: overlays/sendhub-openapi-overlay.yaml
-- type: WellKnown
-  url: well-known/sendhub-well-known.yml
 - type: Webhooks
   url: asyncapi/sendhub-webhooks.yml
 - type: AgentSkill
   url: skills/_index.yml
+- type: Plans
+  url: plans/sendhub-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/sendhub-rate-limits.yml
+- type: GettingStarted
+  url: https://www.sendhub.com/developer/
