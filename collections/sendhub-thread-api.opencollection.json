@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SendHub Authentication Thread API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "username",
+      "value": "{{username}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Thread",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Threads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/inbox",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to skip"
+              }
+            ]
+          },
+          "docs": "Gets a list of inbox threads\n\n**Note:** the URL **must** include the forward-slash after /v1/inbox\n\nThe `next` field in the `meta` object doesn't include this forward-slash in the URI it provides\n\nWe suggest constructing your URIs via your code and using the `next` field to determine if there's a next page (eg. if `next` is null)"
+        },
+        {
+          "info": {
+            "name": "Get thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/threads/:thread_id",
+            "params": [
+              {
+                "name": "thread_id",
+                "value": "",
+                "type": "path",
+                "description": "The thread ID"
+              }
+            ]
+          },
+          "docs": "Gets an individual thread by its id"
+        },
+        {
+          "info": {
+            "name": "Delete thread",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sendhub.com/v1/threads/:thread_id",
+            "params": [
+              {
+                "name": "thread_id",
+                "value": "",
+                "type": "path",
+                "description": "The thread ID"
+              }
+            ]
+          },
+          "docs": "Deletes an individual thread by its id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,211 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SendHub Authentication Group API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "username",
+      "value": "{{username}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/groups",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to skip"
+              }
+            ]
+          },
+          "docs": "Gets a list of groups"
+        },
+        {
+          "info": {
+            "name": "Create Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sendhub.com/v1/groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a group"
+        },
+        {
+          "info": {
+            "name": "Get Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              }
+            ]
+          },
+          "docs": "Gets an individual group by its id"
+        },
+        {
+          "info": {
+            "name": "Update Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sendhub.com/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an individual group referenced by its id\n\n**Note:** this is a _replace_ operation; any properties the group already has that you don't specify in your request will be set to their defaults"
+        },
+        {
+          "info": {
+            "name": "Delete Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sendhub.com/v1/groups/:group_id",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              }
+            ]
+          },
+          "docs": "Deletes a group"
+        },
+        {
+          "info": {
+            "name": "List Group's Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/groups/:group_id/contacts",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to skip"
+              },
+              {
+                "name": "number",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)"
+              },
+              {
+                "name": "screened",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)"
+              },
+              {
+                "name": "blocked",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))"
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Sort contacts by a specified field (prepend a hyphen to reverse order)\n\n**Must** be a built-in contact field, not a custom field"
+              }
+            ]
+          },
+          "docs": "Lists contacts in a specified group"
+        },
+        {
+          "info": {
+            "name": "Add/Remove Group's Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sendhub.com/v1/groups/:group_id/contacts",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add and/or remove contacts from a group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

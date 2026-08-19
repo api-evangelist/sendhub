@@ -1,7 +1,21 @@
-generated: '2026-07-21'
-method: searched
+generated: '2026-08-13'
+method: probed
+source: live HTTP probes of every apis.yml + OpenAPI servers[] host
+result: no-hit
+note: >-
+  NOTHING is served under /.well-known/ on any SendHub host. sendhub.com returns a real nginx 404
+  for every path. api.sendhub.com, app.sendhub.com and integrations.sendhub.com are SOFT-200
+  hosts: every unknown path — including /.well-known/agent-card.json, /.well-known/security.txt,
+  /openapi.json and /swagger.json — returns HTTP 200 with the 55,231-byte "SendHub - Login" HTML
+  application shell, not a document. Those 200s are recorded as MISSES. Because no /.well-known/
+  path returned a real document, this repo emits NO `WellKnown` and NO `SecurityTxt` pointer in
+  apis.yml; a prior round wired a WellKnown pointer off this same all-404 probe and it has been
+  removed. The one machine-readable discovery document SendHub does publish is /llms.txt at the
+  marketing web root (not under /.well-known/); it is captured separately as llms/sendhub-llms.txt
+  and carries the LLMsTxt pointer.
 hosts:
 - host: https://sendhub.com
+  behavior: real-404
   documents:
   - path: /.well-known/security.txt
     status: 404
@@ -13,15 +27,81 @@ hosts:
     status: 404
   - path: /.well-known/ai-plugin.json
     status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /security.txt
+    status: 404
+    note: WordPress 404 page (241 KB HTML), not a document.
   - path: /llms.txt
     status: 200
     file: ../llms/sendhub-llms.txt
-    note: Yoast-generated llms.txt at web root (not under /.well-known/).
+    note: >-
+      Real document, 11,750 bytes, hand-authored (a prior round captured an older Yoast-generated
+      version). Served from the web root, NOT from /.well-known/, so it does not earn a WellKnown
+      pointer.
 - host: https://api.sendhub.com
+  behavior: soft-200
+  soft_200_signature:
+    bytes: 55231
+    title: SendHub - Login
+    note: Identical HTML shell returned for every probed path; treated as a miss everywhere.
   documents:
   - path: /.well-known/security.txt
-    status: 302
-  - path: /.well-known/openid-configuration
-    status: 302
+    status: 200
+    document: false
+    note: soft-200 login shell
   - path: /.well-known/oauth-authorization-server
-    status: 302
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    note: soft-200 login shell — NOT an agent card
+  - path: /.well-known/agent.json
+    status: 200
+    document: false
+    note: soft-200 login shell — NOT an agent card
+  - path: /openapi.json
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /swagger.json
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /v1/openapi.json
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /api-docs
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /docs
+    status: 200
+    document: false
+    note: soft-200 login shell
+  - path: /v1/contacts
+    status: 401
+    document: false
+    note: >-
+      The real API surface answers 401 with an empty body (server gunicorn/20.0.4), which is how
+      the live API is distinguished from the soft-200 web app on the same host.
+- host: https://app.sendhub.com
+  behavior: soft-200
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    note: soft-200 login shell
+- host: https://integrations.sendhub.com
+  behavior: soft-200
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    note: 1,999-byte "SendHub SMS Integration Dashboard" HTML shell, not an agent card.
+checked: '2026-08-13'

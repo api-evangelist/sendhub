@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SendHub Authentication Message API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "username",
+      "value": "{{username}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Message",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send an SMS or MMS message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sendhub.com/v1/messages",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sends an SMS (or MMS based on your plan) to a list of contacts, phone numbers or groups."
+        },
+        {
+          "info": {
+            "name": "Get Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/messages/:message_id",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The message ID"
+              }
+            ]
+          },
+          "docs": "Retrieves an existing message by its Id"
+        },
+        {
+          "info": {
+            "name": "Update Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sendhub.com/v1/messages/:message_id",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The message ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a scheduled message"
+        },
+        {
+          "info": {
+            "name": "Delete Message",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sendhub.com/v1/messages/:message_id",
+            "params": [
+              {
+                "name": "message_id",
+                "value": "",
+                "type": "path",
+                "description": "The message ID"
+              }
+            ]
+          },
+          "docs": "Deletes an individual message by its id"
+        },
+        {
+          "info": {
+            "name": "List scheduled messages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/messages/scheduled"
+          },
+          "docs": "Lists scheduled messages"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

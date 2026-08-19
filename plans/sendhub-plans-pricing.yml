@@ -1,0 +1,166 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.sendhub.com/pricing/
+docs:
+- https://www.sendhub.com/pricing/
+- https://sendhub.com/llms.txt
+- https://www.sendhub.com/developer/
+currency: USD
+plan_count: 5
+note: >-
+  SendHub publishes a full self-serve price list. Every published tier lists "API Integration"
+  as an included feature, while the developer page (https://www.sendhub.com/developer/) still
+  states "API access available on our custom plans." That contradiction is recorded, not
+  resolved — both statements are quoted verbatim from SendHub's own pages on 2026-08-13.
+  Message allowances are per month; annual prices are the published annual total.
+plans:
+- name: Lite
+  price: 19
+  currency: USD
+  billing_period: monthly
+  annual_price: 219
+  annual_billing_period: annual
+  included:
+    sms_per_month: 500
+    max_recipients_per_sms: 50
+    voice_minutes: 100
+  features:
+  - Local Area Code SMS
+  - Unlimited Keywords
+  - Attachments
+  - API Integration
+  - Inbound MMS
+- name: Lite+
+  price: 37
+  currency: USD
+  billing_period: monthly
+  annual_price: 400
+  annual_billing_period: annual
+  included:
+    sms_per_month: 1000
+    max_recipients_per_sms: 100
+    voice_minutes: 100
+  features:
+  - Local Area Code SMS
+  - Unlimited Keywords
+  - Attachments
+  - API Integration
+  - Inbound MMS
+- name: Starter
+  price: 52
+  currency: USD
+  billing_period: monthly
+  annual_price: 570
+  annual_billing_period: annual
+  included:
+    sms_per_month: 2000
+    max_recipients_per_sms: 150
+    voice_minutes: 100
+  features:
+  - Local Area Code SMS
+  - Unlimited Keywords
+  - Attachments
+  - API Integration
+  - Inbound MMS
+  note: >-
+    The annual card lists 100 Max Recipients Per SMS for Starter while the monthly card lists
+    150; both values are published on the same page.
+- name: Basic
+  price: 100
+  currency: USD
+  billing_period: monthly
+  annual_price: 1000
+  annual_billing_period: annual
+  included:
+    sms_per_month: 4000
+    max_recipients_per_sms: 150
+    voice_minutes: 250
+  features:
+  - Local Area Code SMS
+  - Unlimited Keywords
+  - Attachments
+  - API Integration
+  - Inbound MMS
+  - Setup & Training
+  - Account Manager
+  note: >-
+    The annual card lists 250 Max Recipients Per SMS for Basic while the monthly card lists 150.
+- name: Custom
+  price: null
+  currency: USD
+  billing_period: custom
+  quote_required: true
+  cta: Request Quote
+  included:
+    sms_per_month: custom
+    max_recipients_per_sms: custom
+    voice_minutes: custom
+  features:
+  - Local Area Code SMS
+  - Unlimited Keywords
+  - Attachments
+  - API Integration
+  - Inbound MMS
+  - Setup & Training
+  - Account Manager
+  - Outbound MMS
+  - Dedicated Short Codes (annual card only)
+overages:
+- item: Canadian SMS segment
+  price: 0.008
+  currency: USD
+  unit: per SMS segment
+  billing: in arrears
+- item: Canadian MMS
+  price: 0.01
+  currency: USD
+  unit: per MMS
+  billing: in arrears
+- item: Puerto Rico SMS segment (inbound and outbound)
+  price: 0.02
+  currency: USD
+  unit: per SMS segment
+  billing: in arrears
+- item: Guam SMS segment (inbound and outbound)
+  price: 0.075
+  currency: USD
+  unit: per SMS segment
+  billing: in arrears
+- item: Voice minutes over plan allotment
+  price: 0.025
+  currency: USD
+  unit: per minute
+fees:
+- item: A2P 10DLC brand registration
+  price: 5
+  currency: USD
+  frequency: one-time
+  note: Approved 10DLC registration is required before the 14-day free trial can send.
+- item: A2P 10DLC campaign registration
+  price: 15
+  currency: USD
+  frequency: one-time
+trial:
+  available: true
+  length_days: 14
+  url: https://www.sendhub.com/request-free-trial/
+  precondition: Approved A2P 10DLC registration
+contract:
+  terms:
+  - monthly
+  - annual
+  cancel_any_time: true
+coverage:
+  regions:
+  - United States
+  - Canada
+  note: >-
+    "SendHub is currently in the U.S. and Canada but will be adding international service soon."
+fair_use:
+  note: >-
+    "SendHub reserves the right to restrict messages, minutes and groups based on the fair usage
+    clause in our Terms of Service."
+  terms_url: https://www.sendhub.com/terms-of-use/
+lines:
+  included_numbers: 1
+  note: Each account includes one dedicated text-enabled number in an area code of your choice.

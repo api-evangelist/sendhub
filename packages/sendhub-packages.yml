@@ -1,17 +1,69 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
-source: https://github.com/sendhub/sendhub-python
+source: https://github.com/Sendhub/sendhub-python
 notes: >-
-  First-party Python client published in SendHub's official GitHub organization
-  (github.com/sendhub, Pleasanton CA). setup.py declares distribution name
-  "sendhub" but the package is not published to PyPI (pypi.org/pypi/sendhub/json
-  returns "Not Found"); install from source. Legacy v1-era client.
+  SendHub ships exactly one first-party client library — a Python client in its own GitHub
+  organization (github.com/Sendhub). It is NOT published to any package registry
+  (pypi.org/pypi/sendhub/json returns 404), so it must be installed from source and has no
+  registry metadata endpoint to date it; version and date below are read from the repo's own
+  VERSION file and its last code commit. The last functional commit landed 2021-04-30 and the
+  declared version is still 0.0.23, i.e. the only first-party SDK for this API has not shipped a
+  change in over five years while the v1 API it wraps is still live. Two same-named packages on
+  public registries are NOT SendHub's and are deliberately excluded from `official`: the RubyGems
+  gem `sendhub` (0.2.1, 2017-03-28) belongs to a different company, sendhub.NET, by author
+  Richard Taylor, and the npm package `sendhub` is a 2013 third-party client whose source repo
+  (cgarvis/node-sendhub) now 404s.
+registries_checked:
+- registry: pypi
+  package: sendhub
+  status: 404
+  result: absent
+- registry: npm
+  package: sendhub
+  status: 200
+  result: present-but-third-party
+- registry: rubygems
+  package: sendhub
+  status: 200
+  result: different-company
 packages:
-  - language: python
-    registry: github
-    name: sendhub
-    repository: https://github.com/sendhub/sendhub-python
-    install: pip install git+https://github.com/sendhub/sendhub-python.git
-    license: MIT
-    official: true
-    published_to_registry: false
+- language: python
+  registry: github
+  name: sendhub
+  repository: https://github.com/Sendhub/sendhub-python
+  install: pip install git+https://github.com/Sendhub/sendhub-python.git
+  license: MIT
+  official: true
+  published_to_registry: false
+  version: 0.0.23
+  published: '2021-04-30'
+  version_source: https://raw.githubusercontent.com/Sendhub/sendhub-python/master/VERSION
+  published_source: >-
+    Last commit on master (github.com/Sendhub/sendhub-python), 2021-04-30T16:18:07Z. There is no
+    registry release and no GitHub release/tag, so the commit date is the only dating evidence.
+  note: >-
+    setup.py declares distribution name "sendhub" but nothing was ever pushed to PyPI. Legacy
+    v1-era client; unmaintained since 2021.
+- language: javascript
+  registry: npm
+  name: sendhub
+  repository: https://github.com/cgarvis/node-sendhub
+  install: npm install sendhub
+  official: false
+  published_to_registry: true
+  version: 0.1.6
+  published: '2013-11-11'
+  version_source: https://registry.npmjs.org/sendhub
+  note: >-
+    Third-party ("SMS via Sendhub", maintainer cgarvis). Last release 2013-11-11; the declared
+    source repository returns 404. Recorded as ecosystem evidence only — NOT a SendHub-published
+    SDK.
+excluded:
+- registry: rubygems
+  name: sendhub
+  version: 0.2.1
+  published: '2017-03-28'
+  reason: >-
+    Different company. The gem's own metadata names homepage https://sendhub.net/ and describes
+    itself as "a Ruby client library for SendHub.net" (author Richard Taylor,
+    github.com/moomerman/sendhub_ruby). Not sendhub.com.

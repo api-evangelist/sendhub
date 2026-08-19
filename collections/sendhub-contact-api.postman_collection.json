@@ -1,0 +1,2280 @@
+{
+  "item": [
+    {
+      "id": "0d58626f-aec2-41a0-9218-fd63f0dd026c",
+      "name": "Contact",
+      "description": {
+        "content": "Create and manage contacts.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "66a02539-5fd2-4f7b-829d-8d4886d7f1bf",
+          "name": "List Contacts",
+          "request": {
+            "name": "List Contacts",
+            "description": {
+              "content": "Gets a list of contacts\n\nSee also: [List Group Contacts](#listGroupContacts)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "(Pagination) How many records to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "(Pagination) How many records to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "number",
+                  "value": "<string>",
+                  "description": "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)"
+                },
+                {
+                  "disabled": false,
+                  "key": "screened",
+                  "value": "<boolean>",
+                  "description": "Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)"
+                },
+                {
+                  "disabled": false,
+                  "key": "blocked",
+                  "value": "<boolean>",
+                  "description": "Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))"
+                },
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Sort contacts by a specified field (prepend a hyphen to reverse order)\n\n**Must** be a built-in contact field, not a custom field"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "username"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "query"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3cb7edf6-3358-47e6-8165-0c5c56d6054d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"limit\": 1,\n    \"next\": \"/v1/contacts?limit=1&offset=1\",\n    \"offset\": 0,\n    \"previous\": null\n  },\n  \"objects\": [\n    {\n      \"blocked\": false,\n      \"date_created\": \"2022-03-03T14:30:43.434051\",\n      \"date_modified\": \"2022-03-09T17:00:32.795897\",\n      \"deleted\": false,\n      \"groups\": [],\n      \"id\": \"116006957944371848\",\n      \"id_str\": \"116006957944371848\",\n      \"is_owned\": true,\n      \"keyword\": \"acme\",\n      \"landline\": false,\n      \"local_gateway\": false,\n      \"my-custom-field-2\": \"my-custom-field-2\",\n      \"name\": \"ACME Alerts\",\n      \"number\": \"+18002222228\",\n      \"resource_uri\": \"/v1/contacts/116006957944371848\",\n      \"screened\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e4ec5b6-40f6-4964-ac6e-b7fb106d1f2f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html; charset=utf-8"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=utf-8"
+                }
+              ],
+              "body": "The 'resource_uri' field does not allow filtering.",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "56bf55ee-a24e-45c8-957b-5aaec54f3af1",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4605509b-7c50-4d86-8104-d2ba759a9c8d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8963b8f5-9bbc-4535-8908-a9c92fb5535e",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4769e57c-e4d0-4237-8bad-1d14d5497a39",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b4da25a1-e5ac-4247-8cc4-dd7d3f235738",
+          "name": "Create/Update Contact",
+          "request": {
+            "name": "Create/Update Contact",
+            "description": {
+              "content": "Creates or updates a contact\n\nYou can add arbitrary custom fields to a contact (see [Custom Fields](#todo: add link here))\n\n**Note:** the contact's `id` is required in the request payload if the supplied `number` already exists in your contacts\n\nThis operation _doesn't_ remove properties that aren't specified when updating an existing contact\n\n[Use PUT to remove custom fields or groups](#operation/upsertContact)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"number\": \"<string>\",\n  \"blocked\": \"<boolean>\",\n  \"deleted\": \"<boolean>\",\n  \"id\": \"<string>\",\n  \"keyword\": \"<string>\",\n  \"screened\": \"<boolean>\",\n  \"groups\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3803a514-0c39-426c-8d0f-653f84e46c16",
+              "name": "Created or updated contact",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"blocked\": false,\n  \"date_created\": \"2021-08-24T19:44:31.266590\",\n  \"date_modified\": \"2021-08-24T19:44:31.266590\",\n  \"deleted\": false,\n  \"groups\": [],\n  \"id\": \"116006957938283973\",\n  \"id_str\": \"116006957938283973\",\n  \"is_owned\": true,\n  \"keyword\": \"john\",\n  \"local_gateway\": false,\n  \"name\": \"John Smith\",\n  \"number\": \"+19198915828\",\n  \"resource_uri\": \"/v1/contacts/116006957938283973\",\n  \"screened\": false,\n  \"landline\": false,\n  \"landline_override\": false,\n  \"contact_id\": \"116006957938283973\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df93d48f-8947-4135-adf0-05ccfe25d725",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": [\n    \"This field is required.\"\n  ],\n  \"number\": [\n    \"This field is required.\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3fc900c4-c4a0-44df-94ed-5f86e1b95c29",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7b50a88f-d2ba-474e-b938-97c2b304b92a",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a07b9dc8-0303-496d-b983-32872f5e183f",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2968673d-13a9-441d-b977-59c117c9104a",
+          "name": "Creates, updates, or deletes multiple contacts in one request",
+          "request": {
+            "name": "Creates, updates, or deletes multiple contacts in one request",
+            "description": {
+              "content": "Creates, updates, or deletes multiple contacts in one request",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"objects\": [\n    {\n      \"name\": \"<string>\",\n      \"number\": \"<string>\",\n      \"blocked\": \"<boolean>\",\n      \"deleted\": \"<boolean>\",\n      \"id\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"keyword\": \"<string>\",\n      \"screened\": \"<boolean>\",\n      \"groups\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"number\": \"<string>\",\n      \"blocked\": \"<boolean>\",\n      \"deleted\": \"<boolean>\",\n      \"id\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"keyword\": \"<string>\",\n      \"screened\": \"<boolean>\",\n      \"groups\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "15479d18-7c92-42f3-b6fc-d7a04d2050b7",
+              "name": "Created or updated contacts",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"name\": \"<string>\",\n    \"number\": \"<string>\",\n    \"blocked\": \"<boolean>\",\n    \"deleted\": \"<boolean>\",\n    \"id_str\": \"7143860713\",\n    \"is_owned\": false,\n    \"keyword\": \"john\",\n    \"screened\": \"<boolean>\",\n    \"id\": \"<string>\",\n    \"date_created\": \"2021-08-01T03:48:55.350453\",\n    \"date_modified\": \"2021-08-01T03:48:55.350453\",\n    \"local_gateway\": true,\n    \"resource_uri\": \"/v1/contacts/116006957938017590\",\n    \"groups\": [\n      \"/v1/groups/115999753870991332\",\n      \"/v1/groups/115999753870991332\"\n    ],\n    \"landline\": false,\n    \"landline_override\": true\n  },\n  {\n    \"name\": \"<string>\",\n    \"number\": \"<string>\",\n    \"blocked\": \"<boolean>\",\n    \"deleted\": \"<boolean>\",\n    \"id_str\": \"582\",\n    \"is_owned\": false,\n    \"keyword\": \"john\",\n    \"screened\": \"<boolean>\",\n    \"id\": \"<string>\",\n    \"date_created\": \"2021-08-01T03:48:55.350453\",\n    \"date_modified\": \"2021-08-01T03:48:55.350453\",\n    \"local_gateway\": false,\n    \"resource_uri\": \"/v1/contacts/116006957938017590\",\n    \"groups\": [\n      \"/v1/groups/115999753870991332\",\n      \"/v1/groups/115999753870991332\"\n    ],\n    \"landline\": false,\n    \"landline_override\": true\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c55609d-46a7-47cc-9e5e-8fdfc072603c",
+          "name": "Get Contact",
+          "request": {
+            "name": "Get Contact",
+            "description": {
+              "content": "Retrieves a contact by its id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "contact_id",
+                  "description": "(Required) The contact ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c6074133-0507-4933-92f3-d976d0c5ccad",
+              "name": "Found contact",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"blocked\": false,\n  \"date_created\": \"2021-08-24T19:44:31.266590\",\n  \"date_modified\": \"2021-08-24T19:44:31.266590\",\n  \"deleted\": false,\n  \"groups\": [],\n  \"id\": \"116006957938283973\",\n  \"id_str\": \"116006957938283973\",\n  \"is_owned\": true,\n  \"keyword\": \"john\",\n  \"local_gateway\": false,\n  \"name\": \"John Smith\",\n  \"number\": \"+19198915828\",\n  \"resource_uri\": \"/v1/contacts/116006957938283973\",\n  \"screened\": false,\n  \"landline\": false,\n  \"landline_override\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd3c037f-de73-4235-b012-c76933ff995d",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "87c8ed73-9f20-4054-aa94-a684697863f2",
+              "name": "Contact not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested contact not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb33b97f-b58c-4e64-b345-24c822f10f79",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b58efa9-401c-4bc5-81ba-d918c38c5920",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aec886bf-2cf2-4325-baed-8bce641f6f8c",
+          "name": "Update Contact",
+          "request": {
+            "name": "Update Contact",
+            "description": {
+              "content": "Updates an individual contact referenced by its id\n\nYou can add arbitrary custom fields to a contact (see [Custom Fields](#todo: ))\n\n**Note:** this is a _replace_ operation; any properties the contact already has that you don't specify in your request will be removed\n\n[Use POST for _upsert_ functionality](#operation/upsertContact)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "contact_id",
+                  "description": "(Required) The contact ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "<object>",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e854ec39-c162-406f-8997-35ba78069050",
+              "name": "Updated contact",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"blocked\": false,\n  \"date_created\": \"2021-08-24T19:44:31.266590\",\n  \"date_modified\": \"2021-08-24T19:44:31.266590\",\n  \"deleted\": false,\n  \"groups\": [],\n  \"id\": \"116006957938283973\",\n  \"id_str\": \"116006957938283973\",\n  \"is_owned\": true,\n  \"keyword\": \"john\",\n  \"local_gateway\": false,\n  \"name\": \"John Smith\",\n  \"number\": \"+19198915828\",\n  \"resource_uri\": \"/v1/contacts/116006957938283973\",\n  \"screened\": false,\n  \"landline\": false,\n  \"landline_override\": false,\n  \"contact_id\": \"116006957938283973\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d493f62-07d4-43a7-9da3-d858ce002741",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": [\n    \"This field is required.\"\n  ],\n  \"number\": [\n    \"This field is required.\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e0f0852-2b98-4092-b8e9-b05618fb6050",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5f77b8b7-150c-4487-852d-eb77344ffc7b",
+              "name": "Contact not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested contact not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "153a4db4-c27c-41ca-80a8-4129af0872fc",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c838a125-1b8f-47bf-8ad6-d50cdd10bb00",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c220caf8-26c8-49b0-9aef-f944aa4e632e",
+          "name": "Delete Contact",
+          "request": {
+            "name": "Delete Contact",
+            "description": {
+              "content": "Deletes a contact",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "contacts",
+                ":contact_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "contact_id",
+                  "description": "(Required) The contact ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dbea4164-0484-4727-a7e7-f2ad96df42bb",
+              "name": "Deleted contact",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7eb6cdbc-bc83-4096-a216-a984406ebcc9",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "69642105-2e6b-46eb-9aa4-92439c8c7c59",
+              "name": "Contact not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested contact not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d465172f-25f5-4694-9a60-3aeb37b6c693",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f878af11-d01e-4ec7-a6d8-dfb290e2ca4e",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "contacts",
+                    ":contact_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "contact_id",
+                      "description": "(Required) The contact ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e91421b2-c635-478f-9180-98616c9cf751",
+          "name": "List Group's Contacts",
+          "request": {
+            "name": "List Group's Contacts",
+            "description": {
+              "content": "Lists contacts in a specified group",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "groups",
+                ":group_id",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "(Pagination) How many records to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "(Pagination) How many records to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "number",
+                  "value": "<string>",
+                  "description": "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)"
+                },
+                {
+                  "disabled": false,
+                  "key": "screened",
+                  "value": "<boolean>",
+                  "description": "Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)"
+                },
+                {
+                  "disabled": false,
+                  "key": "blocked",
+                  "value": "<boolean>",
+                  "description": "Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))"
+                },
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Sort contacts by a specified field (prepend a hyphen to reverse order)\n\n**Must** be a built-in contact field, not a custom field"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "group_id",
+                  "description": "(Required) The group ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5f780bb6-107f-4b35-9abf-a2a75b8f51df",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "groups",
+                    ":group_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "group_id",
+                      "description": "(Required) The group ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"limit\": 20,\n    \"next\": null,\n    \"offset\": 0,\n    \"previous\": null\n  },\n  \"objects\": [\n    {\n      \"blocked\": false,\n      \"date_created\": \"2021-08-24T19:44:31.266590\",\n      \"date_modified\": \"2021-08-24T19:44:31.266590\",\n      \"deleted\": false,\n      \"groups\": [],\n      \"id\": \"116006957938017590\",\n      \"id_str\": \"116006957938017590\",\n      \"is_owned\": true,\n      \"keyword\": \"bob\",\n      \"local_gateway\": false,\n      \"name\": \"Bob Parker\",\n      \"number\": \"+12015716227\",\n      \"resource_uri\": \"/v1/contacts/116006957938017590\",\n      \"screened\": false,\n      \"landline\": false,\n      \"landline_override\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ee16a8e-2d1e-4c06-a8af-fe73e39eef90",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "groups",
+                    ":group_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "group_id",
+                      "description": "(Required) The group ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ed3756a-fc26-4124-a2d2-b911318e8163",
+              "name": "Contact not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "groups",
+                    ":group_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "group_id",
+                      "description": "(Required) The group ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested contact not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "92e22d63-d431-4743-ad98-1b8ac442639a",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "groups",
+                    ":group_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "group_id",
+                      "description": "(Required) The group ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17b3e7b2-11ea-43ba-877a-ced1bc99859b",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "groups",
+                    ":group_id",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "number",
+                      "value": "%2B18004445555"
+                    },
+                    {
+                      "key": "name",
+                      "value": "John Smith"
+                    },
+                    {
+                      "key": "screened",
+                      "value": "true"
+                    },
+                    {
+                      "key": "blocked",
+                      "value": "true"
+                    },
+                    {
+                      "key": "ordering",
+                      "value": "-date_created"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "group_id",
+                      "description": "(Required) The group ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sendhub.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "username"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "095f400e-7bfe-4554-8f8a-14b5dd04d7ac",
+    "name": "SendHub Authentication Contact API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SendHub's REST-like API allows you to control & interact with your SendHub account programmatically.\n\nNote: this documentation is in Beta and may be updated periodically.\n\nContact Support:\n Name: Contact SendHub\n Email: support@sendhub.com",
+      "type": "text/plain"
+    }
+  }
+}

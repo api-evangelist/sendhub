@@ -1,0 +1,239 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SendHub Authentication Contact API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "username",
+      "value": "{{username}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Contact",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/contacts",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to skip"
+              },
+              {
+                "name": "number",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)"
+              },
+              {
+                "name": "screened",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)"
+              },
+              {
+                "name": "blocked",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))"
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Sort contacts by a specified field (prepend a hyphen to reverse order)\n\n**Must** be a built-in contact field, not a custom field"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "username",
+              "value": "{{username}}",
+              "placement": "query"
+            }
+          },
+          "docs": "Gets a list of contacts\n\nSee also: [List Group Contacts](#listGroupContacts)"
+        },
+        {
+          "info": {
+            "name": "Create/Update Contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.sendhub.com/v1/contacts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or updates a contact\n\nYou can add arbitrary custom fields to a contact (see [Custom Fields](#todo: add link here))\n\n**Note:** the contact's `id` is required in the request payload if the supplied `number` already exists in your contacts\n\nThis operation _doesn't_ remove properties that aren't specified when updating an existing contact\n\n[Use PUT to remove custom fields or groups](#operation/upsertContact)"
+        },
+        {
+          "info": {
+            "name": "Creates, updates, or deletes multiple contacts in one request",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.sendhub.com/v1/contacts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates, updates, or deletes multiple contacts in one request"
+        },
+        {
+          "info": {
+            "name": "Get Contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/contacts/:contact_id",
+            "params": [
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "path",
+                "description": "The contact ID"
+              }
+            ]
+          },
+          "docs": "Retrieves a contact by its id"
+        },
+        {
+          "info": {
+            "name": "Update Contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sendhub.com/v1/contacts/:contact_id",
+            "params": [
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "path",
+                "description": "The contact ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an individual contact referenced by its id\n\nYou can add arbitrary custom fields to a contact (see [Custom Fields](#todo: ))\n\n**Note:** this is a _replace_ operation; any properties the contact already has that you don't specify in your request will be removed\n\n[Use POST for _upsert_ functionality](#operation/upsertContact)"
+        },
+        {
+          "info": {
+            "name": "Delete Contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.sendhub.com/v1/contacts/:contact_id",
+            "params": [
+              {
+                "name": "contact_id",
+                "value": "",
+                "type": "path",
+                "description": "The contact ID"
+              }
+            ]
+          },
+          "docs": "Deletes a contact"
+        },
+        {
+          "info": {
+            "name": "List Group's Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/groups/:group_id/contacts",
+            "params": [
+              {
+                "name": "group_id",
+                "value": "",
+                "type": "path",
+                "description": "The group ID"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "(Pagination) How many records to skip"
+              },
+              {
+                "name": "number",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their phone `number`\n  \nThe value _**must**_ be in the E.164 format and URI-encoded (eg. `+18004445555` would become `%2B18004445555`)"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)"
+              },
+              {
+                "name": "screened",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by their `screened` status (eg. if _**you**_ blocked them)"
+              },
+              {
+                "name": "blocked",
+                "value": "",
+                "type": "query",
+                "description": "Filters the contacts by opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))"
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Sort contacts by a specified field (prepend a hyphen to reverse order)\n\n**Must** be a built-in contact field, not a custom field"
+              }
+            ]
+          },
+          "docs": "Lists contacts in a specified group"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

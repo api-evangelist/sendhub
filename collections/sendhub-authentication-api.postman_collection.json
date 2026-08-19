@@ -1,0 +1,255 @@
+{
+  "item": [
+    {
+      "id": "f993d5eb-7970-4d43-aa95-6c6d4b13c5be",
+      "name": "Authentication",
+      "description": {
+        "content": "Log in via Username & Password and \"Sign In As User\"",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "12cde1e5-f7a0-482a-87ac-f7fde3501189",
+          "name": "Username & password login",
+          "request": {
+            "name": "Username & password login",
+            "description": {
+              "content": "Log in via username & password",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "auth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authenticationType\": \"<string>\",\n  \"sessionId\": \"<string>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8626777e-aa64-4802-b5f3-4e1f2bceebde",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"authToken\": \"string\",\n  \"authenticationType\": \"<string>\",\n  \"csrf_token\": \"string\",\n  \"emailAddress\": \"string\",\n  \"kazooApiPassword\": \"string\",\n  \"password\": \"string\",\n  \"resource_uri\": \"/api/v1/auth\",\n  \"sendhub_number\": \"+15007770213\",\n  \"settings\": {\n    \"automated_sms_response\": \"string\",\n    \"customer_id\": \"string\",\n    \"deleted\": false,\n    \"disable_incoming_sms\": true,\n    \"enterprise\": 5547,\n    \"entitlement\": \"string\",\n    \"id\": \"1057151806\",\n    \"is_verified_email\": true,\n    \"mixpanelid\": \"string\",\n    \"onboarding_mobile_finished\": false,\n    \"onboarding_web_finished\": true,\n    \"payment_schedule\": 1,\n    \"pending_email\": \"string\",\n    \"pending_phone_number\": \"string\",\n    \"phone_number\": \"+15628680639\",\n    \"registration_status\": \"created\",\n    \"settings_json\": \"string\",\n    \"siftScienceLabel\": \"string\",\n    \"signature\": \"string\",\n    \"smsForwardingNumber\": 5738,\n    \"twilio_phone_number\": \"311021492\",\n    \"user\": 3110,\n    \"_payment_plan\": \"string\"\n  },\n  \"sipDeviceId\": \"string\",\n  \"sipPassword\": \"string\",\n  \"user_id\": \"4\",\n  \"username\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8dc21b4-b0a4-49cc-becf-c64f785a6ab2",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6508aa88-65dd-4ecd-991f-b42e0116230e",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a6fafb2-a5fc-4b8e-9e2f-1de0498debaa",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sendhub.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "username"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cf51c10c-3457-43ea-b20f-125be4445ff1",
+    "name": "SendHub Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SendHub's REST-like API allows you to control & interact with your SendHub account programmatically.\n\nNote: this documentation is in Beta and may be updated periodically.\n\nContact Support:\n Name: Contact SendHub\n Email: support@sendhub.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,863 @@
+{
+  "item": [
+    {
+      "id": "751904e0-8aa2-43f9-b582-ebfa47754417",
+      "name": "Thread",
+      "description": {
+        "content": "View and manage inbox threads.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7e2a507d-7cfd-4b27-9bb8-6bf89818f7e2",
+          "name": "List Threads",
+          "request": {
+            "name": "List Threads",
+            "description": {
+              "content": "Gets a list of inbox threads\n\n**Note:** the URL **must** include the forward-slash after /v1/inbox\n\nThe `next` field in the `meta` object doesn't include this forward-slash in the URI it provides\n\nWe suggest constructing your URIs via your code and using the `next` field to determine if there's a next page (eg. if `next` is null)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "inbox"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "(Pagination) How many records to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "(Pagination) How many records to skip"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c0f21865-bc61-43f0-8ca9-28c25b35d38d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "inbox"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"limit\": 1,\n    \"next\": \"/v1/inbox?limit=1&offset=1\",\n    \"offset\": 0,\n    \"previous\": null,\n    \"unread\": 9\n  },\n  \"objects\": [\n    {\n      \"contacts\": [\n        {\n          \"blocked\": false,\n          \"deleted\": false,\n          \"groups\": [\n            \"ACME Alerts\"\n          ],\n          \"id\": 116006957938017580,\n          \"id_str\": \"116006957938017590\",\n          \"is_owned\": true,\n          \"keyword\": \"johnsmithy\",\n          \"name\": \"John Smithy\",\n          \"number\": \"+12015716227\",\n          \"screened\": false\n        }\n      ],\n      \"created_at\": \"2020-03-27T22:50:35.283171\",\n      \"deleted\": false,\n      \"direction\": \"incoming\",\n      \"groups\": [],\n      \"id\": \"115995236880212923\",\n      \"labels\": [\n        \"starred\"\n      ],\n      \"last_read_at\": \"2022-03-08T20:38:03.476505\",\n      \"modified_at\": \"2022-03-09T23:21:46.661440\",\n      \"resource_uri\": \"/v1/threads/115988808193508637\",\n      \"scheduled_at\": null,\n      \"sent\": \"2022-03-09T23:21:46.135757\",\n      \"text\": \"Hey got 'em\\nFile: http://sh.gl/CNpLW5\",\n      \"threadId\": \"115988808193508637\",\n      \"type\": \"message-in\",\n      \"unread\": true\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57dc7bbc-e81d-4a69-8ac7-c6990137140f",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "inbox"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5dff0e7e-34b6-4822-8d6a-0af6fd7d14da",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "inbox"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "753f2f6b-9808-47dc-828e-75bb8be73dc4",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "inbox"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e1544746-45bd-488a-b408-e603337eacc8",
+          "name": "Get thread",
+          "request": {
+            "name": "Get thread",
+            "description": {
+              "content": "Gets an individual thread by its id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "threads",
+                ":thread_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "thread_id",
+                  "description": "(Required) The thread ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a851a8da-90c7-477e-bf8f-41bec3ad08e6",
+              "name": "Found thread",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"limit\": 20,\n    \"next\": null,\n    \"offset\": 0,\n    \"previous\": null,\n    \"hasUnread\": false,\n    \"labels\": [\n      \"starred\"\n    ]\n  },\n  \"objects\": [\n    {\n      \"attachments\": [\n        {\n          \"filename\": \"SendHub_Logo.png\",\n          \"id\": \"336909160859829608\",\n          \"isWriteable\": true,\n          \"mimetype\": \"image/png\",\n          \"size\": 18884,\n          \"url\": \"https://app.sendhub.com/v1/attachments/336909160859829608\"\n        }\n      ],\n      \"contacts\": [],\n      \"deleted\": false,\n      \"direction\": \"to\",\n      \"groups\": [\n        {\n          \"check_all\": false,\n          \"deleted\": false,\n          \"id\": \"115999753870990933\",\n          \"id_str\": \"115999753870990933\",\n          \"mediums\": \"[\\\"sms\\\"]\",\n          \"name\": \"ACME Product Alerts\",\n          \"slug\": \"alerts\",\n          \"text_to_subscribe\": true,\n          \"ttjResponse\": \"Thanks for opting in!\\nOpt-out anytime by replying UNSUBSCRIBE ALERTS\"\n        }\n      ],\n      \"hash\": \"\",\n      \"id\": \"115995236870818976\",\n      \"modified_at\": \"2021-08-24T19:44:31.266590\",\n      \"resource_uri\": \"/v1/messages/115995236870818976\",\n      \"scheduled_at\": null,\n      \"sent\": \"2021-08-24T19:44:31.266590\",\n      \"shortlink\": \"http://sh.gl/IuvJma\",\n      \"text\": \"Short Link?\\nFile: http://sh.gl/IuvJma\",\n      \"type\": \"message-out\",\n      \"unread\": false\n    },\n    {\n      \"attachments\": [],\n      \"contacts\": [],\n      \"deleted\": false,\n      \"direction\": \"to\",\n      \"groups\": [\n        {\n          \"check_all\": false,\n          \"deleted\": false,\n          \"id\": \"115999753870990933\",\n          \"id_str\": \"115999753870990933\",\n          \"mediums\": \"[\\\"sms\\\"]\",\n          \"name\": \"ACME Product Alerts\",\n          \"slug\": \"alerts\",\n          \"text_to_subscribe\": true,\n          \"ttjResponse\": \"Thanks for opting in!\\nOpt-out anytime by replying UNSUBSCRIBE ALERTS\"\n        }\n      ],\n      \"hash\": \"\",\n      \"id\": \"115995236870818148\",\n      \"modified_at\": \"2021-08-24T19:44:31.266590\",\n      \"resource_uri\": \"/v1/messages/115995236870818148\",\n      \"scheduled_at\": \"2021-08-24T19:44:31\",\n      \"sent\": \"2021-08-24T19:44:31.266590\",\n      \"shortlink\": \"\",\n      \"text\": \"Hello,\\n\\nThis is a scheduled alert.\",\n      \"type\": \"message-out\",\n      \"unread\": false\n    },\n    {\n      \"attachments\": [],\n      \"contacts\": [],\n      \"deleted\": false,\n      \"direction\": \"to\",\n      \"groups\": [\n        {\n          \"check_all\": false,\n          \"deleted\": false,\n          \"id\": \"115999753870990933\",\n          \"id_str\": \"115999753870990933\",\n          \"mediums\": \"[\\\"sms\\\"]\",\n          \"name\": \"ACME Product Alerts\",\n          \"slug\": \"alerts\",\n          \"text_to_subscribe\": true,\n          \"ttjResponse\": \"Thanks for opting in!\\nOpt-out anytime by replying UNSUBSCRIBE ALERTS\"\n        }\n      ],\n      \"hash\": \"\",\n      \"id\": \"115995236870818517\",\n      \"modified_at\": \"2021-08-24T19:44:31.266590\",\n      \"resource_uri\": \"/v1/messages/115995236870818517\",\n      \"scheduled_at\": null,\n      \"sent\": \"2021-08-24T19:44:31.266590\",\n      \"shortlink\": \"\",\n      \"text\": \"Hello,\\n\\nThis is our second product alert.\",\n      \"type\": \"message-out\",\n      \"unread\": false\n    },\n    {\n      \"attachments\": [],\n      \"contacts\": [],\n      \"deleted\": false,\n      \"direction\": \"to\",\n      \"groups\": [\n        {\n          \"check_all\": false,\n          \"deleted\": false,\n          \"id\": \"115999753870990933\",\n          \"id_str\": \"115999753870990933\",\n          \"mediums\": \"[\\\"sms\\\"]\",\n          \"name\": \"ACME Product Alerts\",\n          \"slug\": \"alerts\",\n          \"text_to_subscribe\": true,\n          \"ttjResponse\": \"Thanks for opting in!\\nOpt-out anytime by replying UNSUBSCRIBE ALERTS\"\n        }\n      ],\n      \"hash\": \"\",\n      \"id\": \"115995236870812489\",\n      \"modified_at\": \"2021-08-24T19:44:31.266590\",\n      \"resource_uri\": \"/v1/messages/115995236870812489\",\n      \"scheduled_at\": null,\n      \"sent\": \"2021-08-24T19:44:31.266590\",\n      \"shortlink\": \"\",\n      \"text\": \"Hello,\\n\\nThis is our first product alert.\",\n      \"type\": \"message-out\",\n      \"unread\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "205fe1c8-0445-49b1-95d8-7d4bbe343066",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "923df15e-4382-4f36-aa4f-1bc966bc7190",
+              "name": "Thread not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested thread not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8da390a-9e5f-4b48-8369-d78bc9cdc31a",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30c98c4b-a58f-41d7-a650-cb4c7af0d5a1",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f631ea3-8eb6-451d-8bae-182cfe7dacb6",
+          "name": "Delete thread",
+          "request": {
+            "name": "Delete thread",
+            "description": {
+              "content": "Deletes an individual thread by its id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "threads",
+                ":thread_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "thread_id",
+                  "description": "(Required) The thread ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5c532c22-f1f8-4c94-a149-a6ec5bc392d6",
+              "name": "Deleted thread",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Thread successfully deleted\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9decc5c3-64ff-42b9-af28-5bf84e25d590",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cf631733-6a61-490b-9c4d-3d9d4088661e",
+              "name": "Contact not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Requested contact not found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c998f151-8d6e-45de-99d3-82b487888b35",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7428fb0-decf-4f67-b21a-7acb9a857bd9",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "threads",
+                    ":thread_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "thread_id",
+                      "description": "(Required) The thread ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sendhub.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "username"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7f98a4b8-e5a9-4cb4-83b0-6090a0071d88",
+    "name": "SendHub Authentication Thread API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SendHub's REST-like API allows you to control & interact with your SendHub account programmatically.\n\nNote: this documentation is in Beta and may be updated periodically.\n\nContact Support:\n Name: Contact SendHub\n Email: support@sendhub.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,18 +1,54 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source:
 - https://sendhub.com/developer/
+- https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
 - openapi/sendhub-openapi-original.yml
 versioning:
   scheme: uri-path
   current: v1
   docs: https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
-  note: API documentation marked Beta; may be updated periodically.
+  note: >-
+    All operations live under /v1/. The reference carries the standing notice "this documentation
+    is in Beta and may be updated periodically" — the only change signal SendHub publishes.
 deprecation:
   policy_url: null
   sunset_header: false
-  note: No published deprecation/sunset policy found.
+  rfc8594: false
+  note: No published deprecation or sunset policy; no Sunset/Deprecation headers documented.
 sla:
   url: null
-status_page: null
+  note: No SLA or uptime commitment published on the public site.
+status_page:
+  url: null
+  probed:
+  - url: https://status.sendhub.com/
+    status: 000
+    note: Does not resolve to a served status page.
+  - url: https://sendhub.statuspage.io/
+    status: 200
+    note: >-
+      An Atlassian Statuspage EXISTS at sendhub.statuspage.io but it is INACTIVE — the page
+      returns "SendHub Status - Page Inactive … This page is currently inactive and can only be
+      viewed by team members." There is therefore no public status page, and no StatusPage
+      pointer is emitted.
+  checked: '2026-08-13'
+changelog:
+  url: null
+  probed:
+  - url: https://www.sendhub.com/changelog/
+    status: 404
+  note: >-
+    No dated API changelog is published anywhere on sendhub.com or in the v1 reference; no
+    ChangeLog artifact is emitted.
 deprecated_operations: []
+sdk_decay:
+  note: >-
+    The only first-party SDK (github.com/Sendhub/sendhub-python, VERSION 0.0.23) has not had a
+    functional commit since 2021-04-30 while the v1 API remains live. See
+    packages/sendhub-packages.yml.
+corporate:
+  parent: New Era Technology
+  evidence: >-
+    "© 2026 SendHub, a New Era Technology company." — footer of every page on sendhub.com,
+    fetched 2026-08-13. Also stated in SendHub's own llms.txt.

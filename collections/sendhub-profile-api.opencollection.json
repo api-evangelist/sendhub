@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SendHub Authentication Profile API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "username",
+      "value": "{{username}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Profile",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/settings"
+          },
+          "docs": "Gets your line's Settings"
+        },
+        {
+          "info": {
+            "name": "Update Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.sendhub.com/v1/settings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates your SendHub line's settings"
+        },
+        {
+          "info": {
+            "name": "Get Profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/profile"
+          },
+          "docs": "Gets details about your SendHub line"
+        },
+        {
+          "info": {
+            "name": "Get Enterprise (Account)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/enterprises/:enterprise_id",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path",
+                "description": "Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+              }
+            ]
+          },
+          "docs": "Gets your enterprise account's details"
+        },
+        {
+          "info": {
+            "name": "List Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/enterprises/:enterprise_id/users",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path",
+                "description": "Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+              }
+            ]
+          },
+          "docs": "Lists your enterprise account's users (lines)"
+        },
+        {
+          "info": {
+            "name": "Get User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.sendhub.com/v1/enterprises/:enterprise_id/users/:user_id",
+            "params": [
+              {
+                "name": "enterprise_id",
+                "value": "",
+                "type": "path",
+                "description": "Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+              }
+            ]
+          },
+          "docs": "Gets a user (line)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -92,3 +92,17 @@ tools:
 - name: login
   description: Username & password login
   source_operation: openapi/sendhub-openapi-original.yml#login
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: derived
+  tools: 28
+  checked: '2026-08-13'
+  source: >-
+    Catalog MCP census, plus a 2026-08-13 re-search of sendhub.com, the v1 reference, the
+    integrations catalog and github.com/Sendhub. SendHub ships no hosted MCP endpoint and no
+    stdio MCP package; every tool below is a candidate derived one-per-operation from SendHub's
+    own OpenAPI. No endpoint URL is asserted.

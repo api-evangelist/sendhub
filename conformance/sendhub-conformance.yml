@@ -1,18 +1,43 @@
-generated: '2026-07-21'
-method: derived
-source: openapi/sendhub-openapi-original.yml
+generated: '2026-08-13'
+method: searched
+source:
+- openapi/sendhub-openapi-original.yml
+- https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
+- https://www.sendhub.com/pricing/
+- https://www.sendhub.com/healthcare/
+note: >-
+  SendHub publishes NO security or privacy certifications. The healthcare, terms, privacy and
+  pricing pages were read on 2026-08-13 and contain no mention of SOC 2, ISO 27001, HIPAA, PCI
+  DSS, GDPR or a BAA; probe-security-programs.py found no trust center and no vulnerability
+  disclosure program. No `Compliance` pointer is emitted, because there is no published
+  certification or compliance program to point at.
 standards:
 - id: oauth2
   conforms: false
   evidence: No oauth2 securityScheme; auth is apiKey (query) + HTTP Basic.
 - id: openid-connect
   conforms: false
+  evidence: No /.well-known/openid-configuration on any host (404 / soft-200).
 - id: http-basic-auth
   conforms: true
   evidence: components.securitySchemes.basic_auth type http scheme basic
 - id: rfc9457-problem-details
   conforms: false
-  evidence: Errors return application/json custom envelope, not application/problem+json.
+  evidence: Errors return an application/json custom envelope, not application/problem+json.
+- id: rfc6585-additional-status-codes
+  conforms: partial
+  evidence: >-
+    429 Too Many Requests is used as specified, but the companion Retry-After header is not sent;
+    the retry delay is carried in a body field (timeLeft). SendHub also uses a non-standard 420
+    for plan-limit exhaustion.
+- id: ratelimit-headers
+  conforms: false
+  evidence: >-
+    No RateLimit-*/X-RateLimit-* headers documented or observed (see
+    rate-limits/sendhub-rate-limits.yml).
+- id: idempotency-key
+  conforms: false
+  evidence: No Idempotency-Key header or equivalent documented on any write operation.
 - id: rest
   conforms: true
   evidence: Resource-oriented /v1 endpoints with standard HTTP verbs (self-described REST-like).
@@ -22,3 +47,17 @@ standards:
 - id: json
   conforms: true
   evidence: application/json request/response bodies
+- id: a2p-10dlc
+  conforms: true
+  evidence: >-
+    SendHub operates A2P 10DLC brand and campaign registration as a precondition of sending:
+    "approved 10DLC registration is required prior to using the 14-day free trial. There is a
+    one-time $5 fee for the brand registration and $15 fee for the campaign registration"
+    (https://www.sendhub.com/pricing/). Dedicated toll-free and short-code paths are also offered.
+- id: sms-consent-opt-in
+  conforms: true
+  evidence: >-
+    Built-in opt-in capture with stored consent records is a published product feature
+    (https://www.sendhub.com/healthcare/); opt-in/double-opt-in guidance is published across the
+    compliance guides linked from llms.txt.
+certifications: []

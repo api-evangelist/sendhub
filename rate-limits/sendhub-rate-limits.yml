@@ -1,0 +1,87 @@
+generated: '2026-08-13'
+method: searched
+source: https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
+docs:
+- https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
+- https://www.sendhub.com/pricing/
+limit_count: 0
+note: >-
+  SendHub documents rate limiting behaviourally but publishes NO numeric limit: the v1 reference
+  defines a 429 "You've sent too many requests in a short amount of time and are being
+  rate-limited" response and a 420 "You've reached your plan's API limit for this month or
+  you're on a plan that doesn't include API access" response on every operation, but never
+  states a requests-per-second/minute ceiling or a monthly API call allowance. The monthly
+  allowance implied by 420 is a plan attribute that does not appear on the published pricing
+  page either (see plans/sendhub-plans-pricing.yml). No RateLimit-* / X-RateLimit-* / Retry-After
+  response headers are documented, and none were observed on a live unauthenticated request to
+  https://api.sendhub.com/v1/contacts (HTTP 401, probed 2026-08-13). Retry timing is carried in
+  the RESPONSE BODY, not a header, which means a generic HTTP client cannot back off correctly
+  without parsing SendHub's error envelope.
+limits: []
+headers:
+  request: []
+  response: []
+  documented: false
+  note: >-
+    No rate-limit response headers are documented or observed. Clients must read `timeLeft` out
+    of the 429 JSON body instead of Retry-After.
+exhaustion:
+- status: 429
+  title: Too Many Requests
+  meaning: Too many requests in a short amount of time; the caller is being rate-limited.
+  scope: unspecified
+  window: unspecified
+  body_field_for_retry: timeLeft
+  example_body:
+    message: You have sent too many requests.
+    code: '429'
+    error: Too Many Requests
+    devMessage: ''
+    moreInfo: ''
+    timeLeft: '0:00:30'
+  example_note: >-
+    The published example carries timeLeft "0:00:30", i.e. a 30-second cool-off in that sample.
+    SendHub does not state that 30s is the fixed backoff.
+- status: 420
+  title: Plan API limit reached
+  meaning: >-
+    Monthly plan API limit reached, OR the account is on a plan that does not include API access.
+  scope: per-account (plan)
+  window: monthly
+  example_body:
+    error: You have made too many requests and are being rate limited
+  example_note: >-
+    The 420 example body reuses the rate-limit wording even though the condition is a plan
+    entitlement, so 420 and 429 cannot be told apart from the error string alone — only from the
+    status code.
+messaging_limits:
+  note: >-
+    Product-level send limits exist and ARE published, on the pricing page rather than the API
+    reference; they bound what the Message API can do.
+  source: https://www.sendhub.com/pricing/
+  per_plan:
+  - plan: Lite
+    sms_per_month: 500
+    max_recipients_per_sms: 50
+  - plan: Lite+
+    sms_per_month: 1000
+    max_recipients_per_sms: 100
+  - plan: Starter
+    sms_per_month: 2000
+    max_recipients_per_sms: 150
+  - plan: Basic
+    sms_per_month: 4000
+    max_recipients_per_sms: 150
+  - plan: Custom
+    sms_per_month: custom
+    max_recipients_per_sms: custom
+  fair_use: >-
+    "SendHub reserves the right to restrict messages, minutes and groups based on the fair usage
+    clause in our Terms of Service."
+  carrier: >-
+    A2P 10DLC registration gates throughput independently of SendHub's own limits; carriers will
+    not accept traffic until the brand and campaign registrations are approved.
+related:
+- errors/sendhub-error-codes.yml
+- conventions/sendhub-conventions.yml
+- plans/sendhub-plans-pricing.yml

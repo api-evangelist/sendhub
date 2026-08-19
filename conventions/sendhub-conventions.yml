@@ -1,8 +1,9 @@
-generated: '2026-07-21'
-method: derived
+generated: '2026-08-13'
+method: searched
 source:
-- openapi/sendhub-openapi-original.yml
+- https://integrations.sendhub.com/SendHub-API-v1-Documentation.html
 - https://sendhub.com/developer/
+- openapi/sendhub-openapi-original.yml
 authentication:
   styles:
   - apiKey (username + api_key as query params)
@@ -36,9 +37,18 @@ error_envelope:
   - devMessage
   - moreInfo
 rate_limiting:
+  ref: rate-limits/sendhub-rate-limits.yml
   signals:
-  - HTTP 429 (too many requests, includes timeLeft)
-  - HTTP 420 (plan API limit reached / no API access on plan)
-  note: API access is available on custom plans only.
+  - HTTP 429 (too many requests; retry delay carried in the body field timeLeft, e.g. "0:00:30")
+  - HTTP 420 (monthly plan API limit reached, or the plan does not include API access)
+  headers: none
+  headers_note: >-
+    No RateLimit-*/X-RateLimit-*/Retry-After headers are documented or observed; a client must
+    parse SendHub's JSON error envelope to back off.
+  published_limits: false
+  note: >-
+    The developer page states "API access available on our custom plans" while the pricing page
+    lists "API Integration" on every published tier. Both statements are SendHub's own, quoted
+    2026-08-13.
 resource_uris:
   note: Objects carry resource_uri fields (e.g. /v1/contacts/{id}) for hypermedia-style linking.

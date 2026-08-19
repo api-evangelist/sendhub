@@ -1,0 +1,1405 @@
+{
+  "item": [
+    {
+      "id": "66eba120-d75a-400b-87ef-2e1e85a4d0df",
+      "name": "Profile",
+      "description": {
+        "content": "View and manage your account and lines",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c0662d2b-afae-4bc1-8658-f9d3e0cef871",
+          "name": "Get Settings",
+          "request": {
+            "name": "Get Settings",
+            "description": {
+              "content": "Gets your line's Settings",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "56f0553a-c4c9-4848-9277-146d4569d6ca",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"api_key\": \"12a26b3bc48d52e69f70a82a94a13a29a3fa41a5\",\n  \"auto_attendant_greeting_url\": null,\n  \"auto_upgrade_plan\": false,\n  \"automated_sms_response\": \"Thank you for reaching out!\\nWe'll respond shortlyWe'll respond shortlyWe'll respond shortlyWe'll respond shortly\",\n  \"conference_lines_enabled\": true,\n  \"createdTs\": \"2019-12-19T21:09:21.293391\",\n  \"customer_id\": null,\n  \"deleted\": null,\n  \"desktop_notifications\": true,\n  \"disable_incoming_sms\": true,\n  \"email_calling_notifications\": true,\n  \"ent_toll_free_enabled\": false,\n  \"enterprise_id\": \"232267963371095740\",\n  \"firstPaymentTs\": null,\n  \"hide_link_in_bulk_messages\": true,\n  \"id\": \"115999530581874548\",\n  \"image\": null,\n  \"is_verified_email\": true,\n  \"mfa_enabled\": false,\n  \"mfa_enforced\": false,\n  \"mixpanelid\": null,\n  \"modifiedTs\": \"2021-08-25T12:06:22.025499\",\n  \"month_start\": \"2021-04-20\",\n  \"name\": \"Product Alerts\",\n  \"onboarding_mobile_finished\": false,\n  \"onboarding_web_finished\": false,\n  \"payment_period_end\": \"2020-01-19\",\n  \"payment_period_start\": \"2019-12-19\",\n  \"pending_email\": null,\n  \"pending_phone_number\": null,\n  \"phone_number\": \"+18888888888\",\n  \"plan_usage\": {\n    \"api_requests\": \"5208\",\n    \"current_plan\": {\n      \"api_requests\": 40000,\n      \"groups\": -1,\n      \"max_sms_recipients\": 150,\n      \"maxpergroup\": -1,\n      \"messages\": 24000,\n      \"plan_cost\": 100000,\n      \"plan_id\": 1943,\n      \"plan_name\": \"Basic 2021 - 4000 SMS 250 Min - Annual\",\n      \"voice_minutes\": -1\n    },\n    \"groups\": 1,\n    \"maxpergroup\": 1,\n    \"messages\": \"77\",\n    \"voice_mail_transcriptions\": 0,\n    \"voice_minutes\": \"1\"\n  },\n  \"pusher_key\": \"1234567890abcdef1234\",\n  \"registration_status\": \"completed\",\n  \"resource_uri\": \"/settings\",\n  \"send_only_via_short_code\": false,\n  \"send_only_via_toll_free\": false,\n  \"settings_json\": \"{\\\"kazoo_callflow_id\\\": \\\"XXX\\\", \\\"transcribe_voice_mails\\\": true, \\\"kazoo_temporal_rule_id\\\": \\\"XXX\\\", \\\"kazoo_user_id\\\": \\\"XXX\\\", \\\"activityLogPath\\\": \\\"http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv\\\", \\\"toll_free_primary\\\": true, \\\"msg_send_rate_limit_timeout\\\": null, \\\"sound_notifications\\\": true, \\\"desktop_notifications\\\": true, \\\"kazoo_device_ids\\\": [\\\"XXX\\\"], \\\"sms_fwd_help\\\": true, \\\"kazoo_account_id\\\": \\\"XXX\\\", \\\"email_calling_notifications\\\": true, \\\"send_only_via_short_code\\\": false, \\\"send_only_via_toll_free\\\": false, \\\"hide_link_in_bulk_messages\\\": true, \\\"kazoo_voicemail_id\\\": \\\"XXX\\\", \\\"msg_send_rate_limit\\\": null, \\\"kazoo_account_realm\\\": \\\"232267963371095740.sip.sendhub.com\\\", \\\"kazoo_allowed\\\": true, \\\"kazoo_auto_attendant_menu_id\\\": \\\"XXX\\\", \\\"kazoo_vm_media_id\\\": \\\"XXX\\\", \\\"sms_webhook_url\\\": null, \\\"mask_caller_id\\\": true, \\\"sms_config\\\": {\\\"last_example_ts\\\": \\\"1629209040\\\", \\\"last_keyword_reminder_ts\\\": \\\"1629892091\\\", \\\"last_sms_contact_id\\\": \\\"116006957937271730\\\"}}\",\n  \"siftScienceLabel\": null,\n  \"signature\": \"Best Regards,\\nSendHub Support\",\n  \"sms_forwarding\": \"115999691431257661\",\n  \"sms_fwd_help\": true,\n  \"sms_webhook_url\": null,\n  \"sound_notifications\": true,\n  \"toll_free_number\": null,\n  \"toll_free_primary\": true,\n  \"transcribe_voice_mails\": true,\n  \"voicemail_greeting_url\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e806849c-dbca-4389-b948-8f1dd2b5a129",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cd1316bb-626c-4216-a1e8-80966b10242a",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "398a03a2-293d-45ca-abba-3ec722623750",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3a7af7d-af99-42b0-be0e-f79aa9134208",
+          "name": "Update Settings",
+          "request": {
+            "name": "Update Settings",
+            "description": {
+              "content": "Updates your SendHub line's settings",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"automated_sms_response\": \"<string>\",\n  \"createdTs\": \"<string>\",\n  \"customer_id\": \"<string>\",\n  \"deleted\": \"<boolean>\",\n  \"desktop_notifications\": \"<boolean>\",\n  \"disable_incoming_sms\": \"<boolean>\",\n  \"email_calling_notifications\": \"<boolean>\",\n  \"enterprise_id\": \"<string>\",\n  \"firstPaymentTs\": \"<string>\",\n  \"hide_link_in_bulk_messages\": \"<boolean>\",\n  \"id\": \"<string>\",\n  \"image\": \"<string>\",\n  \"modifiedTs\": \"<string>\",\n  \"month_start\": \"<string>\",\n  \"name\": \"<string>\",\n  \"onboarding_mobile_finished\": \"<boolean>\",\n  \"onboarding_web_finished\": \"<boolean>\",\n  \"payment_period_end\": \"<string>\",\n  \"payment_period_start\": \"<string>\",\n  \"pending_email\": \"<string>\",\n  \"pending_phone_number\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"pusher_key\": \"<string>\",\n  \"registration_status\": \"<string>\",\n  \"send_only_via_short_code\": \"<boolean>\",\n  \"send_only_via_toll_free\": \"<boolean>\",\n  \"signature\": \"<string>\",\n  \"sms_forwarding\": \"<string>\",\n  \"sms_fwd_help\": \"<boolean>\",\n  \"sms_webhook_url\": \"<string>\",\n  \"sound_notifications\": \"<boolean>\",\n  \"toll_free_primary\": \"<boolean>\",\n  \"transcribe_voice_mails\": \"<boolean>\",\n  \"mask_caller_id\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "327ee475-dc16-4eb6-b705-8fbacf853a1f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"api_key\": \"12a26b3bc48d52e69f70a82a94a13a29a3fa41a5\",\n  \"auto_attendant_greeting_url\": null,\n  \"auto_upgrade_plan\": false,\n  \"automated_sms_response\": \"Thank you for reaching out!\\nWe'll respond shortlyWe'll respond shortlyWe'll respond shortlyWe'll respond shortly\",\n  \"conference_lines_enabled\": true,\n  \"createdTs\": \"2019-12-19T21:09:21.293391\",\n  \"customer_id\": null,\n  \"deleted\": null,\n  \"desktop_notifications\": true,\n  \"disable_incoming_sms\": true,\n  \"email_calling_notifications\": true,\n  \"ent_toll_free_enabled\": false,\n  \"enterprise_id\": \"232267963371095740\",\n  \"firstPaymentTs\": null,\n  \"hide_link_in_bulk_messages\": true,\n  \"id\": \"115999530581874548\",\n  \"image\": null,\n  \"is_verified_email\": true,\n  \"mfa_enabled\": false,\n  \"mfa_enforced\": false,\n  \"mixpanelid\": null,\n  \"modifiedTs\": \"2021-08-25T12:06:22.025499\",\n  \"month_start\": \"2021-04-20\",\n  \"name\": \"Product Alerts\",\n  \"onboarding_mobile_finished\": false,\n  \"onboarding_web_finished\": false,\n  \"payment_period_end\": \"2020-01-19\",\n  \"payment_period_start\": \"2019-12-19\",\n  \"pending_email\": null,\n  \"pending_phone_number\": null,\n  \"phone_number\": \"+18888888888\",\n  \"plan_usage\": {\n    \"api_requests\": \"5208\",\n    \"current_plan\": {\n      \"api_requests\": 40000,\n      \"groups\": -1,\n      \"max_sms_recipients\": 150,\n      \"maxpergroup\": -1,\n      \"messages\": 24000,\n      \"plan_cost\": 100000,\n      \"plan_id\": 1943,\n      \"plan_name\": \"Basic 2021 - 4000 SMS 250 Min - Annual\",\n      \"voice_minutes\": -1\n    },\n    \"groups\": 1,\n    \"maxpergroup\": 1,\n    \"messages\": \"77\",\n    \"voice_mail_transcriptions\": 0,\n    \"voice_minutes\": \"1\"\n  },\n  \"pusher_key\": \"1234567890abcdef1234\",\n  \"registration_status\": \"completed\",\n  \"resource_uri\": \"/settings\",\n  \"send_only_via_short_code\": false,\n  \"send_only_via_toll_free\": false,\n  \"settings_json\": \"{\\\"kazoo_callflow_id\\\": \\\"XXX\\\", \\\"transcribe_voice_mails\\\": true, \\\"kazoo_temporal_rule_id\\\": \\\"XXX\\\", \\\"kazoo_user_id\\\": \\\"XXX\\\", \\\"activityLogPath\\\": \\\"http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv\\\", \\\"toll_free_primary\\\": true, \\\"msg_send_rate_limit_timeout\\\": null, \\\"sound_notifications\\\": true, \\\"desktop_notifications\\\": true, \\\"kazoo_device_ids\\\": [\\\"XXX\\\"], \\\"sms_fwd_help\\\": true, \\\"kazoo_account_id\\\": \\\"XXX\\\", \\\"email_calling_notifications\\\": true, \\\"send_only_via_short_code\\\": false, \\\"send_only_via_toll_free\\\": false, \\\"hide_link_in_bulk_messages\\\": true, \\\"kazoo_voicemail_id\\\": \\\"XXX\\\", \\\"msg_send_rate_limit\\\": null, \\\"kazoo_account_realm\\\": \\\"232267963371095740.sip.sendhub.com\\\", \\\"kazoo_allowed\\\": true, \\\"kazoo_auto_attendant_menu_id\\\": \\\"XXX\\\", \\\"kazoo_vm_media_id\\\": \\\"XXX\\\", \\\"sms_webhook_url\\\": null, \\\"mask_caller_id\\\": true, \\\"sms_config\\\": {\\\"last_example_ts\\\": \\\"1629209040\\\", \\\"last_keyword_reminder_ts\\\": \\\"1629892091\\\", \\\"last_sms_contact_id\\\": \\\"116006957937271730\\\"}}\",\n  \"siftScienceLabel\": null,\n  \"signature\": \"Best Regards,\\nSendHub Support\",\n  \"sms_forwarding\": \"115999691431257661\",\n  \"sms_fwd_help\": true,\n  \"sms_webhook_url\": null,\n  \"sound_notifications\": true,\n  \"toll_free_number\": null,\n  \"toll_free_primary\": true,\n  \"transcribe_voice_mails\": true,\n  \"voicemail_greeting_url\": null,\n  \"mask_caller_id\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c597063f-6e21-430f-b79d-b12a73106aab",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9d6032e2-c76b-4fa7-b050-b9397d563b95",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1272057c-4e8f-4a25-b161-5811469dee3e",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2e08e6a3-5f07-4645-8220-c91294c43ff6",
+          "name": "Get Profile",
+          "request": {
+            "name": "Get Profile",
+            "description": {
+              "content": "Gets details about your SendHub line",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8fb45f69-2aa3-40d9-ae34-d198fd9d7fc5",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"auth_groups\": [\n    {\n      \"id\": 7,\n      \"name\": \"Account Administrators\"\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Restricted Users\"\n    },\n    {\n      \"id\": 9,\n      \"name\": \"Billing Administrators\"\n    }\n  ],\n  \"date_joined\": \"2019-12-19T21:09:21.216167\",\n  \"downvotes\": 0,\n  \"email\": \"alerts@acme.com\",\n  \"enterprise\": \"ACME Inc.\",\n  \"enterpriseJoinLink\": \"http://sh.gl/HAmMgR\",\n  \"enterpriseSize\": 6,\n  \"enterprise_id\": \"232267963371095740\",\n  \"mixpanel_id\": null,\n  \"name\": \"Product Alerts\",\n  \"onboarding_mobile_finished\": false,\n  \"onboarding_web_finished\": false,\n  \"payment_plan_id\": 1268,\n  \"resource_uri\": \"/v1/profile\",\n  \"sendhub_number\": \"(201) 571-6227\",\n  \"unread\": 0,\n  \"upvotes\": 0,\n  \"user_id\": \"283014186889381821\",\n  \"username\": \"alerts@acme.com\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63f0b40c-a445-4efc-8d8a-c9a8fbd24c21",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fb5a49a7-44a2-401f-a1b5-74aaad9b63d7",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd517d45-a9d1-4faa-a07e-872f6863d723",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c0b296b-30d8-42ae-ba04-71b6dfe80a4d",
+          "name": "Get Enterprise (Account)",
+          "request": {
+            "name": "Get Enterprise (Account)",
+            "description": {
+              "content": "Gets your enterprise account's details",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "enterprises",
+                ":enterprise_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "enterprise_id",
+                  "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e34a5482-071a-494d-bf84-cbe268be94b4",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"brand_id\": {\n    \"$ref\": \"#/components/schemas/brandId\"\n  },\n  \"createdTs\": \"2018-06-07T17:59:51.186701\",\n  \"customerId\": \"cus_D0TMCytXFqWuNO\",\n  \"hasAccessToChatSupport\": true,\n  \"hash\": \"XXX\",\n  \"id\": \"232267963371095740\",\n  \"joinUrl\": \"http://sh.gl/HAmMgR\",\n  \"modifiedTs\": \"2021-08-24T19:31:26.420082\",\n  \"month_start\": \"2021-08-09\",\n  \"name\": \"ACME Inc.\",\n  \"payment_plan_id\": 11,\n  \"resource_uri\": \"/v1/enterprises/232267963371095740\",\n  \"settingsJson\": \"{\\\"mms_enabled\\\": false, \\\"integrationsAllowed\\\": true,  \\\"activityLogPath\\\": \\\"http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv\\\"}\",\n  \"shortcode_allowed\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cc436d55-d089-4fb6-b877-221414dc224a",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d7baacb7-1685-4f7c-8932-4ffca5365442",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a32b27ca-7e08-41f7-b39e-122366522421",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a5df906-028f-4e35-9a4a-48490e1b5f09",
+          "name": "List Users",
+          "request": {
+            "name": "List Users",
+            "description": {
+              "content": "Lists your enterprise account's users (lines)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "enterprises",
+                ":enterprise_id",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "enterprise_id",
+                  "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1d6acf9-094d-49cf-92cc-59f90762cf83",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"offset\": 7825,\n    \"limit\": 7301,\n    \"previous\": \"string\",\n    \"next\": \"string\"\n  },\n  \"objects\": [\n    {\n      \"createdTs\": \"2021-08-01T03:48:34\",\n      \"disable_incoming_sms\": true,\n      \"enterprise_id\": \"<string>\",\n      \"enterprise_id_str\": \"<string>\",\n      \"id\": \"<string>\",\n      \"id_str\": \"8483853\",\n      \"image\": \"string\",\n      \"is_verified_email\": true,\n      \"modifiedTs\": \"2021-08-01T03:48:34\",\n      \"name\": \"<string>\",\n      \"onboarding_mobile_finished\": \"<boolean>\",\n      \"onboarding_web_finished\": \"<boolean>\",\n      \"payment_period_end\": \"<string>\",\n      \"payment_period_start\": \"<string>\",\n      \"payment_schedule_id\": \"2\",\n      \"registration_status\": \"<string>\",\n      \"sendhub_number\": \"+14173868131\",\n      \"settings_json\": \"string\",\n      \"signature\": \"string\",\n      \"twilio_phone_number_id\": \"<string>\",\n      \"twilio_phone_number_id_str\": {\n        \"deprecated\": true,\n        \"description\": \"This is used internally and may be expanded upon or removed in the future\",\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"user_id\": \"<string>\",\n      \"user_id_str\": \"<string>\",\n      \"pending_phone_number\": \"\",\n      \"phone_number\": \"<string>\"\n    },\n    {\n      \"createdTs\": \"2021-08-01T03:48:34\",\n      \"disable_incoming_sms\": true,\n      \"enterprise_id\": \"<string>\",\n      \"enterprise_id_str\": \"<string>\",\n      \"id\": \"<string>\",\n      \"id_str\": \"9511687\",\n      \"image\": \"string\",\n      \"is_verified_email\": true,\n      \"modifiedTs\": \"2021-08-01T03:48:34\",\n      \"name\": \"<string>\",\n      \"onboarding_mobile_finished\": \"<boolean>\",\n      \"onboarding_web_finished\": \"<boolean>\",\n      \"payment_period_end\": \"<string>\",\n      \"payment_period_start\": \"<string>\",\n      \"payment_schedule_id\": \"3\",\n      \"registration_status\": \"<string>\",\n      \"sendhub_number\": \"+15697802810\",\n      \"settings_json\": \"string\",\n      \"signature\": \"string\",\n      \"twilio_phone_number_id\": \"<string>\",\n      \"twilio_phone_number_id_str\": {\n        \"deprecated\": true,\n        \"description\": \"This is used internally and may be expanded upon or removed in the future\",\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"user_id\": \"<string>\",\n      \"user_id_str\": \"<string>\",\n      \"pending_phone_number\": \"+12292589351\",\n      \"phone_number\": \"<string>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d403b73-a9bd-40e3-8203-e53e6c09af81",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dbe83578-210a-4a2f-9b5e-9cbf1ae2c239",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22329c4b-d39e-479e-8314-b6f0a204a7e1",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7e6d8e5-1afd-44f3-8726-5c86f60cfece",
+          "name": "Get User",
+          "request": {
+            "name": "Get User",
+            "description": {
+              "content": "Gets a user (line)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "enterprises",
+                ":enterprise_id",
+                "users",
+                ":user_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "enterprise_id",
+                  "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "user_id",
+                  "description": "(Required) The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "65f95949-47c9-41aa-9990-c216c5560da5",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users",
+                    ":user_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "user_id",
+                      "description": "(Required) The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"115999530581874548\",\n  \"user_id\": \"283014186889381821\",\n  \"enterprise_id\": \"232267963371095740\",\n  \"phone_number\": \"+18888888888\",\n  \"twilio_phone_number_id\": \"115999766167712690\",\n  \"registration_status\": \"completed\",\n  \"image\": \"\",\n  \"signature\": \"Best Regards,\\nACME Inc.\",\n  \"disable_incoming_sms\": false,\n  \"automated_sms_response\": \"\",\n  \"payment_schedule_id\": \"1\",\n  \"payment_period_start\": \"2019-12-19\",\n  \"payment_period_end\": \"2020-01-19\",\n  \"onboarding_web_finished\": false,\n  \"onboarding_mobile_finished\": false,\n  \"settings_json\": \"{\\\"kazoo_callflow_id\\\": \\\"XXX\\\", \\\"transcribe_voice_mails\\\": true, \\\"kazoo_temporal_rule_id\\\": \\\"XXX\\\", \\\"kazoo_user_id\\\": \\\"XXX\\\", \\\"activityLogPath\\\": \\\"http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv\\\", \\\"toll_free_primary\\\": false, \\\"msg_send_rate_limit_timeout\\\": null, \\\"sound_notifications\\\": true, \\\"desktop_notifications\\\": true, \\\"kazoo_device_ids\\\": [\\\"XXX\\\"], \\\"sms_fwd_help\\\": true, \\\"kazoo_account_id\\\": \\\"XXX\\\", \\\"email_calling_notifications\\\": true, \\\"send_only_via_short_code\\\": false, \\\"send_only_via_toll_free\\\": false, \\\"hide_link_in_bulk_messages\\\": true, \\\"kazoo_voicemail_id\\\": \\\"XXX\\\", \\\"msg_send_rate_limit\\\": null, \\\"kazoo_account_realm\\\": \\\"232267963371095740.sip.sendhub.com\\\", \\\"kazoo_allowed\\\": true, \\\"kazoo_auto_attendant_menu_id\\\": \\\"XXX\\\", \\\"kazoo_vm_media_id\\\": \\\"XXX\\\", \\\"sms_webhook_url\\\": null, \\\"mask_caller_id\\\": false, \\\"sms_config\\\": {\\\"last_example_ts\\\": \\\"1629209040\\\", \\\"last_keyword_reminder_ts\\\": \\\"1629873648\\\", \\\"last_sms_contact_id\\\": \\\"116006957938283973\\\"}}\",\n  \"is_verified_email\": true,\n  \"createdTs\": \"2019-12-19T21:09:21\",\n  \"modifiedTs\": \"2021-08-25T06:47:16\",\n  \"auth_groups\": [\n    {\n      \"id\": 7,\n      \"name\": \"Account Administrators\"\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Restricted Users\"\n    },\n    {\n      \"id\": 9,\n      \"name\": \"Billing Administrators\"\n    }\n  ],\n  \"username\": \"alerts@acme.com\",\n  \"id_str\": \"115999530581874548\",\n  \"user_id_str\": \"283014186889381821\",\n  \"enterprise_id_str\": \"232267963371095740\",\n  \"twilio_phone_number_id_str\": \"115999766167712690\",\n  \"name\": \"Product Alerts\",\n  \"sendhub_number\": \"+12015716227\",\n  \"sms_forwarding\": \"115999691431257661\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5aa905cb-a85e-4aa5-9fdd-bd174a5f3151",
+              "name": "The credentials you supplied are invalid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users",
+                    ":user_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "user_id",
+                      "description": "(Required) The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c9d6cef0-2cfc-4cc8-b7aa-5699b55a9e92",
+              "name": "You've reached your plan's API limit for this month or you're on a plan that doesn't include API access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users",
+                    ":user_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "user_id",
+                      "description": "(Required) The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "code": 420,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"You have made too many requests and are being rate limited\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e374bdb7-a12a-4912-a95d-f662d0df56d5",
+              "name": "You've sent too many requests in a short amount of time and are being rate-limited",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "enterprises",
+                    ":enterprise_id",
+                    "users",
+                    ":user_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "enterprise_id",
+                      "description": "(Required) Your enterprise account's ID\n\n**Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "user_id",
+                      "description": "(Required) The SendHub user (line)'s ID\n\n**Note:** You can find your `user_id` in the `/v1/profile` endpoint\nYou can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"You have sent too many requests.\",\n  \"code\": \"429\",\n  \"error\": \"Too Many Requests\",\n  \"devMessage\": \"\",\n  \"moreInfo\": \"\",\n  \"timeLeft\": \"0:00:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.sendhub.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "username"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e6f3f0f6-d363-4cff-8be7-b7e8ef9afaed",
+    "name": "SendHub Authentication Profile API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "SendHub's REST-like API allows you to control & interact with your SendHub account programmatically.\n\nNote: this documentation is in Beta and may be updated periodically.\n\nContact Support:\n Name: Contact SendHub\n Email: support@sendhub.com",
+      "type": "text/plain"
+    }
+  }
+}
