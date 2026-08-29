@@ -12,6 +12,18 @@ description: >-
   connectors and Zapier plus inbound-SMS webhooks, and is a New Era Technology company.
   Surfaced as a 500 Global portfolio company and enriched by the API Evangelist pipeline.
 url: https://raw.githubusercontent.com/api-evangelist/sendhub/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
