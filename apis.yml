@@ -140,6 +140,8 @@ apis:
   humanURL: https://sendhub.com/developer/
   baseURL: https://api.sendhub.com
   tags:
+  - Profiles
+  tags_raw:
   - Profile
   properties:
   - type: OpenAPI
@@ -154,6 +156,8 @@ apis:
   humanURL: https://sendhub.com/developer/
   baseURL: https://api.sendhub.com
   tags:
+  - Threads
+  tags_raw:
   - Thread
   properties:
   - type: OpenAPI
