@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: SendHub Authentication API
   version: v1
@@ -53,18 +53,46 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/login'
 components:
-  requestBodies:
-    login:
-      x-internal: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/loginRequest'
   schemas:
-    sendhubNumber:
-      type: string
-      pattern: ^\+1\d{10}$
-      description: This line's SendHub number (E.164 format)
+    onboardingWebFinished:
+      $ref: '#/components/schemas/onboardingMobileFinished'
+    nullableInteger:
+      type:
+      - integer
+      - 'null'
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    loginRequest:
+      x-internal: 'true'
+      type: object
+      properties:
+        authenticationType:
+          allOf:
+          - $ref: '#/components/schemas/authenticationType'
+          - x-$ref: '#/components/schemas/authenticationType'
+        sessionId:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
     settingsJson:
       type: string
       minLength: 1
@@ -81,8 +109,9 @@ components:
         emailAddress:
           type: string
         kazooApiPassword:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         password:
           type: string
           description: Always giong to return '******'
@@ -149,25 +178,15 @@ components:
           $ref: '#/components/schemas/userId'
         username:
           $ref: '#/components/schemas/username'
-    rateLimitingResponse:
-      properties:
-        message:
-          type: string
-          example: You have sent too many requests.
-        code:
-          type: string
-          pattern: ^\d+$
-          example: '429'
-        error:
-          type: string
-          example: Too Many Requests
-        devMessage:
-          type: string
-        moreInfo:
-          type: string
-        timeLeft:
-          type: string
-          pattern: ^\d:[0-5]\d:[0-5]\d$
+    onboardingMobileFinished:
+      type: boolean
+      readOnly: true
+      description: This is used internally and may be expanded upon or removed in the future
+      deprecated: true
+    idBoth:
+      anyOf:
+      - $ref: '#/components/schemas/id'
+      - $ref: '#/components/schemas/idInt'
     registrationStatus:
       type: string
       minLength: 1
@@ -177,51 +196,53 @@ components:
       - payment_method_absent
       - completed
       readOnly: true
-    nullableInteger:
+    personalCell:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
+    twilioPhoneNumberId:
+      allOf:
+      - $ref: '#/components/schemas/idBoth'
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    isVerifiedEmail:
+      type: boolean
+      description: Whether this user's email has been verified
+      readOnly: true
+    userId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The ID of a SendHub user (an individual line)
+    username:
+      type: string
+      description: User's (SendHub line's) username
+      minLength: 1
+      maxLength: 254
+    signature:
+      type: string
+      description: 'Signature that the SendHub apps append to new messages
+
+        **Note:** SendHub does not use this field when sending via the API'
+    id:
+      type: string
+      pattern: ^\d+$
+    enterpriseSize:
       type: integer
-      nullable: true
+      description: How manu Users (lines) your account has
+      readOnly: true
     disableIncomingSms:
       type: boolean
-    nullableString:
-      type: string
-      nullable: true
     authenticationType:
       x-internal: 'true'
       type: string
       enum:
       - sendhub
       - manager
-    id:
-      type: string
-      pattern: ^\d+$
-    isVerifiedEmail:
-      type: boolean
-      description: Whether this user's email has been verified
+    deletedNullable:
+      type:
+      - boolean
+      - 'null'
       readOnly: true
-    idInt:
-      type: integer
-      format: int64
-    onboardingWebFinished:
-      $ref: '#/components/schemas/onboardingMobileFinished'
-    username:
-      type: string
-      description: User's (SendHub line's) username
-      minLength: 1
-      maxLength: 254
-    twilioPhoneNumberId:
-      allOf:
-      - $ref: '#/components/schemas/idBoth'
-      deprecated: true
-      description: This is used internally and may be expanded upon or removed in the future
-    personalCell:
-      type: string
-      pattern: ^\+1\d{10}$
-      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
-    signature:
-      type: string
-      description: 'Signature that the SendHub apps append to new messages
-
-        **Note:** SendHub does not use this field when sending via the API'
     paymentScheduleIdInt:
       type: integer
       minimum: 1
@@ -229,45 +250,28 @@ components:
       description: 'Your plan''s payment schedule type:
 
         1. Monthly 2. Yearly 3. Consumable (eg. free trial)'
-    idBoth:
-      anyOf:
-      - $ref: '#/components/schemas/id'
-      - $ref: '#/components/schemas/idInt'
+    nullableString:
+      type:
+      - string
+      - 'null'
+    idInt:
+      type: integer
+      format: int64
+    sendhubNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: This line's SendHub number (E.164 format)
     nullableStringRO:
       allOf:
       - $ref: '#/components/schemas/nullableString'
       - readOnly: true
-    deletedNullable:
-      type: boolean
-      readOnly: true
-      nullable: true
-    userId:
-      allOf:
-      - $ref: '#/components/schemas/id'
-      description: The ID of a SendHub user (an individual line)
-    loginRequest:
-      x-internal: 'true'
-      type: object
-      properties:
-        authenticationType:
-          allOf:
-          - $ref: '#/components/schemas/authenticationType'
-          - x-$ref: '#/components/schemas/authenticationType'
-        sessionId:
-          type: string
-        username:
-          type: string
-        password:
-          type: string
-    enterpriseSize:
-      type: integer
-      description: How manu Users (lines) your account has
-      readOnly: true
-    onboardingMobileFinished:
-      type: boolean
-      readOnly: true
-      description: This is used internally and may be expanded upon or removed in the future
-      deprecated: true
+  requestBodies:
+    login:
+      x-internal: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/loginRequest'
   responses:
     login200:
       description: Success
@@ -275,6 +279,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/login200Response'
+    '401':
+      description: The credentials you supplied are invalid
     429RateLimiting:
       description: You've sent too many requests in a short amount of time and are being rate-limited
       content:
@@ -304,8 +310,6 @@ components:
               summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
               value:
                 error: You have made too many requests and are being rate limited
-    '401':
-      description: The credentials you supplied are invalid
   securitySchemes:
     username:
       name: username

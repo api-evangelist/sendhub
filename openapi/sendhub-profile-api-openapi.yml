@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: SendHub Authentication Profile API
+  title: SendHub Profile API
   version: v1
   contact:
     name: Contact SendHub
@@ -220,325 +220,191 @@ paths:
         '429':
           $ref: '#/components/responses/429RateLimiting'
 components:
+  responses:
+    getProfile200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/userProfile'
+          examples:
+            Product Alerts Line Profile:
+              $ref: '#/components/examples/userProfile'
+    '401':
+      description: The credentials you supplied are invalid
+    429RateLimiting:
+      description: You've sent too many requests in a short amount of time and are being rate-limited
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/rateLimitingResponse'
+          examples:
+            Too Many Requests:
+              summary: You've been rate-limited and can send again in 30-seconds
+              value:
+                message: You have sent too many requests.
+                code: '429'
+                error: Too Many Requests
+                devMessage: ''
+                moreInfo: ''
+                timeLeft: 0:00:30
+    updateSettings200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateSettings'
+          examples:
+            Updated Product Alerts Line's Settings:
+              $ref: '#/components/examples/updateSettings'
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
+    getUser200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/user'
+            x-$ref: '#/components/schemas/user'
+          examples:
+            Product Alerts Line:
+              $ref: '#/components/examples/user'
+    getSettings200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/settings'
+            x-$ref: '#/components/schemas/settings'
+          examples:
+            Get Product Alerts Line's Settings:
+              $ref: '#/components/examples/settings'
+    getEnterprise200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/enterprise'
+          examples:
+            ACME Inc.:
+              $ref: '#/components/examples/enterprise'
+    listUsers200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listUsersResponse'
+            x-$ref: '#/components/schemas/listUsersResponse'
   schemas:
-    settingsJson:
+    downvotes:
+      type: integer
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    upvotes:
+      type: integer
+      deprecated: true
+      description: This is used internally and may be expanded upon or removed in the future
+    userName:
       type: string
+      description: User's (SendHub line's) name
       minLength: 1
-    registrationStatus:
-      type: string
-      minLength: 1
-      enum:
-      - created
-      - email_verified
-      - payment_method_absent
-      - completed
-      readOnly: true
-    modifiedTs:
-      allOf:
-      - $ref: '#/components/schemas/timestamp'
-      - minLength: 1
-        readOnly: true
-    enterpriseName:
-      type: string
-      description: Your company name
-      maxLength: 255
-      nullable: true
-    internalId:
+      maxLength: 120
+    enterpriseId:
       allOf:
       - $ref: '#/components/schemas/id'
-      - description: This is an internal ID and is not the same as a user ID (SendHub line)
-        readOnly: true
-    next:
-      type: string
-      nullable: true
-    profileUnread:
-      type: integer
+      description: The enterprise ID
       readOnly: true
-      description: Shows how many unread threads this User (line) has
+    user:
+      type: object
+      title: User
+      x-examples:
+        Product Alerts Line:
+          value:
+            id: '115999530581874548'
+            user_id: '283014186889381821'
+            enterprise_id: '232267963371095740'
+            phone_number: '+18888888888'
+            twilio_phone_number_id: '115999766167712690'
+            registration_status: completed
+            image: ''
+            signature: 'Best Regards,
+
+              ACME Inc.'
+            disable_incoming_sms: false
+            automated_sms_response: ''
+            payment_schedule_id: '1'
+            payment_period_start: '2019-12-19'
+            payment_period_end: '2020-01-19'
+            onboarding_web_finished: false
+            onboarding_mobile_finished: false
+            settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id": "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary": false, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids": ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit": null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": false, "sms_config": {"last_example_ts": "1629209040", "last_keyword_reminder_ts": "1629873648", "last_sms_contact_id": "116006957938283973"}}'
+            is_verified_email: true
+            createdTs: '2019-12-19T21:09:21'
+            modifiedTs: '2021-08-25T06:47:16'
+            auth_groups:
+            - id: 7
+              name: Account Administrators
+            - id: 5
+              name: Restricted Users
+            - id: 9
+              name: Billing Administrators
+            username: alerts@acme.com
+            id_str: '115999530581874548'
+            user_id_str: '283014186889381821'
+            enterprise_id_str: '232267963371095740'
+            twilio_phone_number_id_str: '115999766167712690'
+            name: Product Alerts
+            sendhub_number: '+12015716227'
+            sms_forwarding: '115999691431257661'
+      description: Individual SendHub user (line)
+      allOf:
+      - $ref: '#/components/schemas/listNestedUser'
+      - properties:
+          auth_groups:
+            $ref: '#/components/schemas/authGroups'
+          username:
+            $ref: '#/components/schemas/username'
+        required:
+        - auth_groups
+        - username
+    paymentPeriodEnd:
+      allOf:
+      - $ref: '#/components/schemas/date'
+      readOnly: true
     pendingPhoneNumber:
       type: string
       pattern: ^\+1\d{10}|$
       description: Phone number waiting to be verified for the "Personal Cell" field
-    listUsersResponse:
-      type: object
-      title: listUsersResponse
-      properties:
-        meta:
-          $ref: '#/components/schemas/meta'
-        objects:
-          type: array
-          items:
-            $ref: '#/components/schemas/listNestedUser'
-            x-$ref: '#/components/schemas/listNestedUser'
-    username:
-      type: string
-      description: User's (SendHub line's) username
-      minLength: 1
-      maxLength: 254
-    twilioPhoneNumberId:
-      allOf:
-      - $ref: '#/components/schemas/idBoth'
-      deprecated: true
-      description: This is used internally and may be expanded upon or removed in the future
-    formattedSendhubNumber:
-      type: string
-      pattern: ^\(\d{3}\) \d{3}-\d{4}$
-      description: This line's SendHub number (formatted)
-    offset:
-      type: integer
-    pusherKey:
-      type: string
-      minLength: 1
-      readOnly: true
-    userProfile:
-      type: object
-      title: User Profile
-      description: ''
-      properties:
-        auth_groups:
-          $ref: '#/components/schemas/authGroups'
-        date_joined:
-          $ref: '#/components/schemas/dateJoined'
-        downvotes:
-          $ref: '#/components/schemas/downvotes'
-        email:
-          $ref: '#/components/schemas/email'
-        enterprise:
-          $ref: '#/components/schemas/enterpriseName'
-        enterprise_id:
-          $ref: '#/components/schemas/enterpriseId'
-        enterpriseJoinLink:
-          $ref: '#/components/schemas/enterpriseJoinLink'
-        enterpriseSize:
-          $ref: '#/components/schemas/enterpriseSize'
-        mixpanel_id:
-          $ref: '#/components/schemas/mixpanelId'
-        name:
-          $ref: '#/components/schemas/enterpriseName'
-        onboarding_mobile_finished:
-          $ref: '#/components/schemas/onboardingMobileFinished'
-        onboarding_web_finished:
-          $ref: '#/components/schemas/onboardingWebFinished'
-        payment_plan_id:
-          $ref: '#/components/schemas/planId'
-        resource_uri:
-          $ref: '#/components/schemas/profileResourceUri'
-        sendhub_number:
-          $ref: '#/components/schemas/formattedSendhubNumber'
-        unread:
-          $ref: '#/components/schemas/profileUnread'
-        upvotes:
-          $ref: '#/components/schemas/upvotes'
-        user_id:
-          $ref: '#/components/schemas/userId'
-        username:
-          $ref: '#/components/schemas/username'
-      required:
-      - auth_groups
-      - date_joined
-      - downvotes
-      - email
-      - enterprise
-      - enterprise_id
-      - enterpriseJoinLink
-      - enterpriseSize
-      - mixpanel_id
-      - name
-      - onboarding_mobile_finished
-      - onboarding_web_finished
-      - payment_plan_id
-      - resource_uri
-      - sendhub_number
-      - unread
-      - upvotes
-      - user_id
-      - username
-    idBoth:
-      anyOf:
-      - $ref: '#/components/schemas/id'
-      - $ref: '#/components/schemas/idInt'
-    enterprise:
-      type: object
-      title: Enterprise (Account)
-      description: ''
-      properties:
-        brand_id:
-          $ref: '#/components/schemas/brandId'
-        createdTs:
-          type: string
-          minLength: 1
-        customerId:
-          type: string
-          minLength: 1
-        hasAccessToChatSupport:
-          type: boolean
-          deprecated: true
-        hash:
-          type: string
-          minLength: 1
-        id:
-          type: string
-          minLength: 1
-        joinUrl:
-          type: string
-          minLength: 1
-          deprecated: true
-        modifiedTs:
-          type: string
-          minLength: 1
-        month_start:
-          type: string
-          minLength: 1
-        name:
-          $ref: '#/components/schemas/enterpriseName'
-        payment_plan_id:
-          type: integer
-        resource_uri:
-          type: string
-          minLength: 1
-        settingsJson:
-          type: string
-          minLength: 1
-        shortcode_allowed:
-          type: boolean
-      required:
-      - createdTs
-      - customerId
-      - hasAccessToChatSupport
-      - hash
-      - id
-      - joinUrl
-      - modifiedTs
-      - month_start
-      - name
-      - payment_plan_id
-      - resource_uri
-      - settingsJson
-      - shortcode_allowed
-    listNestedUser:
-      type: object
-      title: listNestedUser
-      properties:
-        createdTs:
-          $ref: '#/components/schemas/createdTsWithoutDecimal'
-        disable_incoming_sms:
-          $ref: '#/components/schemas/disableIncomingSms'
-        enterprise_id:
-          $ref: '#/components/schemas/enterpriseId'
-        enterprise_id_str:
-          $ref: '#/components/schemas/enterpriseIdStr'
-        id:
-          $ref: '#/components/schemas/id'
-        id_str:
-          $ref: '#/components/schemas/idStr'
-        image:
-          $ref: '#/components/schemas/image'
-        is_verified_email:
-          $ref: '#/components/schemas/isVerifiedEmail'
-        modifiedTs:
-          $ref: '#/components/schemas/modifiedTsWithoutDecimal'
-        name:
-          $ref: '#/components/schemas/userName'
-        onboarding_mobile_finished:
-          $ref: '#/components/schemas/onboardingMobileFinished'
-        onboarding_web_finished:
-          $ref: '#/components/schemas/onboardingWebFinished'
-        payment_period_end:
-          $ref: '#/components/schemas/paymentPeriodEnd'
-        payment_period_start:
-          $ref: '#/components/schemas/paymentPeriodStart'
-        payment_schedule_id:
-          $ref: '#/components/schemas/paymentScheduleId'
-        pending_phone_number:
-          $ref: '#/components/schemas/pendingPhoneNumber'
-        phone_number:
-          $ref: '#/components/schemas/personalCell'
-        registration_status:
-          $ref: '#/components/schemas/registrationStatus'
-        sendhub_number:
-          $ref: '#/components/schemas/sendhubNumber'
-        settings_json:
-          $ref: '#/components/schemas/settingsJson'
-        signature:
-          $ref: '#/components/schemas/signature'
-        twilio_phone_number_id:
-          $ref: '#/components/schemas/twilioPhoneNumberId'
-        twilio_phone_number_id_str:
-          $ref: '#/components/schemas/twilioPhoneNumberIdStr'
-        user_id:
-          $ref: '#/components/schemas/userId'
-        user_id_str:
-          $ref: '#/components/schemas/userId'
-      required:
-      - createdTs
-      - disable_incoming_sms
-      - enterprise_id
-      - enterprise_id_str
-      - id
-      - id_str
-      - image
-      - is_verified_email
-      - modifiedTs
-      - name
-      - onboarding_mobile_finished
-      - onboarding_web_finished
-      - payment_period_end
-      - payment_period_start
-      - payment_schedule_id
-      - registration_status
-      - sendhub_number
-      - settings_json
-      - signature
-      - twilio_phone_number_id
-      - twilio_phone_number_id_str
-      - user_id
-      - user_id_str
-    dateJoined:
-      allOf:
-      - $ref: '#/components/schemas/timestamp'
-      description: Timestamp that this SendHub User (line) was created
-    sendhubNumber:
-      type: string
-      pattern: ^\+1\d{10}$
-      description: This line's SendHub number (E.164 format)
-    nullableString:
-      type: string
-      nullable: true
-    planId:
-      allOf:
-      - $ref: '#/components/schemas/idInt'
-      description: The plan ID
-    idStr:
-      type: string
-      pattern: ^\d+$
-      description: Same as id but always a string
-    id:
-      type: string
-      pattern: ^\d+$
-    brandId:
-      type: string
-      nullable: true
-      description: 10DLC Brand ID
-    timestamp:
-      type: string
-      description: 'A UTC timestamp
-
-
-        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
-      example: '2021-08-01T03:48:55.350453'
-      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
-    personalCell:
-      type: string
-      pattern: ^\+1\d{10}$
-      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
-    signature:
-      type: string
-      description: 'Signature that the SendHub apps append to new messages
-
-        **Note:** SendHub does not use this field when sending via the API'
-    date:
-      type: string
-      pattern: ^\d{4}-\d{2}-\d{2}$
     authGroup:
       anyOf:
       - properties:
@@ -606,132 +472,105 @@ components:
         type: object
         title: Auth Group
       title: Auth Group
-    userName:
+    twilioPhoneNumberIdStr:
+      $ref: '#/components/schemas/twilioPhoneNumberId'
+    personalCell:
       type: string
-      description: User's (SendHub line's) name
-      minLength: 1
-      maxLength: 120
-    previous:
-      type: string
-      nullable: true
-    mixpanelId:
-      type: string
-      format: int64
-      nullable: true
+      pattern: ^\+1\d{10}$
+      description: The `Personal Cell` number in your [My Settings page](https://app.sendhub.com/settings)
+    twilioPhoneNumberId:
+      allOf:
+      - $ref: '#/components/schemas/idBoth'
       deprecated: true
       description: This is used internally and may be expanded upon or removed in the future
-      readOnly: true
-    nullableStringRO:
-      allOf:
-      - $ref: '#/components/schemas/nullableString'
-      - readOnly: true
-    updateSettings:
-      allOf:
-      - $ref: '#/components/schemas/settings'
-      - type: object
-        properties:
-          mask_caller_id:
-            type: boolean
     userId:
       allOf:
       - $ref: '#/components/schemas/id'
       description: The ID of a SendHub user (an individual line)
+    signature:
+      type: string
+      description: 'Signature that the SendHub apps append to new messages
+
+        **Note:** SendHub does not use this field when sending via the API'
+    enterpriseSize:
+      type: integer
+      description: How manu Users (lines) your account has
+      readOnly: true
+    disableIncomingSms:
+      type: boolean
+    meta:
+      type: object
+      properties:
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    profileResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/profile$
+      description: Resource URI for this User's profile
+      example: /v1/profile
     enterpriseJoinLink:
       type: string
       pattern: ^https?://sh\.gl/[a-zA-Z0-9]+$
       deprecated: true
       description: This is used internally and may be expanded upon or removed in the future
       readOnly: true
-    customerId:
+    idInt:
+      type: integer
+      format: int64
+    listUsersResponse:
+      type: object
+      title: listUsersResponse
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/listNestedUser'
+            x-$ref: '#/components/schemas/listNestedUser'
+    modifiedTsWithoutDecimal:
       allOf:
-      - $ref: '#/components/schemas/nullableString'
-      - readOnly: true
-        example: cus_D0TMCytXFqWuNO
-    timestampWithoutDecimal:
-      type: string
-      description: 'A UTC timestamp
-
-
-        `2021-08-01T03:48:34` equals August 1st, 2021 at 3:48 and 34 seconds AM (UTC)'
-      example: '2021-08-01T03:48:34'
-      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
-    disableIncomingSms:
-      type: boolean
-    paymentPeriodStart:
-      allOf:
-      - $ref: '#/components/schemas/date'
-      readOnly: true
-    createdTs:
-      allOf:
-      - $ref: '#/components/schemas/timestamp'
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
       - minLength: 1
         readOnly: true
-    paymentPeriodEnd:
+    planId:
       allOf:
-      - $ref: '#/components/schemas/date'
+      - $ref: '#/components/schemas/idInt'
+      description: The plan ID
+    formattedSendhubNumber:
+      type: string
+      pattern: ^\(\d{3}\) \d{3}-\d{4}$
+      description: This line's SendHub number (formatted)
+    pusherKey:
+      type: string
+      minLength: 1
       readOnly: true
+    idBoth:
+      anyOf:
+      - $ref: '#/components/schemas/id'
+      - $ref: '#/components/schemas/idInt'
+    enterpriseIdStr:
+      allOf:
+      - $ref: '#/components/schemas/enterpriseId'
+      description: The enterprise ID
+    previous:
+      type:
+      - string
+      - 'null'
     isVerifiedEmail:
       type: boolean
       description: Whether this user's email has been verified
       readOnly: true
-    limit:
-      type: integer
-    user:
-      type: object
-      title: User
-      x-examples:
-        Product Alerts Line:
-          value:
-            id: '115999530581874548'
-            user_id: '283014186889381821'
-            enterprise_id: '232267963371095740'
-            phone_number: '+18888888888'
-            twilio_phone_number_id: '115999766167712690'
-            registration_status: completed
-            image: ''
-            signature: 'Best Regards,
-
-              ACME Inc.'
-            disable_incoming_sms: false
-            automated_sms_response: ''
-            payment_schedule_id: '1'
-            payment_period_start: '2019-12-19'
-            payment_period_end: '2020-01-19'
-            onboarding_web_finished: false
-            onboarding_mobile_finished: false
-            settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id": "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary": false, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids": ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit": null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": false, "sms_config": {"last_example_ts": "1629209040", "last_keyword_reminder_ts": "1629873648", "last_sms_contact_id": "116006957938283973"}}'
-            is_verified_email: true
-            createdTs: '2019-12-19T21:09:21'
-            modifiedTs: '2021-08-25T06:47:16'
-            auth_groups:
-            - id: 7
-              name: Account Administrators
-            - id: 5
-              name: Restricted Users
-            - id: 9
-              name: Billing Administrators
-            username: alerts@acme.com
-            id_str: '115999530581874548'
-            user_id_str: '283014186889381821'
-            enterprise_id_str: '232267963371095740'
-            twilio_phone_number_id_str: '115999766167712690'
-            name: Product Alerts
-            sendhub_number: '+12015716227'
-            sms_forwarding: '115999691431257661'
-      description: Individual SendHub user (line)
+    dateRO:
       allOf:
-      - $ref: '#/components/schemas/listNestedUser'
-      - properties:
-          auth_groups:
-            $ref: '#/components/schemas/authGroups'
-          username:
-            $ref: '#/components/schemas/username'
-        required:
-        - auth_groups
-        - username
-    email:
-      type: string
-      pattern: ^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])|$
+      - $ref: '#/components/schemas/date'
+      - readOnly: true
     settings:
       title: UserSettings
       type: object
@@ -742,15 +581,17 @@ components:
           minLength: 1
           readOnly: true
         auto_attendant_greeting_url:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
         auto_upgrade_plan:
           type: boolean
           readOnly: true
         automated_sms_response:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maximum: 160
         conference_lines_enabled:
           type: boolean
@@ -768,8 +609,9 @@ components:
         email_calling_notifications:
           type: boolean
         ent_toll_free_enabled:
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
           readOnly: true
         enterprise_id:
           $ref: '#/components/schemas/enterpriseId'
@@ -785,15 +627,17 @@ components:
           type: boolean
           readOnly: true
         mfa_enabled:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           readOnly: true
-          nullable: true
         mfa_enforced:
           type: boolean
           readOnly: true
         mixpanelid:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
           description: This is used internally and may be expanded upon or removed in the future
           deprecated: true
@@ -898,86 +742,388 @@ components:
           minLength: 1
           readOnly: true
         siftScienceLabel:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
         signature:
-          type: string
+          type:
+          - string
+          - 'null'
           minLength: 1
-          nullable: true
         sms_forwarding:
-          type: string
+          type:
+          - string
+          - 'null'
           minLength: 1
-          nullable: true
         sms_fwd_help:
           type: boolean
         sms_webhook_url:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         sound_notifications:
           type: boolean
         toll_free_number:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
         toll_free_primary:
           type: boolean
         transcribe_voice_mails:
           type: boolean
         voicemail_greeting_url:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
-    upvotes:
-      type: integer
-      deprecated: true
-      description: This is used internally and may be expanded upon or removed in the future
-    enterpriseId:
+    username:
+      type: string
+      description: User's (SendHub line's) username
+      minLength: 1
+      maxLength: 254
+    image:
+      type: string
+      readOnly: true
+      description: The URL for this user's profile image
+    customerId:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - readOnly: true
+        example: cus_D0TMCytXFqWuNO
+    email:
+      type: string
+      pattern: ^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])|$
+    updateSettings:
+      allOf:
+      - $ref: '#/components/schemas/settings'
+      - type: object
+        properties:
+          mask_caller_id:
+            type: boolean
+    dateJoined:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      description: Timestamp that this SendHub User (line) was created
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    idStr:
+      type: string
+      pattern: ^\d+$
+      description: Same as id but always a string
+    listNestedUser:
+      type: object
+      title: listNestedUser
+      properties:
+        createdTs:
+          $ref: '#/components/schemas/createdTsWithoutDecimal'
+        disable_incoming_sms:
+          $ref: '#/components/schemas/disableIncomingSms'
+        enterprise_id:
+          $ref: '#/components/schemas/enterpriseId'
+        enterprise_id_str:
+          $ref: '#/components/schemas/enterpriseIdStr'
+        id:
+          $ref: '#/components/schemas/id'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        image:
+          $ref: '#/components/schemas/image'
+        is_verified_email:
+          $ref: '#/components/schemas/isVerifiedEmail'
+        modifiedTs:
+          $ref: '#/components/schemas/modifiedTsWithoutDecimal'
+        name:
+          $ref: '#/components/schemas/userName'
+        onboarding_mobile_finished:
+          $ref: '#/components/schemas/onboardingMobileFinished'
+        onboarding_web_finished:
+          $ref: '#/components/schemas/onboardingWebFinished'
+        payment_period_end:
+          $ref: '#/components/schemas/paymentPeriodEnd'
+        payment_period_start:
+          $ref: '#/components/schemas/paymentPeriodStart'
+        payment_schedule_id:
+          $ref: '#/components/schemas/paymentScheduleId'
+        pending_phone_number:
+          $ref: '#/components/schemas/pendingPhoneNumber'
+        phone_number:
+          $ref: '#/components/schemas/personalCell'
+        registration_status:
+          $ref: '#/components/schemas/registrationStatus'
+        sendhub_number:
+          $ref: '#/components/schemas/sendhubNumber'
+        settings_json:
+          $ref: '#/components/schemas/settingsJson'
+        signature:
+          $ref: '#/components/schemas/signature'
+        twilio_phone_number_id:
+          $ref: '#/components/schemas/twilioPhoneNumberId'
+        twilio_phone_number_id_str:
+          $ref: '#/components/schemas/twilioPhoneNumberIdStr'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        user_id_str:
+          $ref: '#/components/schemas/userId'
+      required:
+      - createdTs
+      - disable_incoming_sms
+      - enterprise_id
+      - enterprise_id_str
+      - id
+      - id_str
+      - image
+      - is_verified_email
+      - modifiedTs
+      - name
+      - onboarding_mobile_finished
+      - onboarding_web_finished
+      - payment_period_end
+      - payment_period_start
+      - payment_schedule_id
+      - registration_status
+      - sendhub_number
+      - settings_json
+      - signature
+      - twilio_phone_number_id
+      - twilio_phone_number_id_str
+      - user_id
+      - user_id_str
+    userProfile:
+      type: object
+      title: User Profile
+      description: ''
+      properties:
+        auth_groups:
+          $ref: '#/components/schemas/authGroups'
+        date_joined:
+          $ref: '#/components/schemas/dateJoined'
+        downvotes:
+          $ref: '#/components/schemas/downvotes'
+        email:
+          $ref: '#/components/schemas/email'
+        enterprise:
+          $ref: '#/components/schemas/enterpriseName'
+        enterprise_id:
+          $ref: '#/components/schemas/enterpriseId'
+        enterpriseJoinLink:
+          $ref: '#/components/schemas/enterpriseJoinLink'
+        enterpriseSize:
+          $ref: '#/components/schemas/enterpriseSize'
+        mixpanel_id:
+          $ref: '#/components/schemas/mixpanelId'
+        name:
+          $ref: '#/components/schemas/enterpriseName'
+        onboarding_mobile_finished:
+          $ref: '#/components/schemas/onboardingMobileFinished'
+        onboarding_web_finished:
+          $ref: '#/components/schemas/onboardingWebFinished'
+        payment_plan_id:
+          $ref: '#/components/schemas/planId'
+        resource_uri:
+          $ref: '#/components/schemas/profileResourceUri'
+        sendhub_number:
+          $ref: '#/components/schemas/formattedSendhubNumber'
+        unread:
+          $ref: '#/components/schemas/profileUnread'
+        upvotes:
+          $ref: '#/components/schemas/upvotes'
+        user_id:
+          $ref: '#/components/schemas/userId'
+        username:
+          $ref: '#/components/schemas/username'
+      required:
+      - auth_groups
+      - date_joined
+      - downvotes
+      - email
+      - enterprise
+      - enterprise_id
+      - enterpriseJoinLink
+      - enterpriseSize
+      - mixpanel_id
+      - name
+      - onboarding_mobile_finished
+      - onboarding_web_finished
+      - payment_plan_id
+      - resource_uri
+      - sendhub_number
+      - unread
+      - upvotes
+      - user_id
+      - username
+    registrationStatus:
+      type: string
+      minLength: 1
+      enum:
+      - created
+      - email_verified
+      - payment_method_absent
+      - completed
+      readOnly: true
+    enterprise:
+      type: object
+      title: Enterprise (Account)
+      description: ''
+      properties:
+        brand_id:
+          $ref: '#/components/schemas/brandId'
+        createdTs:
+          type: string
+          minLength: 1
+        customerId:
+          type: string
+          minLength: 1
+        hasAccessToChatSupport:
+          type: boolean
+          deprecated: true
+        hash:
+          type: string
+          minLength: 1
+        id:
+          type: string
+          minLength: 1
+        joinUrl:
+          type: string
+          minLength: 1
+          deprecated: true
+        modifiedTs:
+          type: string
+          minLength: 1
+        month_start:
+          type: string
+          minLength: 1
+        name:
+          $ref: '#/components/schemas/enterpriseName'
+        payment_plan_id:
+          type: integer
+        resource_uri:
+          type: string
+          minLength: 1
+        settingsJson:
+          type: string
+          minLength: 1
+        shortcode_allowed:
+          type: boolean
+      required:
+      - createdTs
+      - customerId
+      - hasAccessToChatSupport
+      - hash
+      - id
+      - joinUrl
+      - modifiedTs
+      - month_start
+      - name
+      - payment_plan_id
+      - resource_uri
+      - settingsJson
+      - shortcode_allowed
+    authGroups:
+      type: array
+      uniqueItems: true
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/authGroup'
+    date:
+      type: string
+      pattern: ^\d{4}-\d{2}-\d{2}$
+    modifiedTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
+    internalId:
       allOf:
       - $ref: '#/components/schemas/id'
-      description: The enterprise ID
-      readOnly: true
+      - description: This is an internal ID and is not the same as a user ID (SendHub line)
+        readOnly: true
     deletedNullable:
-      type: boolean
+      type:
+      - boolean
+      - 'null'
       readOnly: true
-      nullable: true
-    enterpriseSize:
+    nullableStringRO:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - readOnly: true
+    onboardingWebFinished:
+      $ref: '#/components/schemas/onboardingMobileFinished'
+    paymentPeriodStart:
+      allOf:
+      - $ref: '#/components/schemas/date'
+      readOnly: true
+    offset:
       type: integer
-      description: How manu Users (lines) your account has
-      readOnly: true
+    timestampWithoutDecimal:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:34` equals August 1st, 2021 at 3:48 and 34 seconds AM (UTC)'
+      example: '2021-08-01T03:48:34'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$
+    settingsJson:
+      type: string
+      minLength: 1
+    next:
+      type:
+      - string
+      - 'null'
+    createdTs:
+      allOf:
+      - $ref: '#/components/schemas/timestamp'
+      - minLength: 1
+        readOnly: true
     onboardingMobileFinished:
       type: boolean
       readOnly: true
       description: This is used internally and may be expanded upon or removed in the future
       deprecated: true
-    downvotes:
+    brandId:
+      type:
+      - string
+      - 'null'
+      description: 10DLC Brand ID
+    createdTsWithoutDecimal:
+      allOf:
+      - $ref: '#/components/schemas/timestampWithoutDecimal'
+      - minLength: 1
+        readOnly: true
+    enterpriseName:
+      type:
+      - string
+      - 'null'
+      description: Your company name
+      maxLength: 255
+    profileUnread:
       type: integer
+      readOnly: true
+      description: Shows how many unread threads this User (line) has
+    mixpanelId:
+      type:
+      - string
+      - 'null'
+      format: int64
       deprecated: true
       description: This is used internally and may be expanded upon or removed in the future
-    rateLimitingResponse:
-      properties:
-        message:
-          type: string
-          example: You have sent too many requests.
-        code:
-          type: string
-          pattern: ^\d+$
-          example: '429'
-        error:
-          type: string
-          example: Too Many Requests
-        devMessage:
-          type: string
-        moreInfo:
-          type: string
-        timeLeft:
-          type: string
-          pattern: ^\d:[0-5]\d:[0-5]\d$
-    profileResourceUri:
+      readOnly: true
+    id:
       type: string
-      pattern: ^\/v\d+(\.\d+)*\/profile$
-      description: Resource URI for this User's profile
-      example: /v1/profile
+      pattern: ^\d+$
+    limit:
+      type: integer
+    nullableString:
+      type:
+      - string
+      - 'null'
     paymentScheduleId:
       type: string
       minLength: 1
@@ -989,139 +1135,98 @@ components:
       - '1'
       - '2'
       - '3'
-    modifiedTsWithoutDecimal:
-      allOf:
-      - $ref: '#/components/schemas/timestampWithoutDecimal'
-      - minLength: 1
-        readOnly: true
-    idInt:
-      type: integer
-      format: int64
-    onboardingWebFinished:
-      $ref: '#/components/schemas/onboardingMobileFinished'
-    authGroups:
-      type: array
-      uniqueItems: true
-      minItems: 1
-      items:
-        $ref: '#/components/schemas/authGroup'
-    dateRO:
-      allOf:
-      - $ref: '#/components/schemas/date'
-      - readOnly: true
-    twilioPhoneNumberIdStr:
-      $ref: '#/components/schemas/twilioPhoneNumberId'
-    createdTsWithoutDecimal:
-      allOf:
-      - $ref: '#/components/schemas/timestampWithoutDecimal'
-      - minLength: 1
-        readOnly: true
-    meta:
-      type: object
-      properties:
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-        previous:
-          $ref: '#/components/schemas/previous'
-        next:
-          $ref: '#/components/schemas/next'
-    image:
+    sendhubNumber:
       type: string
-      readOnly: true
-      description: The URL for this user's profile image
-    enterpriseIdStr:
-      allOf:
-      - $ref: '#/components/schemas/enterpriseId'
-      description: The enterprise ID
-  responses:
-    listUsers200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/listUsersResponse'
-            x-$ref: '#/components/schemas/listUsersResponse'
-    420PlanLimit:
-      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-      content:
-        application/json:
-          schema:
-            properties:
-              error:
-                type: string
-          examples:
-            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
-              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-              value:
-                error: You have made too many requests and are being rate limited
-    429RateLimiting:
-      description: You've sent too many requests in a short amount of time and are being rate-limited
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/rateLimitingResponse'
-          examples:
-            Too Many Requests:
-              summary: You've been rate-limited and can send again in 30-seconds
-              value:
-                message: You have sent too many requests.
-                code: '429'
-                error: Too Many Requests
-                devMessage: ''
-                moreInfo: ''
-                timeLeft: 0:00:30
-    getSettings200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/settings'
-            x-$ref: '#/components/schemas/settings'
-          examples:
-            Get Product Alerts Line's Settings:
-              $ref: '#/components/examples/settings'
-    updateSettings200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/updateSettings'
-          examples:
-            Updated Product Alerts Line's Settings:
-              $ref: '#/components/examples/updateSettings'
-    getProfile200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/userProfile'
-          examples:
-            Product Alerts Line Profile:
-              $ref: '#/components/examples/userProfile'
-    getUser200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/user'
-            x-$ref: '#/components/schemas/user'
-          examples:
-            Product Alerts Line:
-              $ref: '#/components/examples/user'
-    getEnterprise200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/enterprise'
-          examples:
-            ACME Inc.:
-              $ref: '#/components/examples/enterprise'
-    '401':
-      description: The credentials you supplied are invalid
+      pattern: ^\+1\d{10}$
+      description: This line's SendHub number (E.164 format)
   examples:
+    enterprise:
+      value:
+        brand_id:
+          $ref: '#/components/schemas/brandId'
+        createdTs: '2018-06-07T17:59:51.186701'
+        customerId: cus_D0TMCytXFqWuNO
+        hasAccessToChatSupport: true
+        hash: XXX
+        id: '232267963371095740'
+        joinUrl: http://sh.gl/HAmMgR
+        modifiedTs: '2021-08-24T19:31:26.420082'
+        month_start: '2021-08-09'
+        name: ACME Inc.
+        payment_plan_id: 11
+        resource_uri: /v1/enterprises/232267963371095740
+        settingsJson: '{"mms_enabled": false, "integrationsAllowed": true,  "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv"}'
+        shortcode_allowed: false
+    settings:
+      value:
+        api_key: 12a26b3bc48d52e69f70a82a94a13a29a3fa41a5
+        auto_attendant_greeting_url: null
+        auto_upgrade_plan: false
+        automated_sms_response: 'Thank you for reaching out!
+
+          We''ll respond shortlyWe''ll respond shortlyWe''ll respond shortlyWe''ll respond shortly'
+        conference_lines_enabled: true
+        createdTs: '2019-12-19T21:09:21.293391'
+        customer_id: null
+        deleted: null
+        desktop_notifications: true
+        disable_incoming_sms: true
+        email_calling_notifications: true
+        ent_toll_free_enabled: false
+        enterprise_id: '232267963371095740'
+        firstPaymentTs: null
+        hide_link_in_bulk_messages: true
+        id: '115999530581874548'
+        image: null
+        is_verified_email: true
+        mfa_enabled: false
+        mfa_enforced: false
+        mixpanelid: null
+        modifiedTs: '2021-08-25T12:06:22.025499'
+        month_start: '2021-04-20'
+        name: Product Alerts
+        onboarding_mobile_finished: false
+        onboarding_web_finished: false
+        payment_period_end: '2020-01-19'
+        payment_period_start: '2019-12-19'
+        pending_email: null
+        pending_phone_number: null
+        phone_number: '+18888888888'
+        plan_usage:
+          api_requests: '5208'
+          current_plan:
+            api_requests: 40000
+            groups: -1
+            max_sms_recipients: 150
+            maxpergroup: -1
+            messages: 24000
+            plan_cost: 100000
+            plan_id: 1943
+            plan_name: Basic 2021 - 4000 SMS 250 Min - Annual
+            voice_minutes: -1
+          groups: 1
+          maxpergroup: 1
+          messages: '77'
+          voice_mail_transcriptions: 0
+          voice_minutes: '1'
+        pusher_key: 1234567890abcdef1234
+        registration_status: completed
+        resource_uri: /settings
+        send_only_via_short_code: false
+        send_only_via_toll_free: false
+        settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id": "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary": true, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids": ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit": null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": true, "sms_config": {"last_example_ts": "1629209040", "last_keyword_reminder_ts": "1629892091", "last_sms_contact_id": "116006957937271730"}}'
+        siftScienceLabel: null
+        signature: 'Best Regards,
+
+          SendHub Support'
+        sms_forwarding: '115999691431257661'
+        sms_fwd_help: true
+        sms_webhook_url: null
+        sound_notifications: true
+        toll_free_number: null
+        toll_free_primary: true
+        transcribe_voice_mails: true
+        voicemail_greeting_url: null
     updateSettings:
       value:
         api_key: 12a26b3bc48d52e69f70a82a94a13a29a3fa41a5
@@ -1193,23 +1298,6 @@ components:
         transcribe_voice_mails: true
         voicemail_greeting_url: null
         mask_caller_id: true
-    enterprise:
-      value:
-        brand_id:
-          $ref: '#/components/schemas/brandId'
-        createdTs: '2018-06-07T17:59:51.186701'
-        customerId: cus_D0TMCytXFqWuNO
-        hasAccessToChatSupport: true
-        hash: XXX
-        id: '232267963371095740'
-        joinUrl: http://sh.gl/HAmMgR
-        modifiedTs: '2021-08-24T19:31:26.420082'
-        month_start: '2021-08-09'
-        name: ACME Inc.
-        payment_plan_id: 11
-        resource_uri: /v1/enterprises/232267963371095740
-        settingsJson: '{"mms_enabled": false, "integrationsAllowed": true,  "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv"}'
-        shortcode_allowed: false
     user:
       value:
         id: '115999530581874548'
@@ -1248,76 +1336,6 @@ components:
         name: Product Alerts
         sendhub_number: '+12015716227'
         sms_forwarding: '115999691431257661'
-    settings:
-      value:
-        api_key: 12a26b3bc48d52e69f70a82a94a13a29a3fa41a5
-        auto_attendant_greeting_url: null
-        auto_upgrade_plan: false
-        automated_sms_response: 'Thank you for reaching out!
-
-          We''ll respond shortlyWe''ll respond shortlyWe''ll respond shortlyWe''ll respond shortly'
-        conference_lines_enabled: true
-        createdTs: '2019-12-19T21:09:21.293391'
-        customer_id: null
-        deleted: null
-        desktop_notifications: true
-        disable_incoming_sms: true
-        email_calling_notifications: true
-        ent_toll_free_enabled: false
-        enterprise_id: '232267963371095740'
-        firstPaymentTs: null
-        hide_link_in_bulk_messages: true
-        id: '115999530581874548'
-        image: null
-        is_verified_email: true
-        mfa_enabled: false
-        mfa_enforced: false
-        mixpanelid: null
-        modifiedTs: '2021-08-25T12:06:22.025499'
-        month_start: '2021-04-20'
-        name: Product Alerts
-        onboarding_mobile_finished: false
-        onboarding_web_finished: false
-        payment_period_end: '2020-01-19'
-        payment_period_start: '2019-12-19'
-        pending_email: null
-        pending_phone_number: null
-        phone_number: '+18888888888'
-        plan_usage:
-          api_requests: '5208'
-          current_plan:
-            api_requests: 40000
-            groups: -1
-            max_sms_recipients: 150
-            maxpergroup: -1
-            messages: 24000
-            plan_cost: 100000
-            plan_id: 1943
-            plan_name: Basic 2021 - 4000 SMS 250 Min - Annual
-            voice_minutes: -1
-          groups: 1
-          maxpergroup: 1
-          messages: '77'
-          voice_mail_transcriptions: 0
-          voice_minutes: '1'
-        pusher_key: 1234567890abcdef1234
-        registration_status: completed
-        resource_uri: /settings
-        send_only_via_short_code: false
-        send_only_via_toll_free: false
-        settings_json: '{"kazoo_callflow_id": "XXX", "transcribe_voice_mails": true, "kazoo_temporal_rule_id": "XXX", "kazoo_user_id": "XXX", "activityLogPath": "http://sendhub-prod-user-files.s3.amazonaws.com/activityLogs/2/XXX.csv", "toll_free_primary": true, "msg_send_rate_limit_timeout": null, "sound_notifications": true, "desktop_notifications": true, "kazoo_device_ids": ["XXX"], "sms_fwd_help": true, "kazoo_account_id": "XXX", "email_calling_notifications": true, "send_only_via_short_code": false, "send_only_via_toll_free": false, "hide_link_in_bulk_messages": true, "kazoo_voicemail_id": "XXX", "msg_send_rate_limit": null, "kazoo_account_realm": "232267963371095740.sip.sendhub.com", "kazoo_allowed": true, "kazoo_auto_attendant_menu_id": "XXX", "kazoo_vm_media_id": "XXX", "sms_webhook_url": null, "mask_caller_id": true, "sms_config": {"last_example_ts": "1629209040", "last_keyword_reminder_ts": "1629892091", "last_sms_contact_id": "116006957937271730"}}'
-        siftScienceLabel: null
-        signature: 'Best Regards,
-
-          SendHub Support'
-        sms_forwarding: '115999691431257661'
-        sms_fwd_help: true
-        sms_webhook_url: null
-        sound_notifications: true
-        toll_free_number: null
-        toll_free_primary: true
-        transcribe_voice_mails: true
-        voicemail_greeting_url: null
     userProfile:
       value:
         auth_groups:
@@ -1354,6 +1372,16 @@ components:
             $ref: '#/components/schemas/updateSettings'
             x-$ref: '#/components/schemas/updateSettings'
   parameters:
+    enterprise_id:
+      name: enterprise_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: 'Your enterprise account''s ID
+
+
+        **Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints'
     user_id:
       name: user_id
       in: path
@@ -1368,16 +1396,6 @@ components:
         **Note:** You can find your `user_id` in the `/v1/profile` endpoint
 
         You can list all the users in your account via the `/v1/enterprises/{enterprise_id}/users` endpoint'
-    enterprise_id:
-      name: enterprise_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: 'Your enterprise account''s ID
-
-
-        **Note:** You can find your `enterprise_id` in the `/v1/settings` or `/v1/profile` endpoints'
   securitySchemes:
     username:
       name: username

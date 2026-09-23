@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: SendHub Authentication Group API
+  title: SendHub Group API
   version: v1
   contact:
     name: Contact SendHub
@@ -214,76 +214,164 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/addRemoveGroupContacts'
 components:
+  requestBodies:
+    createGroup:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/createGroupRequest'
+          examples:
+            Creating_a_group:
+              $ref: '#/components/examples/Creating_a_group'
+            Creating_a_group_with_more_options:
+              $ref: '#/components/examples/Creating_a_group_with_more_options'
+    addRemoveGroupContacts:
+      content:
+        application/json:
+          schema:
+            allOf:
+            - x-$ref: '#/components/schemas/addRemoveGroupContactsRequest'
+            - $ref: '#/components/schemas/addRemoveGroupContactsRequest'
+          examples:
+            Adding 3 contacts to a group:
+              summary: Adding 3 contacts to a group
+              value:
+                add:
+                - '116006957942993390'
+                - '116006957943010580'
+                - '116006957938017580'
+            Adding and removing contacts from a group:
+              summary: Adding and removing contacts from a group
+              value:
+                add:
+                - '116006957942993390'
+                - '116006957943010580'
+                remove:
+                - '116006957938017580'
+    updateGroup:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateGroupRequest'
+          examples:
+            Updating_a_group:
+              $ref: '#/components/examples/Updating_a_group'
+            Updating_a_group_with_more_options:
+              $ref: '#/components/examples/Updating_a_group_with_more_options'
   schemas:
-    nullableInteger:
+    contactIdInt:
       type: integer
-      nullable: true
-    next:
-      type: string
-      nullable: true
+      format: int64
+      description: The contact ID
+    nullableInteger:
+      type:
+      - integer
+      - 'null'
+    landline:
+      type: boolean
+      description: Whether SendHub has determined the contact's number is a landline number
+    contactId:
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The contact ID
+    rateLimitingResponse:
+      properties:
+        message:
+          type: string
+          example: You have sent too many requests.
+        code:
+          type: string
+          pattern: ^\d+$
+          example: '429'
+        error:
+          type: string
+          example: Too Many Requests
+        devMessage:
+          type: string
+        moreInfo:
+          type: string
+        timeLeft:
+          type: string
+          pattern: ^\d:[0-5]\d:[0-5]\d$
+    textToSubscribe:
+      type: boolean
+      default: false
+      description: Whether to enable text-to-join functionality for this group
     deleted:
       type: boolean
       readOnly: true
-    groupSize:
-      type: integer
-      description: The number of contacts that are a memeber of this group
-      nullable: true
+    addRemoveGroupContactsRequestAdd:
+      title: addRemoveGroupContactsRequestAdd
+      type: object
+      required:
+      - add
+      additionalProperties: false
+      properties:
+        add:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids that you want to add to this group
+    meta:
+      type: object
+      properties:
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    contactResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
+      description: Resource URI for this contact
+      example: /v1/contacts/116006957938017590
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
     groupMediums:
       allOf:
       - $ref: '#/components/schemas/nullableString'
       - deprecated: true
         description: This is used internally and may be expanded upon or removed in the future
-    localGateway:
+    landlineOverride:
       type: boolean
-      description: True if the contact is a SendHub line
-      readOnly: true
-    contactIdBoth:
+      description: 'TODO: '
+    groupResourceUri:
       type: string
-      anyOf:
-      - $ref: '#/components/schemas/contactId'
-      - $ref: '#/components/schemas/contactIdInt'
-    addRemoveGroupContacts202ResponseAdd:
-      type: object
-      properties:
-        add:
-          type: array
-          items:
-            type: string
-          description: Contact ids that failed to be added to this group
-    offset:
-      type: integer
-    nameErrorObject:
-      type: object
-      properties:
-        name:
-          type: array
-          items:
-            type: string
-    listOfGroupResourceUris:
-      type: array
-      items:
-        $ref: '#/components/schemas/groupResourceUri'
-      description: List of group resource URIs
-    contactName:
+      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
+      description: Resource URI for this group
+      example: /v1/groups/115999753870991332
+    previous:
+      type:
+      - string
+      - 'null'
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    groupName:
       type: string
-      description: The contact's name
+      description: The group's name
       minLength: 1
       maxLength: 128
-    listContacts200Response:
-      title: listContacts200Response
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/meta'
-          x-$ref: '#/components/schemas/meta'
-        objects:
-          type: array
-          items:
-            $ref: '#/components/schemas/contact'
-            x-$ref: '#/components/schemas/contact'
-    customField:
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    timestamp:
       type: string
-      nullable: true
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    customField:
+      type:
+      - string
+      - 'null'
       description: 'Custom field(s)
 
 
@@ -293,63 +381,24 @@ components:
         **Note:** Custom fields may add *very* slight load time per contact. This is typically only noticable when listing many contacts that have a large amount of custom fields
 
         Note: Setting the value to `null` removes the custom field'
-    landlineOverride:
-      type: boolean
-      description: 'TODO: '
-    contactKeyword:
-      type: string
-      example: john
-      description: 'The keyword must be unique and is generated by the contact''s name by default.
-
-        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
-
-        '
-    errorObject:
-      type: object
-      properties:
-        error:
-          type: string
-        status:
-          type: number
-    groupResourceUri:
-      type: string
-      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
-      description: Resource URI for this group
-      example: /v1/groups/115999753870991332
-    nullableString:
-      type: string
-      nullable: true
-    landline:
-      type: boolean
-      description: Whether SendHub has determined the contact's number is a landline number
     idStr:
       type: string
       pattern: ^\d+$
       description: Same as id but always a string
-    id:
-      type: string
-      pattern: ^\d+$
-    addRemoveGroupContactsRequest:
-      title: addRemoveGroupContactsRequest
+    groupWithMediums:
+      allOf:
+      - $ref: '#/components/schemas/group'
+      - properties:
+          mediums:
+            $ref: '#/components/schemas/groupMediums'
+    addRemoveGroupContacts202ResponseAdd:
       type: object
-      oneOf:
-      - allOf:
-        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
-        - $ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
-      - allOf:
-        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
-        - $ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
-      - allOf:
-        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
-        - $ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
-    timestamp:
-      type: string
-      description: 'A UTC timestamp
-
-
-        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
-      example: '2021-08-01T03:48:55.350453'
-      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+          description: Contact ids that failed to be added to this group
     addRemoveGroupContacts202Response:
       type: object
       properties:
@@ -370,63 +419,80 @@ components:
           items:
             $ref: '#/components/schemas/contactIdBoth'
           description: Contact ids successfully removed from this group
-    blocked:
-      type: boolean
-      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
-    previous:
+    groupSlug:
       type: string
-      nullable: true
-    groupWithMediums:
-      allOf:
-      - $ref: '#/components/schemas/group'
-      - properties:
-          mediums:
-            $ref: '#/components/schemas/groupMediums'
-    addRemoveGroupContacts202ResponseRemove:
+      description: 'The "keyword" used to text-to-join
+
+
+        Defaults to the group name lowercased, without any spaces and not duplicate by appending an incrementing number if needed'
+    group:
       type: object
       properties:
-        remove:
+        date_created:
+          $ref: '#/components/schemas/timestamp'
+        date_modified:
+          $ref: '#/components/schemas/timestamp'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/groupId'
+        id_str:
+          $ref: '#/components/schemas/idStr'
+        is_shared:
+          $ref: '#/components/schemas/isShared'
+        name:
+          $ref: '#/components/schemas/groupName'
+        parent_id:
+          $ref: '#/components/schemas/nullableString'
+        parent_user_id:
+          $ref: '#/components/schemas/nullableString'
+        permissions:
+          $ref: '#/components/schemas/groupPermissions'
+        resource_uri:
+          $ref: '#/components/schemas/groupResourceUri'
+        share_invite_count:
+          $ref: '#/components/schemas/nullableInteger'
+        size:
+          $ref: '#/components/schemas/groupSize'
+        slug:
+          $ref: '#/components/schemas/groupSlug'
+        text_to_subscribe:
+          $ref: '#/components/schemas/textToSubscribe'
+        ttjResponse:
+          $ref: '#/components/schemas/ttjResponse'
+    contactNumber:
+      type: string
+      pattern: ^\+1\d{10}$
+      description: The contact's phone number
+    listGroups200Response:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/meta'
+        objects:
           type: array
           items:
-            type: string
-          description: Contact ids that failed to be removed from this group
-    addRemoveGroupContactsRequestRemove:
-      title: addRemoveGroupContactsRequestRemove
-      type: object
+            $ref: '#/components/schemas/group'
+    groupSize:
+      type:
+      - integer
+      - 'null'
+      description: The number of contacts that are a memeber of this group
+    updateGroupRequest:
+      allOf:
+      - $ref: '#/components/schemas/createGroupRequest'
+      - type: object
+        properties:
+          id:
+            $ref: '#/components/schemas/contactId'
       required:
-      - remove
-      additionalProperties: false
-      properties:
-        remove:
-          type: array
-          items:
-            $ref: '#/components/schemas/contactIdBoth'
-          description: Contact ids that you want to remove from this group
-    groupPermissions:
-      allOf:
-      - $ref: '#/components/schemas/nullableString'
-      - default: write
-        enum:
-        - write
-    contactResourceUri:
+      - id
+      - name
+    contactIdBoth:
       type: string
-      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
-      description: Resource URI for this contact
-      example: /v1/contacts/116006957938017590
-    isShared:
-      type: boolean
-      description: Whether the group is shared between the lines
-      deprecated: true
-    ttjResponse:
-      type: string
-      maximum: 70
-      default: You are now subscribed.
-      description: A custom response sent when someone texts-to-join this group
-    groupName:
-      type: string
-      description: The group's name
-      minLength: 1
-      maxLength: 128
+      anyOf:
+      - $ref: '#/components/schemas/contactId'
+      - $ref: '#/components/schemas/contactIdInt'
     addRemoveGroupContactsRequestBoth:
       title: addRemoveGroupContactsRequestBoth
       type: object
@@ -438,14 +504,6 @@ components:
           $ref: '#/components/schemas/addRemoveGroupContactsRequestAdd/properties/add'
         remove:
           $ref: '#/components/schemas/addRemoveGroupContactsRequestRemove/properties/remove'
-    groupSlug:
-      type: string
-      description: 'The "keyword" used to text-to-join
-
-
-        Defaults to the group name lowercased, without any spaces and not duplicate by appending an incrementing number if needed'
-    limit:
-      type: integer
     createGroupRequest:
       type: object
       properties:
@@ -465,64 +523,50 @@ components:
           $ref: '#/components/schemas/ttjResponse'
       required:
       - name
-    addRemoveGroupContactsRequestAdd:
-      title: addRemoveGroupContactsRequestAdd
+    addRemoveGroupContactsRequest:
+      title: addRemoveGroupContactsRequest
       type: object
-      required:
-      - add
-      additionalProperties: false
+      oneOf:
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestAdd'
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestRemove'
+      - allOf:
+        - x-$ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
+        - $ref: '#/components/schemas/addRemoveGroupContactsRequestBoth'
+    groupPermissions:
+      allOf:
+      - $ref: '#/components/schemas/nullableString'
+      - default: write
+        enum:
+        - write
+    errorObject:
+      type: object
       properties:
-        add:
-          type: array
-          items:
-            $ref: '#/components/schemas/contactIdBoth'
-          description: Contact ids that you want to add to this group
-    textToSubscribe:
-      type: boolean
-      default: false
-      description: Whether to enable text-to-join functionality for this group
-    rateLimitingResponse:
-      properties:
-        message:
-          type: string
-          example: You have sent too many requests.
-        code:
-          type: string
-          pattern: ^\d+$
-          example: '429'
         error:
           type: string
-          example: Too Many Requests
-        devMessage:
-          type: string
-        moreInfo:
-          type: string
-        timeLeft:
-          type: string
-          pattern: ^\d:[0-5]\d:[0-5]\d$
-    updateGroupRequest:
-      allOf:
-      - $ref: '#/components/schemas/createGroupRequest'
-      - type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/contactId'
-      required:
-      - id
-      - name
-    groupId:
+        status:
+          type: number
+    listOfGroupResourceUris:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs
+    ttjResponse:
       type: string
-      allOf:
-      - $ref: '#/components/schemas/id'
-      description: The group ID
-    isOwned:
-      type: boolean
-      description: This is used internally and may be expanded upon or removed in the future
-      readOnly: true
-    contactNumber:
-      type: string
-      pattern: ^\+1\d{10}$
-      description: The contact's phone number
+      maximum: 70
+      default: You are now subscribed.
+      description: A custom response sent when someone texts-to-join this group
+    addRemoveGroupContacts202ResponseRemove:
+      type: object
+      properties:
+        remove:
+          type: array
+          items:
+            type: string
+          description: Contact ids that failed to be removed from this group
     contact:
       title: Contact
       type: object
@@ -564,73 +608,81 @@ components:
       required:
       - name
       - number
-    group:
-      type: object
-      properties:
-        date_created:
-          $ref: '#/components/schemas/timestamp'
-        date_modified:
-          $ref: '#/components/schemas/timestamp'
-        deleted:
-          $ref: '#/components/schemas/deleted'
-        id:
-          $ref: '#/components/schemas/groupId'
-        id_str:
-          $ref: '#/components/schemas/idStr'
-        is_shared:
-          $ref: '#/components/schemas/isShared'
-        name:
-          $ref: '#/components/schemas/groupName'
-        parent_id:
-          $ref: '#/components/schemas/nullableString'
-        parent_user_id:
-          $ref: '#/components/schemas/nullableString'
-        permissions:
-          $ref: '#/components/schemas/groupPermissions'
-        resource_uri:
-          $ref: '#/components/schemas/groupResourceUri'
-        share_invite_count:
-          $ref: '#/components/schemas/nullableInteger'
-        size:
-          $ref: '#/components/schemas/groupSize'
-        slug:
-          $ref: '#/components/schemas/groupSlug'
-        text_to_subscribe:
-          $ref: '#/components/schemas/textToSubscribe'
-        ttjResponse:
-          $ref: '#/components/schemas/ttjResponse'
-    contactIdInt:
-      type: integer
-      format: int64
-      description: The contact ID
-    contactId:
-      allOf:
-      - $ref: '#/components/schemas/id'
-      description: The contact ID
-    meta:
-      type: object
-      properties:
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-        previous:
-          $ref: '#/components/schemas/previous'
-        next:
-          $ref: '#/components/schemas/next'
-    screened:
+    localGateway:
       type: boolean
-      description: Whether the contact has been blocked by you
-    listGroups200Response:
+      description: True if the contact is a SendHub line
+      readOnly: true
+    listContacts200Response:
+      title: listContacts200Response
       type: object
       properties:
         meta:
           $ref: '#/components/schemas/meta'
+          x-$ref: '#/components/schemas/meta'
         objects:
           type: array
           items:
-            $ref: '#/components/schemas/group'
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+    offset:
+      type: integer
+    next:
+      type:
+      - string
+      - 'null'
+    addRemoveGroupContactsRequestRemove:
+      title: addRemoveGroupContactsRequestRemove
+      type: object
+      required:
+      - remove
+      additionalProperties: false
+      properties:
+        remove:
+          type: array
+          items:
+            $ref: '#/components/schemas/contactIdBoth'
+          description: Contact ids that you want to remove from this group
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+    id:
+      type: string
+      pattern: ^\d+$
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
+    limit:
+      type: integer
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    nameErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    nullableString:
+      type:
+      - string
+      - 'null'
+    isShared:
+      type: boolean
+      description: Whether the group is shared between the lines
+      deprecated: true
   responses:
+    '401':
+      description: The credentials you supplied are invalid
     listGroups200:
       description: Success
       content:
@@ -640,19 +692,6 @@ components:
           examples:
             success:
               $ref: '#/components/examples/listGroups200Response'
-    420PlanLimit:
-      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-      content:
-        application/json:
-          schema:
-            properties:
-              error:
-                type: string
-          examples:
-            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
-              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-              value:
-                error: You have made too many requests and are being rate limited
     429RateLimiting:
       description: You've sent too many requests in a short amount of time and are being rate-limited
       content:
@@ -669,6 +708,19 @@ components:
                 devMessage: ''
                 moreInfo: ''
                 timeLeft: 0:00:30
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
     updateGroup400:
       description: Bad Request
       content:
@@ -687,6 +739,40 @@ components:
                 - Duplicate group name.
             Text-to-join message is too long:
               $ref: '#/components/examples/errorResponseTtjTooLong'
+    group404:
+      description: Group not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Group not found:
+              summary: Group not found
+              value:
+                error: Requested group not found
+                status: 404
+    updateGroup200:
+      description: Updated group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/groupWithMediums'
+          examples:
+            Example group 1:
+              $ref: '#/components/examples/updateGroup1'
+            Example group 2:
+              $ref: '#/components/examples/updateGroup2'
+    getGroup200:
+      description: Found group
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/group'
+          examples:
+            Group 1:
+              $ref: '#/components/examples/getGroup200Response1'
+            Group 2:
+              $ref: '#/components/examples/getGroup200Response2'
     createGroup201:
       description: Created group
       content:
@@ -698,6 +784,15 @@ components:
               $ref: '#/components/examples/createGroupResponse1'
             Example group 2:
               $ref: '#/components/examples/createGroupResponse2'
+    listGroupContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listGroupContacts200Response'
     contact404:
       description: Contact not found
       content:
@@ -710,15 +805,6 @@ components:
               value:
                 error: Requested contact not found
                 status: 404
-    listGroupContacts200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/listContacts200Response'
-          examples:
-            success:
-              $ref: '#/components/examples/listGroupContacts200Response'
     addRemoveGroupContacts202:
       description: Accepted
       content:
@@ -756,149 +842,7 @@ components:
                   remove:
                   - 116006957938017590 is not an id of a contact in the group.
                 remove: []
-    updateGroup200:
-      description: Updated group
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/groupWithMediums'
-          examples:
-            Example group 1:
-              $ref: '#/components/examples/updateGroup1'
-            Example group 2:
-              $ref: '#/components/examples/updateGroup2'
-    group404:
-      description: Group not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errorObject'
-          examples:
-            Group not found:
-              summary: Group not found
-              value:
-                error: Requested group not found
-                status: 404
-    getGroup200:
-      description: Found group
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/group'
-          examples:
-            Group 1:
-              $ref: '#/components/examples/getGroup200Response1'
-            Group 2:
-              $ref: '#/components/examples/getGroup200Response2'
-    '401':
-      description: The credentials you supplied are invalid
   examples:
-    createGroupResponse2:
-      summary: Example group 2
-      value:
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        id: '115999753870990932'
-        id_str: '115999753870990932'
-        is_shared: false
-        name: New Leads
-        parent_id: null
-        parent_user_id: null
-        permissions: write
-        resource_uri: /v1/groups/115999753870990932
-        share_invite_count: null
-        size: null
-        slug: leads
-        text_to_subscribe: false
-        ttjResponse: You are now subscribed.
-        mediums: null
-    Updating_a_group:
-      summary: Updating a group
-      value:
-        id: '115999753870990933'
-        name: ACME Product Alerts
-    listGroupContacts200Response:
-      value:
-        meta:
-          limit: 20
-          next: null
-          offset: 0
-          previous: null
-        objects:
-        - blocked: false
-          date_created: '2021-08-24T19:44:31.266590'
-          date_modified: '2021-08-24T19:44:31.266590'
-          deleted: false
-          groups: []
-          id: '116006957938017590'
-          id_str: '116006957938017590'
-          is_owned: true
-          keyword: bob
-          local_gateway: false
-          name: Bob Parker
-          number: '+12015716227'
-          resource_uri: /v1/contacts/116006957938017590
-          screened: false
-          landline: false
-          landline_override: false
-    getGroup200Response1:
-      summary: Example group 1
-      value:
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        id: '115999753870990933'
-        id_str: '115999753870990933'
-        is_shared: false
-        name: ACME Product Alerts
-        parent_id: null
-        parent_user_id: null
-        permissions: write
-        resource_uri: /v1/groups/115999753870990933
-        share_invite_count: 0
-        size: 1
-        slug: alerts
-        text_to_subscribe: true
-        ttjResponse: 'Thanks for opting in!
-
-          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
-    errorResponseTtjTooLong:
-      summary: Text-to-join message is too long
-      value:
-        error: Join message can not be longer than 70 characters.
-        status: 400
-    Creating_a_group_with_more_options:
-      summary: Creating a group with more options
-      value:
-        name: ACME Product Alerts
-        slug: alerts
-        text_to_subscribe: true
-        ttjResponse: 'Thanks for opting in!
-
-          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
-    updateGroup1:
-      summary: Example group 1
-      value:
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        id: '115999753870990933'
-        id_str: '115999753870990933'
-        is_shared: false
-        name: ACME Product Alerts
-        parent_id: null
-        parent_user_id: null
-        permissions: write
-        resource_uri: /v1/groups/115999753870990933
-        share_invite_count: 0
-        size: 1
-        slug: alerts
-        text_to_subscribe: true
-        ttjResponse: 'Thanks for opting in!
-
-          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
-        mediums: null
     getGroup200Response2:
       summary: Example group 2
       value:
@@ -918,39 +862,14 @@ components:
         slug: leads
         text_to_subscribe: false
         ttjResponse: You are now subscribed.
-    errorResponseMissingNameField:
-      summary: Missing name field
+    errorResponseTtjTooLong:
+      summary: Text-to-join message is too long
       value:
-        name:
-        - This field is required.
-    updateGroup2:
-      summary: Example group 2
+        error: Join message can not be longer than 70 characters.
+        status: 400
+    Creating_a_group_with_more_options:
+      summary: Creating a group with more options
       value:
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        id: '115999753870990932'
-        id_str: '115999753870990932'
-        is_shared: false
-        name: New Leads
-        parent_id: null
-        parent_user_id: null
-        permissions: write
-        resource_uri: /v1/groups/115999753870990932
-        share_invite_count: 0
-        size: 1
-        slug: leads
-        text_to_subscribe: false
-        ttjResponse: You are now subscribed.
-        mediums: null
-    Creating_a_group:
-      summary: Creating a group
-      value:
-        name: ACME Product Alerts
-    Updating_a_group_with_more_options:
-      summary: Updating a group with more options
-      value:
-        id: '115999753870990933'
         name: ACME Product Alerts
         slug: alerts
         text_to_subscribe: true
@@ -1021,6 +940,137 @@ components:
 
           Opt-out anytime by replying UNSUBSCRIBE ALERTS'
         mediums: null
+    getGroup200Response1:
+      summary: Example group 1
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: 0
+        size: 1
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    updateGroup2:
+      summary: Example group 2
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: 0
+        size: 1
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+        mediums: null
+    Updating_a_group:
+      summary: Updating a group
+      value:
+        id: '115999753870990933'
+        name: ACME Product Alerts
+    errorResponseMissingNameField:
+      summary: Missing name field
+      value:
+        name:
+        - This field is required.
+    listGroupContacts200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938017590'
+          id_str: '116006957938017590'
+          is_owned: true
+          keyword: bob
+          local_gateway: false
+          name: Bob Parker
+          number: '+12015716227'
+          resource_uri: /v1/contacts/116006957938017590
+          screened: false
+          landline: false
+          landline_override: false
+    updateGroup1:
+      summary: Example group 1
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990933'
+        id_str: '115999753870990933'
+        is_shared: false
+        name: ACME Product Alerts
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990933
+        share_invite_count: 0
+        size: 1
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+        mediums: null
+    createGroupResponse2:
+      summary: Example group 2
+      value:
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        id: '115999753870990932'
+        id_str: '115999753870990932'
+        is_shared: false
+        name: New Leads
+        parent_id: null
+        parent_user_id: null
+        permissions: write
+        resource_uri: /v1/groups/115999753870990932
+        share_invite_count: null
+        size: null
+        slug: leads
+        text_to_subscribe: false
+        ttjResponse: You are now subscribed.
+        mediums: null
+    Updating_a_group_with_more_options:
+      summary: Updating a group with more options
+      value:
+        id: '115999753870990933'
+        name: ACME Product Alerts
+        slug: alerts
+        text_to_subscribe: true
+        ttjResponse: 'Thanks for opting in!
+
+          Opt-out anytime by replying UNSUBSCRIBE ALERTS'
+    Creating_a_group:
+      summary: Creating a group
+      value:
+        name: ACME Product Alerts
   parameters:
     ContactsListOrdering:
       name: ordering
@@ -1082,26 +1132,6 @@ components:
         Only show contacts that haven't opted-out:
           summary: Only show contacts that haven't opted-out
           value: false
-    PageLimit:
-      name: limit
-      in: query
-      description: (Pagination) How many records to return
-      schema:
-        type: integer
-        maximum: 1000
-        minimum: 1
-        default: 20
-    ContactsListFilterByName:
-      name: name
-      in: query
-      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
-      schema:
-        type: string
-      examples:
-        John Smith:
-          value: John Smith
-        Bob Parker:
-          value: Bob Parker
     ContactsListFilterByNumber:
       name: number
       in: query
@@ -1128,6 +1158,17 @@ components:
         Only show contacts that you haven't blocked:
           summary: Only show contacts that you haven't blocked
           value: false
+    ContactsListFilterByName:
+      name: name
+      in: query
+      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
+      schema:
+        type: string
+      examples:
+        John Smith:
+          value: John Smith
+        Bob Parker:
+          value: Bob Parker
     PageOffset:
       name: offset
       in: query
@@ -1135,50 +1176,15 @@ components:
       schema:
         type: integer
         default: 0
-  requestBodies:
-    updateGroup:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/updateGroupRequest'
-          examples:
-            Updating_a_group:
-              $ref: '#/components/examples/Updating_a_group'
-            Updating_a_group_with_more_options:
-              $ref: '#/components/examples/Updating_a_group_with_more_options'
-    addRemoveGroupContacts:
-      content:
-        application/json:
-          schema:
-            allOf:
-            - x-$ref: '#/components/schemas/addRemoveGroupContactsRequest'
-            - $ref: '#/components/schemas/addRemoveGroupContactsRequest'
-          examples:
-            Adding 3 contacts to a group:
-              summary: Adding 3 contacts to a group
-              value:
-                add:
-                - '116006957942993390'
-                - '116006957943010580'
-                - '116006957938017580'
-            Adding and removing contacts from a group:
-              summary: Adding and removing contacts from a group
-              value:
-                add:
-                - '116006957942993390'
-                - '116006957943010580'
-                remove:
-                - '116006957938017580'
-    createGroup:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/createGroupRequest'
-          examples:
-            Creating_a_group:
-              $ref: '#/components/examples/Creating_a_group'
-            Creating_a_group_with_more_options:
-              $ref: '#/components/examples/Creating_a_group_with_more_options'
+    PageLimit:
+      name: limit
+      in: query
+      description: (Pagination) How many records to return
+      schema:
+        type: integer
+        maximum: 1000
+        minimum: 1
+        default: 20
   securitySchemes:
     username:
       name: username

@@ -1,12 +1,7 @@
 {
   "provider": "sendhub",
   "sources": [
-    "sendhub-authentication-api-openapi.yml",
-    "sendhub-contact-api-openapi.yml",
-    "sendhub-group-api-openapi.yml",
-    "sendhub-message-api-openapi.yml",
-    "sendhub-profile-api-openapi.yml",
-    "sendhub-thread-api-openapi.yml"
+    "_original/sendhub-openapi-original.yml"
   ],
   "outputs": [
     "sendhub-authentication-api-openapi.yml",
@@ -19,6 +14,17 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sendhub-openapi-original.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "sendhub-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sendhub-contact-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sendhub-group-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sendhub-message-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sendhub-profile-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "sendhub-thread-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
