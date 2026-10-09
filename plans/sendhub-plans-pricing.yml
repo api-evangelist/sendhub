@@ -164,3 +164,41 @@ fair_use:
 lines:
   included_numbers: 1
   note: Each account includes one dedicated text-enabled number in an area code of your choice.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Lite
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Lite+
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Starter
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Basic
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Custom
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
