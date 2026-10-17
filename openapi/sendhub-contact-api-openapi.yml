@@ -237,9 +237,29 @@ paths:
           $ref: '#/components/responses/429RateLimiting'
 components:
   schemas:
-    landlineOverride:
-      type: boolean
-      description: 'TODO: '
+    next:
+      type:
+      - string
+      - 'null'
+    limit:
+      type: integer
+    nameErrorObject:
+      type: object
+      properties:
+        name:
+          type: array
+          items:
+            type: string
+    contactName:
+      type: string
+      description: The contact's name
+      minLength: 1
+      maxLength: 128
+    groupId:
+      type: string
+      allOf:
+      - $ref: '#/components/schemas/id'
+      description: The group ID
     upsertContactRequestWithId:
       allOf:
       - $ref: '#/components/schemas/upsertContactRequestWithoutId'
@@ -247,33 +267,75 @@ components:
         title: upsertContactRequestWithId
         required:
         - id
-    next:
-      type:
-      - string
-      - 'null'
-    landline:
-      type: boolean
-      description: Whether SendHub has determined the contact's number is a landline number
-    upsertContactResponse:
-      anyOf:
-      - $ref: '#/components/schemas/contact'
-      - $ref: '#/components/schemas/contactWithContactId'
     contactId:
       allOf:
       - $ref: '#/components/schemas/id'
       description: The contact ID
-    listContacts200Response:
-      title: listContacts200Response
+    contactResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
+      description: Resource URI for this contact
+      example: /v1/contacts/116006957938017590
+    upsertContactRequestWithoutId:
+      title: upsertContactRequestWithoutId
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/customField'
+        x-$ref: '#/components/schemas/customField'
+      properties:
+        blocked:
+          $ref: '#/components/schemas/blocked'
+          x-$ref: '#/components/schemas/blocked'
+        deleted:
+          $ref: '#/components/schemas/deleted'
+          x-$ref: '#/components/schemas/deleted'
+        id:
+          $ref: '#/components/schemas/contactIdBoth'
+          x-$ref: '#/components/schemas/contactIdBoth'
+        keyword:
+          $ref: '#/components/schemas/contactKeyword'
+          x-$ref: '#/components/schemas/contactKeyword'
+        name:
+          $ref: '#/components/schemas/contactName'
+          x-$ref: '#/components/schemas/contactName'
+        number:
+          $ref: '#/components/schemas/contactNumber'
+          x-$ref: '#/components/schemas/contactNumber'
+        screened:
+          $ref: '#/components/schemas/screened'
+          x-$ref: '#/components/schemas/screened'
+        groups:
+          $ref: '#/components/schemas/listOfGroupIds'
+          x-$ref: '#/components/schemas/listOfGroupIds'
+      required:
+      - name
+      - number
+    updateContactRequest:
+      $ref: '#/components/schemas/upsertContactRequestWithId'
+      x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    meta:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/meta'
-          x-$ref: '#/components/schemas/meta'
-        objects:
-          type: array
-          items:
-            $ref: '#/components/schemas/contact'
-            x-$ref: '#/components/schemas/contact'
+        offset:
+          $ref: '#/components/schemas/offset'
+        limit:
+          $ref: '#/components/schemas/limit'
+        previous:
+          $ref: '#/components/schemas/previous'
+        next:
+          $ref: '#/components/schemas/next'
+    id:
+      type: string
+      pattern: ^\d+$
+    upsertContactResponse:
+      anyOf:
+      - $ref: '#/components/schemas/contact'
+      - $ref: '#/components/schemas/contactWithContactId'
+    groupResourceUri:
+      type: string
+      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
+      description: Resource URI for this group
+      example: /v1/groups/115999753870991332
     contact:
       title: Contact
       type: object
@@ -315,35 +377,10 @@ components:
       required:
       - name
       - number
-    contactName:
-      type: string
-      description: The contact's name
-      minLength: 1
-      maxLength: 128
-    groupResourceUri:
-      type: string
-      pattern: ^\/v\d+(\.\d+)*\/groups\/\d+$
-      description: Resource URI for this group
-      example: /v1/groups/115999753870991332
     contactNumber:
       type: string
       pattern: ^\+1\d{10}$
       description: The contact's phone number
-    meta:
-      type: object
-      properties:
-        offset:
-          $ref: '#/components/schemas/offset'
-        limit:
-          $ref: '#/components/schemas/limit'
-        previous:
-          $ref: '#/components/schemas/previous'
-        next:
-          $ref: '#/components/schemas/next'
-    previous:
-      type:
-      - string
-      - 'null'
     numberErrorObject:
       type: object
       properties:
@@ -351,43 +388,40 @@ components:
           type: array
           items:
             type: string
-    groupIdInt:
-      type: integer
-      format: int64
-      description: The group ID
     contactIdInt:
       type: integer
       format: int64
       description: The contact ID
-    deleted:
+    landlineOverride:
       type: boolean
-      readOnly: true
+      description: 'TODO: '
     contactWithContactId:
       allOf:
       - $ref: '#/components/schemas/contact'
       - properties:
           contact_id:
             $ref: '#/components/schemas/contactIdBoth'
-    timestamp:
-      type: string
-      description: 'A UTC timestamp
-
-
-        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
-      example: '2021-08-01T03:48:55.350453'
-      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
-    nameErrorObject:
+    blocked:
+      type: boolean
+      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
+    groupIdInt:
+      type: integer
+      format: int64
+      description: The group ID
+    updateContactResponse:
+      $ref: '#/components/schemas/contactWithContactId'
+    listContacts200Response:
+      title: listContacts200Response
       type: object
       properties:
-        name:
+        meta:
+          $ref: '#/components/schemas/meta'
+          x-$ref: '#/components/schemas/meta'
+        objects:
           type: array
           items:
-            type: string
-    listOfGroupResourceUris:
-      type: array
-      items:
-        $ref: '#/components/schemas/groupResourceUri'
-      description: List of group resource URIs
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
     listOfGroupIds:
       type: array
       items:
@@ -398,39 +432,11 @@ components:
         - $ref: '#/components/schemas/groupIdInt'
         - $ref: '#/components/schemas/groupResourceUri'
       description: List of group resource URIs and/or IDs
-    id:
-      type: string
-      pattern: ^\d+$
-    updateContactResponse:
-      $ref: '#/components/schemas/contactWithContactId'
-    limit:
-      type: integer
     contactIdBoth:
       type: string
       anyOf:
       - $ref: '#/components/schemas/contactId'
       - $ref: '#/components/schemas/contactIdInt'
-    screened:
-      type: boolean
-      description: Whether the contact has been blocked by you
-    localGateway:
-      type: boolean
-      description: True if the contact is a SendHub line
-      readOnly: true
-    blocked:
-      type: boolean
-      description: Opt-out status (eg. if they texted `Stop`, `Cancel`, `Block`, `Quit` or `End` - [more info](https://sendhub.force.com/support/s/article/SendHub-Number-FAQ))
-    contactKeyword:
-      type: string
-      example: john
-      description: 'The keyword must be unique and is generated by the contact''s name by default.
-
-        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
-
-        '
-    updateContactRequest:
-      $ref: '#/components/schemas/upsertContactRequestWithId'
-      x-$ref: '#/components/schemas/upsertContactRequestWithId'
     rateLimitingResponse:
       properties:
         message:
@@ -450,15 +456,30 @@ components:
         timeLeft:
           type: string
           pattern: ^\d:[0-5]\d:[0-5]\d$
-    contactResourceUri:
-      type: string
-      pattern: ^\/v\d+(\.\d+)*\/contacts\/\d+$
-      description: Resource URI for this contact
-      example: /v1/contacts/116006957938017590
     idStr:
       type: string
       pattern: ^\d+$
       description: Same as id but always a string
+    nameOrNumberError:
+      anyOf:
+      - $ref: '#/components/schemas/nameErrorObject'
+      - $ref: '#/components/schemas/numberErrorObject'
+    offset:
+      type: integer
+    previous:
+      type:
+      - string
+      - 'null'
+    screened:
+      type: boolean
+      description: Whether the contact has been blocked by you
+    deleted:
+      type: boolean
+      readOnly: true
+    localGateway:
+      type: boolean
+      description: True if the contact is a SendHub line
+      readOnly: true
     errorObject:
       type: object
       properties:
@@ -466,68 +487,6 @@ components:
           type: string
         status:
           type: number
-    groupId:
-      type: string
-      allOf:
-      - $ref: '#/components/schemas/id'
-      description: The group ID
-    nameOrNumberError:
-      anyOf:
-      - $ref: '#/components/schemas/nameErrorObject'
-      - $ref: '#/components/schemas/numberErrorObject'
-    upsertContactRequest:
-      anyOf:
-      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
-        x-$ref: '#/components/schemas/upsertContactRequestWithoutId'
-      - $ref: '#/components/schemas/upsertContactRequestWithId'
-        x-$ref: '#/components/schemas/upsertContactRequestWithId'
-    isOwned:
-      type: boolean
-      description: This is used internally and may be expanded upon or removed in the future
-      readOnly: true
-    bulkUpsertContactRequest:
-      type: object
-      properties:
-        objects:
-          type: array
-          items:
-            $ref: '#/components/schemas/upsertContactRequest'
-    offset:
-      type: integer
-    upsertContactRequestWithoutId:
-      title: upsertContactRequestWithoutId
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/customField'
-        x-$ref: '#/components/schemas/customField'
-      properties:
-        blocked:
-          $ref: '#/components/schemas/blocked'
-          x-$ref: '#/components/schemas/blocked'
-        deleted:
-          $ref: '#/components/schemas/deleted'
-          x-$ref: '#/components/schemas/deleted'
-        id:
-          $ref: '#/components/schemas/contactIdBoth'
-          x-$ref: '#/components/schemas/contactIdBoth'
-        keyword:
-          $ref: '#/components/schemas/contactKeyword'
-          x-$ref: '#/components/schemas/contactKeyword'
-        name:
-          $ref: '#/components/schemas/contactName'
-          x-$ref: '#/components/schemas/contactName'
-        number:
-          $ref: '#/components/schemas/contactNumber'
-          x-$ref: '#/components/schemas/contactNumber'
-        screened:
-          $ref: '#/components/schemas/screened'
-          x-$ref: '#/components/schemas/screened'
-        groups:
-          $ref: '#/components/schemas/listOfGroupIds'
-          x-$ref: '#/components/schemas/listOfGroupIds'
-      required:
-      - name
-      - number
     customField:
       type:
       - string
@@ -541,9 +500,141 @@ components:
         **Note:** Custom fields may add *very* slight load time per contact. This is typically only noticable when listing many contacts that have a large amount of custom fields
 
         Note: Setting the value to `null` removes the custom field'
+    isOwned:
+      type: boolean
+      description: This is used internally and may be expanded upon or removed in the future
+      readOnly: true
+    timestamp:
+      type: string
+      description: 'A UTC timestamp
+
+
+        `2021-08-01T03:48:55.350453` equals August 1st, 2021 at 3:48 and 55.350453 seconds AM (UTC)'
+      example: '2021-08-01T03:48:55.350453'
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}$
+    upsertContactRequest:
+      anyOf:
+      - $ref: '#/components/schemas/upsertContactRequestWithoutId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithoutId'
+      - $ref: '#/components/schemas/upsertContactRequestWithId'
+        x-$ref: '#/components/schemas/upsertContactRequestWithId'
+    listOfGroupResourceUris:
+      type: array
+      items:
+        $ref: '#/components/schemas/groupResourceUri'
+      description: List of group resource URIs
+    bulkUpsertContactRequest:
+      type: object
+      properties:
+        objects:
+          type: array
+          items:
+            $ref: '#/components/schemas/upsertContactRequest'
+    landline:
+      type: boolean
+      description: Whether SendHub has determined the contact's number is a landline number
+    contactKeyword:
+      type: string
+      example: john
+      description: 'The keyword must be unique and is generated by the contact''s name by default.
+
+        [Learn more about how contact keywords are used here.](https://sendhub.force.com/support/s/article/contacts-faq)
+
+        '
+  requestBodies:
+    updateContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/updateContactRequest'
+            x-$ref: '#/components/schemas/updateContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Updating_a_contact's_custom_field(s)_without_removing_them_from_any_groups_they're_in:
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in'
+    upsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/upsertContactRequest'
+            x-$ref: '#/components/schemas/upsertContactRequest'
+          examples:
+            Updating_a_contact's_name:
+              $ref: '#/components/examples/Updating_a_contacts_name'
+            Updating_a_contact's_groups:
+              $ref: '#/components/examples/Updating_a_contacts_groups'
+            Updating_a_contact's_custom_field(s):
+              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
+            Create_non-existing_contact:
+              $ref: '#/components/examples/Create_non-existing_contact'
+            Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+              $ref: '#/components/examples/Update_my-custom-field-2_without_modifying_or_removing_my-custom-field'
+    bulkUpsertContact:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/bulkUpsertContactRequest'
+            x-$ref: '#/components/schemas/bulkUpsertContactRequest'
   responses:
     listContacts403:
       description: Forbidden
+    getContact200:
+      description: Found contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/contact'
+            x-$ref: '#/components/schemas/contact'
+          examples:
+            Example contact 1:
+              $ref: '#/components/examples/john'
+            Example contact 2:
+              $ref: '#/components/examples/bob'
+    bulkUpsertContacts202:
+      description: Created or updated contacts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/upsertContactResponse'
+    listContacts200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/listContacts200Response'
+            x-$ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listContacts200Response-2'
+    contact404:
+      description: Contact not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorObject'
+          examples:
+            Contact not found:
+              summary: Contact not found
+              value:
+                error: Requested contact not found
+                status: 404
+    list400BadFiltering:
+      description: Bad Request
+      content:
+        text/html; charset=utf-8:
+          schema:
+            type: string
+          examples:
+            Invalid filter parameter:
+              summary: Invalid filter parameter
+              value: The 'resource_uri' field does not allow filtering.
     updateContact400:
       description: Bad Request
       content:
@@ -563,20 +654,6 @@ components:
               value:
                 number:
                 - That number is already in your contacts.
-    '401':
-      description: The credentials you supplied are invalid
-    getContact200:
-      description: Found contact
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/contact'
-            x-$ref: '#/components/schemas/contact'
-          examples:
-            Example contact 1:
-              $ref: '#/components/examples/john'
-            Example contact 2:
-              $ref: '#/components/examples/bob'
     upsertContact201:
       description: Created or updated contact
       content:
@@ -588,60 +665,6 @@ components:
               $ref: '#/components/examples/johnWithContactId'
             Example contact 2:
               $ref: '#/components/examples/bobWithContactId'
-    contact404:
-      description: Contact not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errorObject'
-          examples:
-            Contact not found:
-              summary: Contact not found
-              value:
-                error: Requested contact not found
-                status: 404
-    420PlanLimit:
-      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-      content:
-        application/json:
-          schema:
-            properties:
-              error:
-                type: string
-          examples:
-            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
-              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
-              value:
-                error: You have made too many requests and are being rate limited
-    list400BadFiltering:
-      description: Bad Request
-      content:
-        text/html; charset=utf-8:
-          schema:
-            type: string
-          examples:
-            Invalid filter parameter:
-              summary: Invalid filter parameter
-              value: The 'resource_uri' field does not allow filtering.
-    listContacts200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/listContacts200Response'
-            x-$ref: '#/components/schemas/listContacts200Response'
-          examples:
-            success:
-              $ref: '#/components/examples/listContacts200Response-2'
-    listGroupContacts200:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/listContacts200Response'
-          examples:
-            success:
-              $ref: '#/components/examples/listGroupContacts200Response'
     updateContact200:
       description: Updated contact
       content:
@@ -655,14 +678,30 @@ components:
               $ref: '#/components/examples/bobWithContactId'
     upsertContact400:
       $ref: '#/components/responses/updateContact400'
-    bulkUpsertContacts202:
-      description: Created or updated contacts
+    listGroupContacts200:
+      description: Success
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/upsertContactResponse'
+            $ref: '#/components/schemas/listContacts200Response'
+          examples:
+            success:
+              $ref: '#/components/examples/listGroupContacts200Response'
+    '401':
+      description: The credentials you supplied are invalid
+    420PlanLimit:
+      description: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+      content:
+        application/json:
+          schema:
+            properties:
+              error:
+                type: string
+          examples:
+            You've reached your plan's API limit for this month or you're on a plan that doesn't include API access:
+              summary: You've reached your plan's API limit for this month or you're on a plan that doesn't include API access
+              value:
+                error: You have made too many requests and are being rate limited
     429RateLimiting:
       description: You've sent too many requests in a short amount of time and are being rate-limited
       content:
@@ -680,22 +719,59 @@ components:
                 moreInfo: ''
                 timeLeft: 0:00:30
   examples:
-    Updating_a_contacts_groups:
-      summary: Updating a contact's groups
-      value:
-        id: '116006957938283973'
-        name: John Smith
-        number: '+19198915828'
-        groups:
-        - '115999753870990933'
-        - '115999753870990932'
-    Updating_a_contacts_custom_fields:
-      summary: Updating a contact's custom field(s)
+    Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in:
+      summary: Updating a contact's custom field(s) without removing them from any groups they're in
       value:
         id: '116006957938283973'
         name: John Smith
         number: '+19198915828'
         my-custom-field: My custom value
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    bobWithContactId:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+        contact_id: '116006957938017590'
+    listGroupContacts200Response:
+      value:
+        meta:
+          limit: 20
+          next: null
+          offset: 0
+          previous: null
+        objects:
+        - blocked: false
+          date_created: '2021-08-24T19:44:31.266590'
+          date_modified: '2021-08-24T19:44:31.266590'
+          deleted: false
+          groups: []
+          id: '116006957938017590'
+          id_str: '116006957938017590'
+          is_owned: true
+          keyword: bob
+          local_gateway: false
+          name: Bob Parker
+          number: '+12015716227'
+          resource_uri: /v1/contacts/116006957938017590
+          screened: false
+          landline: false
+          landline_override: false
     john:
       value:
         blocked: false
@@ -714,34 +790,6 @@ components:
         screened: false
         landline: false
         landline_override: false
-    bob:
-      value:
-        blocked: false
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        groups: []
-        id: '116006957938017590'
-        id_str: '116006957938017590'
-        is_owned: true
-        keyword: bob
-        local_gateway: false
-        name: Bob Parker
-        number: '+12015716227'
-        resource_uri: /v1/contacts/116006957938017590
-        screened: false
-        landline: false
-        landline_override: false
-    Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in:
-      summary: Updating a contact's custom field(s) without removing them from any groups they're in
-      value:
-        id: '116006957938283973'
-        name: John Smith
-        number: '+19198915828'
-        my-custom-field: My custom value
-        groups:
-        - '115999753870990933'
-        - '115999753870990932'
     listContacts200Response-2:
       summary: Success
       value:
@@ -767,6 +815,38 @@ components:
           number: '+18002222228'
           resource_uri: /v1/contacts/116006957944371848
           screened: false
+    bob:
+      value:
+        blocked: false
+        date_created: '2021-08-24T19:44:31.266590'
+        date_modified: '2021-08-24T19:44:31.266590'
+        deleted: false
+        groups: []
+        id: '116006957938017590'
+        id_str: '116006957938017590'
+        is_owned: true
+        keyword: bob
+        local_gateway: false
+        name: Bob Parker
+        number: '+12015716227'
+        resource_uri: /v1/contacts/116006957938017590
+        screened: false
+        landline: false
+        landline_override: false
+    Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
+      summary: Update my-custom-field-2 without modifying or removing my-custom-field
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field-2: My custom value 2
+    Updating_a_contacts_custom_fields:
+      summary: Updating a contact's custom field(s)
+      value:
+        id: '116006957938283973'
+        name: John Smith
+        number: '+19198915828'
+        my-custom-field: My custom value
     johnWithContactId:
       value:
         blocked: false
@@ -786,77 +866,27 @@ components:
         landline: false
         landline_override: false
         contact_id: '116006957938283973'
-    listGroupContacts200Response:
-      value:
-        meta:
-          limit: 20
-          next: null
-          offset: 0
-          previous: null
-        objects:
-        - blocked: false
-          date_created: '2021-08-24T19:44:31.266590'
-          date_modified: '2021-08-24T19:44:31.266590'
-          deleted: false
-          groups: []
-          id: '116006957938017590'
-          id_str: '116006957938017590'
-          is_owned: true
-          keyword: bob
-          local_gateway: false
-          name: Bob Parker
-          number: '+12015716227'
-          resource_uri: /v1/contacts/116006957938017590
-          screened: false
-          landline: false
-          landline_override: false
-    Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
-      summary: Update my-custom-field-2 without modifying or removing my-custom-field
+    Updating_a_contacts_groups:
+      summary: Updating a contact's groups
       value:
         id: '116006957938283973'
         name: John Smith
         number: '+19198915828'
-        my-custom-field-2: My custom value 2
-    bobWithContactId:
+        groups:
+        - '115999753870990933'
+        - '115999753870990932'
+    Create_non-existing_contact:
+      summary: Create a non-existing contact
       value:
-        blocked: false
-        date_created: '2021-08-24T19:44:31.266590'
-        date_modified: '2021-08-24T19:44:31.266590'
-        deleted: false
-        groups: []
-        id: '116006957938017590'
-        id_str: '116006957938017590'
-        is_owned: true
-        keyword: bob
-        local_gateway: false
         name: Bob Parker
         number: '+12015716227'
-        resource_uri: /v1/contacts/116006957938017590
-        screened: false
-        landline: false
-        landline_override: false
-        contact_id: '116006957938017590'
     Updating_a_contacts_name:
       summary: Updating a contact's name
       value:
         id: '116006957938283973'
         name: John Smith
         number: '+19198915828'
-    Create_non-existing_contact:
-      summary: Create a non-existing contact
-      value:
-        name: Bob Parker
-        number: '+12015716227'
   parameters:
-    PageLimit:
-      name: limit
-      in: query
-      description: (Pagination) How many records to return
-      schema:
-        type: integer
-        maximum: 1000
-        minimum: 1
-        default: 20
     ContactsListFilterByNumber:
       name: number
       in: query
@@ -870,30 +900,15 @@ components:
         Only show contacts with a `number` matching +12015716227:
           summary: Only show contacts with a `number` matching +12015716227
           value: '%2B12015716227'
-    ContactsListFilterByName:
-      name: name
+    PageLimit:
+      name: limit
       in: query
-      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
+      description: (Pagination) How many records to return
       schema:
-        type: string
-      examples:
-        John Smith:
-          value: John Smith
-        Bob Parker:
-          value: Bob Parker
-    contact_id:
-      name: contact_id
-      in: path
-      required: true
-      schema:
-        anyOf:
-        - type: integer
-          format: int64
-          minimum: 1
-        - type: string
-          pattern: ^\d+$
-          minLength: 1
-      description: The contact ID
+        type: integer
+        maximum: 1000
+        minimum: 1
+        default: 20
     ContactsListFilterByScreened:
       name: screened
       in: query
@@ -907,6 +922,13 @@ components:
         Only show contacts that you haven't blocked:
           summary: Only show contacts that you haven't blocked
           value: false
+    PageOffset:
+      name: offset
+      in: query
+      description: (Pagination) How many records to skip
+      schema:
+        type: integer
+        default: 0
     ContactsListOrdering:
       name: ordering
       in: query
@@ -954,13 +976,19 @@ components:
         Sort contacts by their name A-to-Z:
           summary: Sort contacts by their name A-to-Z
           value: name
-    PageOffset:
-      name: offset
-      in: query
-      description: (Pagination) How many records to skip
+    contact_id:
+      name: contact_id
+      in: path
+      required: true
       schema:
-        type: integer
-        default: 0
+        anyOf:
+        - type: integer
+          format: int64
+          minimum: 1
+        - type: string
+          pattern: ^\d+$
+          minLength: 1
+      description: The contact ID
     ContactsListFilterByBlocked:
       name: blocked
       in: query
@@ -974,45 +1002,17 @@ components:
         Only show contacts that haven't opted-out:
           summary: Only show contacts that haven't opted-out
           value: false
-  requestBodies:
-    bulkUpsertContact:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/bulkUpsertContactRequest'
-            x-$ref: '#/components/schemas/bulkUpsertContactRequest'
-    upsertContact:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/upsertContactRequest'
-            x-$ref: '#/components/schemas/upsertContactRequest'
-          examples:
-            Updating_a_contact's_name:
-              $ref: '#/components/examples/Updating_a_contacts_name'
-            Updating_a_contact's_groups:
-              $ref: '#/components/examples/Updating_a_contacts_groups'
-            Updating_a_contact's_custom_field(s):
-              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
-            Create_non-existing_contact:
-              $ref: '#/components/examples/Create_non-existing_contact'
-            Update_my-custom-field-2_without_modifying_or_removing_my-custom-field:
-              $ref: '#/components/examples/Update_my-custom-field-2_without_modifying_or_removing_my-custom-field'
-    updateContact:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/updateContactRequest'
-            x-$ref: '#/components/schemas/updateContactRequest'
-          examples:
-            Updating_a_contact's_name:
-              $ref: '#/components/examples/Updating_a_contacts_name'
-            Updating_a_contact's_groups:
-              $ref: '#/components/examples/Updating_a_contacts_groups'
-            Updating_a_contact's_custom_field(s):
-              $ref: '#/components/examples/Updating_a_contacts_custom_fields'
-            Updating_a_contact's_custom_field(s)_without_removing_them_from_any_groups_they're_in:
-              $ref: '#/components/examples/Updating_a_contacts_custom_fields_without_removing_them_from_any_groups_theyre_in'
+    ContactsListFilterByName:
+      name: name
+      in: query
+      description: Filters contacts by their `name` (Will only return contacts whose name matches **exactly**)
+      schema:
+        type: string
+      examples:
+        John Smith:
+          value: John Smith
+        Bob Parker:
+          value: Bob Parker
   securitySchemes:
     username:
       name: username
